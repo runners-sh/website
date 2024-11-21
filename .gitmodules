@@ -1,0 +1,3 @@
+[submodule "content/zine"]
+	path = content/zine
+	url = git@github.com:runners-sh/zine-content.git
