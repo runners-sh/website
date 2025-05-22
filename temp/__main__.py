@@ -1,4 +1,4 @@
-from library.src.library import *
+from library import *
 
 init(__package__)
 
