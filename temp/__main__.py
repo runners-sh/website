@@ -8,10 +8,13 @@ for dirname, dirs, files in os.walk("content"):
     for file in files:
         name, ext = path.splitext(file)
         if ext != ".md": continue
-        meta, content = markdown_to_html(path.join(dirname, file))
-        page(
-            "blog.html",
-            path.join(dirname, name + ".html"),
-            content=content,
-            title=meta["title"]
-        )
+        src_path = path.join(dirname, file)
+        dist_path = path.join(dirname, name + ".html")
+        with LogTimer(f"Markdown process {src_path} -> {dist_path}"):
+            meta, content = markdown_to_html(src_path)
+            page(
+                "blog.html",
+                dist_path,
+                content=content,
+                title=meta["title"]
+            )
