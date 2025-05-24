@@ -88,7 +88,10 @@ def recurse_files(root: str, extensions: list[str]):
 def load_markdown(file_path: str) -> tuple[dict, str]:
 	with open(file_path, "r") as f:
 		meta, content = frontmatter.parse(f.read())
-		return meta, markdown.markdown(content)
+		return meta, markdown.markdown(content, extensions=[
+		    "markdown.extensions.extra",
+			"markdown.extensions.admonition"
+		])
 
 
 from . import common  # noqa: E402 F401
