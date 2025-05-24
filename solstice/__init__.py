@@ -60,4 +60,4 @@ def markdown_to_html(file_path: str) -> tuple[Any, str]:
 		return meta, markdown.markdown(content)
 
 
-from . import common
+from . import common  # noqa: E402 F401
