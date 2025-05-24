@@ -1,9 +1,11 @@
 from typing import Any
-import jinja2, markdown, frontmatter
-import os, os.path as path, shutil
+import jinja2
+import markdown
+import frontmatter
+import os
+import os.path as path
+import shutil
 from .log import *
-
-from jinja2.loaders import PackageLoader
 
 pkgname: str
 env: jinja2.Environment
