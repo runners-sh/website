@@ -1,0 +1,52 @@
+@import "./theme.css";
+
+.container {
+    height: 100vh;
+}
+
+.mc {
+    display: grid;
+    place-items: center;
+    height: 100%;
+}
+@media (max-width: 800px) {
+    .mc {
+        color: red !important;
+    }
+}
+
+path {
+    fill: currentColor;
+}
+
+main {
+    width: 100%;
+    height: 50%;
+    position: relative;
+    > svg {
+        color: var(--color-accent-400);
+        height: 100%;
+        width: auto;
+    }
+    > div {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        text-align: right;
+        > ul {
+            padding: 0;
+            > li {
+                display: block;
+                > svg {
+                    height: 1em;
+                }
+            }
+        }
+        > h1 {
+            color: var(--color-accent-800);
+            font-size: 6rem;
+            margin-block-start: 0;
+            margin-right: -0.07em;
+        }
+    }
+}

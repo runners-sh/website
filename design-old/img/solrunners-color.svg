@@ -1,0 +1,20 @@
+<!-- hand-written by cubic :3 -->
+<svg width="256" height="256" xmlns="http://www.w3.org/2000/svg">
+    <rect width="256" height="256" rx="80" fill="#181825" />
+	<path
+        d="
+		M 103 36
+		A 96 96 0 1 0 220 153
+		A 83.2 83.2 0 1 1 103 36
+
+		M 81 118
+		A 42 42 0 1 1 138 175
+		A 80 80 0 0 1 81 118
+
+		M 170 131 v 5 l 27 2 v -8
+		M 121 86 h 5 l 1 -27 h -8
+		M 156 98 l 3 3 l 20 -18 l -6 -6
+		"
+        fill="#67299F"
+    />
+</svg>

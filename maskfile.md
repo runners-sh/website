@@ -53,3 +53,9 @@ ruff check
 ~~~sh
 pip freeze > requirements.txt
 ~~~
+
+## serve
+> Serve the website locally
+~~~sh
+python -m http.server -d dist
+~~~

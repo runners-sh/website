@@ -1,8 +1,8 @@
 ---
-title: hello
+title: Test blog post
+author: peppidesu
+date: 1984-04-01
 ---
-
-# Hello!
 
 This is a test file for markdown.
 
