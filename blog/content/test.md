@@ -19,13 +19,19 @@ Here is an image:
 Look! a table!
 
 | Column 1 | Column 2 |
-|----------|----------|
+|:---------|:---------|
 | Value 1  | Value 2  |
 | Value 3  | Value 4  |
 | Value 5  | Value 6  |
 
 !!! note
     Here is an admonition block.
+
+!!! warn
+		Watch out!
+
+!!! danger
+		Oh no.
 
 ```html
 <p> And this is a code block! </p>

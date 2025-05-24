@@ -17,7 +17,9 @@ dist_path: str
 def init(package_name: str | None):
 	global pkgname, env, base_path, dist_path
 
-	timer = LogTimer(f"Building {package_name!r}", f"Finished {package_name!r} in {{}}")
+	timer = LogTimer(
+		f"Building {package_name!r}", f"Finished {package_name!r} in {{}}"
+	)
 	timer.__enter__()
 	import atexit
 
@@ -39,7 +41,9 @@ def init(package_name: str | None):
 
 	shutil.rmtree(dist_path, ignore_errors=True)
 
-	env = jinja2.Environment(loader=jinja2.PackageLoader(package_name), autoescape=True)
+	env = jinja2.Environment(
+		loader=jinja2.PackageLoader(package_name), autoescape=True
+	)
 
 
 def dist_path_for(name: str) -> str:
@@ -88,10 +92,14 @@ def recurse_files(root: str, extensions: list[str]):
 def load_markdown(file_path: str) -> tuple[dict, str]:
 	with open(file_path, "r") as f:
 		meta, content = frontmatter.parse(f.read())
-		return meta, markdown.markdown(content, extensions=[
-		    "markdown.extensions.extra",
-			"markdown.extensions.admonition"
-		])
+		return meta, markdown.markdown(
+			content,
+			extensions=[
+				"markdown.extensions.extra",
+				"markdown.extensions.admonition",
+				"markdown.extensions.codehilite",
+			],
+		)
 
 
 from . import common  # noqa: E402 F401
