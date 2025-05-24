@@ -32,20 +32,20 @@ python -m blog
 ## test
 > Run tests
 ~~~sh
-python -m pytest
+pytest
 ~~~
 
 ## format
 > Run the ruff formatter
 ~~~sh
-python -m ruff format
+ruff format
 ~~~
 
 ## check
 > Run the ruff checker
 
 ~~~sh
-python -m ruff check
+ruff check
 ~~~
 
 ## make-reqs
