@@ -1,28 +1,14 @@
-# ssg branch
+# Solrunners website
+Source code for the [runners.sh](https://runners.sh)
 
-solrunners site generator!
+## Installation
+Requirements:
+- `python >= 3.13`
+- `mask`
 
-# Installation
+This project uses the [`mask` command runner](https://github.com/jacobdeichert/mask). You can install it from the AUR or crates.io. Refer to [`maskfile.md`](maskfile.md) for manual installation instructions.
 
-## Using `mask`
-Install `mask` from the AUR or from crates.io using `cargo install mask`. Then run `mask init` to set up the .venv and install the requirements. Use `mask --help` for a list of commands.
+To initialize the environment, run `mask init`. This sets up a python venv and installs the required packages.
 
-## Manually
-```sh
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-# Building
-
-## Using `mask`
-```sh
-mask build
-```
-Build files will output to `/dist`.
-
-## Manually
-```sh
-python3 -m blog
-```
+## Building, testing, etc.
+Run `mask help` or refer to the [`maskfile.md`](maskfile.md) for different dev commands.

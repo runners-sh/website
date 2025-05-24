@@ -23,6 +23,8 @@ pip install -r requirements.txt
 
 ## build
 > Build the website
+
+Build files will appear in the `./dist` folder.
 ~~~sh
 python -m blog
 ~~~
@@ -34,14 +36,17 @@ python -m pytest
 ~~~
 
 ## format
-> Format using ruff
+> Run the ruff formatter
 ~~~sh
 python -m ruff format
 ~~~
 
-## lint
-> Lint using ruff
-```
+## check
+> Run the ruff checker
+
+~~~sh
+python -m ruff check
+~~~
 
 ## make-reqs
 > Update the requirements.txt file
