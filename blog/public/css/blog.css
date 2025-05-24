@@ -78,6 +78,7 @@ main {
         }
     }
     > article {
+        flex-grow: 1;
         > .title-box {
             overflow: hidden;
             margin-bottom: 3rem;
