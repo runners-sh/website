@@ -1,6 +1,7 @@
 # custom logging implementation bcuz the built-in one kinda sucks
 from enum import Enum
-import time, sys
+import time
+import sys
 
 
 class LogLevel(Enum):

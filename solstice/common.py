@@ -16,7 +16,7 @@ def do_markdown_ssg():
 				page("blog.html", dist_path, content=content, title=meta.get("title"))
 
 	if path.exists("public"):
-		with LogTimer(f"Copying public files"):
+		with LogTimer("Copying public files"):
 			shutil.copytree("public", dist_path_for("public"))
 
 
