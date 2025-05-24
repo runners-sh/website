@@ -1,6 +1,6 @@
 # common.py -- code not ubiquitous enough to go in library/__init__.py but contains shared functionality across the sites
 
-from library import *
+from solstice import *
 
 def do_markdown_ssg():
     for dirname, dirs, files in os.walk("content"):
