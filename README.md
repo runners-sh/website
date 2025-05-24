@@ -1,5 +1,5 @@
 # Solrunners website
-Source code for the [runners.sh](https://runners.sh)
+Source code for the [runners.sh](https://runners.sh) website.
 
 ## Installation
 Requirements:
