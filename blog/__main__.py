@@ -2,4 +2,4 @@ from solstice import *
 
 init(__package__)
 page("index.html")
-common.do_markdown_ssg()
+common.simple_recursive_ssg("body.html", "content")

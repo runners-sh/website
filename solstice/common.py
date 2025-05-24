@@ -3,21 +3,16 @@
 from solstice import *
 
 
-def do_markdown_ssg():
-	for dirname, dirs, files in os.walk("content"):
-		for file in files:
-			name, ext = path.splitext(file)
-			if ext != ".md":
-				continue
-			src_path = path.join(dirname, file)
-			dist_path = path.join(dirname, name + ".html")
-			with LogTimer(f"Markdown process {src_path} -> {dist_path}"):
-				meta, content = markdown_to_html(src_path)
-				page("blog.html", dist_path, content=content, title=meta.get("title"))
+def simple_recursive_ssg(template_name: str, content_dir: str):
+	for dirname, file, name in recurse_files(content_dir, [".md"]):
+		src_path = path.join(dirname, file)
+		dist_path = path.join(dirname, name + ".html")
+		with LogTimer(f"Markdown process {src_path} -> {dist_path}"):
+			markdown_page(template_name, src_path, dist_path)
 
 	if path.exists("public"):
 		with LogTimer("Copying public files"):
 			shutil.copytree("public", dist_path_for("public"))
 
 
-__all__ = ["do_markdown_ssg"]
+__all__ = ["simple_recursive_ssg"]

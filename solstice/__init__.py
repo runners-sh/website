@@ -1,10 +1,11 @@
-from typing import Any
-import jinja2
-import markdown
-import frontmatter
 import os
 import os.path as path
 import shutil
+
+import frontmatter
+import jinja2
+import markdown
+
 from .log import *
 
 pkgname: str
@@ -54,7 +55,37 @@ def page(template_name: str, output_path: str | None = None, **kwargs):
 		file.write(contents)
 
 
-def markdown_to_html(file_path: str) -> tuple[Any, str]:
+def markdown_page(
+	template_name: str,
+	content_path: str,
+	output_path: str | None = None,
+	**kwargs,
+):
+	meta, content = load_markdown(content_path)
+	for key, val in kwargs.items():
+		if key in meta.keys():
+			warn(f"(in content file '{content_path}'):")
+			warn(f"\tkey '{key}' is reserved by the caller, skipping...")
+		meta[key] = val
+
+	if "content" in meta.keys():
+		warn(f"(in content file '{content_path}'):")
+		warn("\tkey 'content' is reserved, skipping...")
+		meta.pop("content")
+
+	page("blog.html", output_path, content=content, **meta)
+
+
+def recurse_files(root: str, extensions: list[str]):
+	for dirname, dirs, files in os.walk(root):
+		for file in files:
+			name, ext = path.splitext(file)
+			if ext not in extensions:
+				continue
+			yield (dirname, file, name)
+
+
+def load_markdown(file_path: str) -> tuple[dict, str]:
 	with open(file_path, "r") as f:
 		meta, content = frontmatter.parse(f.read())
 		return meta, markdown.markdown(content)

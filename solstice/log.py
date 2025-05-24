@@ -1,7 +1,7 @@
 # custom logging implementation bcuz the built-in one kinda sucks
-from enum import Enum
-import time
 import sys
+import time
+from enum import Enum
 
 
 class LogLevel(Enum):
@@ -25,7 +25,9 @@ def log(level: LogLevel, msg: str):
 	# the standard string padding functions don't work as they don't take into account ANSI codes
 	print(
 		"{}{}{}".format(
-			f"[{ANSI_COLORS[level]}{level.name}\x1b[0m]", " " * (8 - len(level.name)), msg
+			f"[{ANSI_COLORS[level]}{level.name}\x1b[0m]",
+			" " * (8 - len(level.name)),
+			msg,
 		),
 		file=sys.stderr,
 	)
