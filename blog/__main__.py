@@ -1,4 +1,4 @@
-from library import *
+from solstice import *
 
 init(__package__)
 
