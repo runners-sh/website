@@ -53,3 +53,12 @@ ruff check
 ~~~sh
 pip freeze > requirements.txt
 ~~~
+
+## serve (module)
+> Serve the specified website locally
+
+~~~sh
+trap 'kill $bgpid; exit' INT
+python -m http.server -d dist/$module & bgpid=$!
+watchfiles "python -m $module" . --ignore-paths "dist"
+~~~

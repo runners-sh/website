@@ -1,0 +1,95 @@
+@import "./pwrln.css";
+
+/*
+    the kanjiless fonts are just the ttf fonts edited in fontforge to remove all the japanese lettering
+    say what you will about that but it reduced the font size from 1.7MiB to 12.2KiB
+    (that's a 99.3% decrease! also tbf a lot of the size savings probably come from woff2's better compression
+    but also jeez holy hell, 99% reduction)
+      - cubic
+*/
+@font-face {
+	font-family: "M PLUS 1 Code";
+	font-display: swap;
+	font-weight: 400;
+	src:
+		local("M PLUS 1 Code"),
+		url("../woff/MPLUS1Code-Regular-Kanjiless.woff2") format("woff2");
+}
+@font-face {
+	font-family: "M PLUS 1 Code";
+	font-display: swap;
+	font-weight: 500;
+	src:
+		local("M PLUS 1 Code"),
+		url("../woff/MPLUS1Code-Medium-Kanjiless.woff2") format("woff2");
+}
+
+.theme-dark {
+	--font: "Comic Sans MS", cursive;
+	--bold-weight: bold;
+
+	--color-info: var(--color-a2);
+	--color-info-bg: color-mix(in lab, var(--color-info) 20%, var(--color-bg));
+
+	--color-warning: #f9cd5f;
+	--color-warning-bg: color-mix(
+		in lab,
+		var(--color-warning) 20%,
+		var(--color-bg)
+	);
+
+	--color-danger: var(--color-a3);
+	--color-danger-bg: color-mix(
+		in lab,
+		var(--color-danger) 20%,
+		var(--color-bg)
+	);
+}
+
+.theme-dark:has(#vis-font-m1pc:checked) {
+	--font: "M PLUS 1 Code", "Comic Sans MS", cursive;
+	--bold-weight: 500;
+}
+.theme-dark:has(#vis-font-iosev:checked) {
+	--font: "Iosevka Web", "Comic Sans MS", cursive;
+	--bold-weight: 700;
+}
+
+.theme-dark:has(#vis-cs-default:checked) {
+	--color-bg: #0b0b18;
+	--color-fg: #ded5ec;
+	--color-a1: #f989ff;
+	--color-a2: #7aebff;
+	--color-a3: #ff7063;
+}
+.theme-dark:has(#vis-cs-desat:checked) {
+	--color-bg: #0b0b18;
+	--color-fg: #ded5ec;
+	--color-a1: #e793ec;
+	--color-a2: #88dfee;
+	--color-a3: #ee8076;
+}
+.theme-dark:has(#vis-cs-purple:checked) {
+	--color-bg: #0b0b18;
+	--color-fg: #ded5ec;
+	--color-a1: #d468ff;
+	--color-a2: #7aebff;
+	--color-a3: #ff7063;
+}
+
+@font-face {
+	font-family: "Iosevka Web";
+	font-display: swap;
+	font-weight: 500;
+	font-stretch: normal;
+	font-style: normal;
+	src: url("../woff/Iosevka-Regular.woff2") format("woff2");
+}
+@font-face {
+	font-family: "Iosevka Web";
+	font-display: swap;
+	font-weight: 700;
+	font-stretch: normal;
+	font-style: normal;
+	src: url("../woff/Iosevka-Bold.woff2") format("woff2");
+}
