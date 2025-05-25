@@ -35,9 +35,7 @@ def init(package_name: str | None):
 
 	cli.run_cli()
 
-	env = jinja2.Environment(
-		loader=jinja2.PackageLoader(package_name), autoescape=True
-	)
+	env = jinja2.Environment(loader=jinja2.PackageLoader(package_name), autoescape=True)
 
 
 def dist_path_for(name: str) -> str:

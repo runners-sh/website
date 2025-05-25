@@ -1,6 +1,7 @@
+import argparse
 import shutil
 import sys
-import argparse
+
 from . import *
 
 
@@ -13,7 +14,9 @@ def run_cli():
 		return
 
 	parser = argparse.ArgumentParser("solstice", description="")
-	parser.add_argument("cmd", nargs="?", default="build", help='"build", "clean", or "serve"')
+	parser.add_argument(
+		"cmd", nargs="?", default="build", help='"build", "clean", or "serve"'
+	)
 	parser.add_argument("--port", default=5123, type=int)
 
 	args = parser.parse_args()
@@ -74,7 +77,9 @@ def run_http_server(port):
 
 			def end_headers(self):
 				self.send_header("Connection", "close")
-				self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+				self.send_header(
+					"Cache-Control", "no-cache, no-store, must-revalidate"
+				)
 				self.send_header("Pragma", "no-cache")
 				self.send_header("Expires", "0")
 				return super().end_headers()
@@ -90,7 +95,8 @@ def hotreload():
 	import runpy
 	import time
 	from datetime import datetime
-	from watchfiles import watch
+
+	from watchfiles import watch  # type: ignore (removes pyright hallucination)
 
 	it = watch(module_path)
 	is_first = True
@@ -105,7 +111,9 @@ def hotreload():
 	sys.stderr.write("\x1b[2J\x1b[1;1H")  # clear screen, reset cursor
 	sys.stderr.flush()
 
-	info(f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}")
+	info(
+		f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}"
+	)
 
 	while True:
 		sys.stderr.write("\x1b[2;1H")  # move cursor to (0, 1)
@@ -117,7 +125,9 @@ def hotreload():
 		else:
 			next(it)
 
-		sys.stderr.write("\x1b[0J\x1b[B")  # clear from cursor down, move cursor down
+		sys.stderr.write(
+			"\x1b[0J\x1b[B"
+		)  # clear from cursor down, move cursor down
 		sys.stderr.flush()
 		info(f"Starting build at {datetime.now()}")
 
