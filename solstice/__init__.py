@@ -2,9 +2,9 @@ import os
 import os.path as path
 import shutil
 
-import frontmatter
+import frontmatter  # type: ignore (removes pyright hallucination)
 import jinja2
-import markdown
+import markdown  # type: ignore (removes pyright hallucination)
 
 from .log import *
 
