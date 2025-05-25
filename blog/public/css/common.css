@@ -62,12 +62,12 @@ fieldset {
 
 	&::after {
 		content: "";
-		width: 100%;
-		height: 100%;
+		width: calc(100% + var(--admon-border));
+		height: calc(100% + var(--admon-border));
 		position: absolute;
 		top: 0.3em;
 		left: 0.3em;
-		border: 1px solid var(--color-admon-fg);
+		border: calc(var(--admon-border) / 1.5) solid var(--color-admon-fg);
 		border-left: none;
 		border-top: none;
 	}
