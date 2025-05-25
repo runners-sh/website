@@ -1,8 +1,10 @@
 # Solrunners website project tasks
 
 ## init
+
 > Initialize the python venv and install required packages
-~~~sh
+
+```sh
 if ! type python > /dev/null; then
     echo "Python is not installed."
     exit 1
@@ -19,46 +21,54 @@ fi
 
 pip install --upgrade pip
 pip install -r requirements.txt
-~~~
+```
 
 ## build
+
 > Build the website
 
 Build files will appear in the `./dist` folder.
-~~~sh
+
+```sh
 python -m blog
-~~~
+```
 
 ## test
+
 > Run tests
-~~~sh
-pytest
-~~~
+
+```sh
+python3 -m pytest
+```
 
 ## format
+
 > Run the ruff formatter
-~~~sh
+
+```sh
 ruff format
-~~~
+```
 
 ## check
+
 > Run the ruff checker
 
-~~~sh
+```sh
 ruff check
-~~~
+```
 
 ## make-reqs
+
 > Update the requirements.txt file
-~~~sh
+
+```sh
 pip freeze > requirements.txt
-~~~
+```
 
 ## serve (module)
+
 > Serve the specified website locally
 
-~~~sh
-trap 'kill $bgpid; exit' INT
-python -m http.server -d dist/$module & bgpid=$!
-watchfiles "python -m $module" . --ignore-paths "dist"
-~~~
+```sh
+python3 -m blog serve
+```

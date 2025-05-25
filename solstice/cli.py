@@ -11,10 +11,9 @@ def run_cli():
 	if _http_server is not None:
 		# we're hot reloading, ignore this function call
 		return
-	print(_http_server)
 
 	parser = argparse.ArgumentParser("solstice", description="")
-	parser.add_argument("cmd", nargs="?", default="build")
+	parser.add_argument("cmd", nargs="?", default="build", help='"build", "clean", or "serve"')
 	parser.add_argument("--port", default=5123, type=int)
 
 	args = parser.parse_args()
@@ -56,13 +55,18 @@ def run_http_server(port):
 	from http.server import SimpleHTTPRequestHandler
 	from socketserver import TCPServer
 
-	with TCPServer(("", port), SimpleHTTPRequestHandler) as server:
+	class Handler(SimpleHTTPRequestHandler):
+		def __init__(self, *args, **kwargs):
+			super().__init__(*args, directory=dist_path, **kwargs)
+
+	with TCPServer(("", port), Handler) as server:
 		_http_server = server
 		server.serve_forever()
 
 
 def hotreload():
 	import runpy
+	import time
 	from datetime import datetime
 	from watchfiles import watch
 
@@ -70,7 +74,13 @@ def hotreload():
 
 	sys.stderr.write("\x1b[2J\x1b[1;1H")  # clear screen, reset cursor
 	sys.stderr.flush()
-	info(f"Watching module {pkgname} for changes")
+
+	# wait for server to start
+	while not _http_server:
+		time.sleep(0.1)
+	_addr, port = _http_server.server_address
+
+	info(f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}")
 
 	while True:
 		sys.stderr.write("\x1b[2;1H")  # move cursor to (0, 1)
