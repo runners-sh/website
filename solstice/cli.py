@@ -52,16 +52,24 @@ _http_server = None
 
 def run_http_server(port):
 	global _http_server
-	from http.server import SimpleHTTPRequestHandler
-	from socketserver import TCPServer
+	try:
+		from http.server import SimpleHTTPRequestHandler
+		from socketserver import TCPServer
 
-	class Handler(SimpleHTTPRequestHandler):
-		def __init__(self, *args, **kwargs):
-			super().__init__(*args, directory=dist_path, **kwargs)
+		class Handler(SimpleHTTPRequestHandler):
+			protocol_version = "HTTP/1.1"
 
-	with TCPServer(("", port), Handler) as server:
-		_http_server = server
-		server.serve_forever()
+			def __init__(self, *args, **kwargs):
+				super().__init__(*args, directory=dist_path, **kwargs)
+
+			def log_message(self, format: str, *args):
+				pass
+
+		with TCPServer(("", port), Handler) as server:
+			_http_server = server
+			server.serve_forever()
+	finally:
+		_http_server = sys.exception()
 
 
 def hotreload():
@@ -72,13 +80,15 @@ def hotreload():
 
 	it = watch(module_path)
 
-	sys.stderr.write("\x1b[2J\x1b[1;1H")  # clear screen, reset cursor
-	sys.stderr.flush()
-
 	# wait for server to start
 	while not _http_server:
 		time.sleep(0.1)
+	if isinstance(_http_server, BaseException):
+		return
 	_addr, port = _http_server.server_address
+
+	sys.stderr.write("\x1b[2J\x1b[1;1H")  # clear screen, reset cursor
+	sys.stderr.flush()
 
 	info(f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}")
 
