@@ -3,3 +3,7 @@ __pycache__
 .py[ocd]
 
 /dist
+
+/.direnv
+/.envrc
+/result
