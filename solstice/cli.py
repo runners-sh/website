@@ -93,6 +93,7 @@ def hotreload():
 	from watchfiles import watch
 
 	it = watch(module_path)
+	is_first = True
 
 	# wait for server to start
 	while not _http_server:
@@ -110,7 +111,11 @@ def hotreload():
 		sys.stderr.write("\x1b[2;1H")  # move cursor to (0, 1)
 		sys.stderr.flush()
 
-		next(it)
+		if is_first:
+			# we don't want to wait for a file change so just give the first build a free pass
+			is_first = False
+		else:
+			next(it)
 
 		sys.stderr.write("\x1b[0J\x1b[B")  # clear from cursor down, move cursor down
 		sys.stderr.flush()
