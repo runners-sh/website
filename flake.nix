@@ -40,6 +40,7 @@
                 pyyaml
                 ruff
                 sniffio
+                watchfiles
               ]
             ))
             mask
