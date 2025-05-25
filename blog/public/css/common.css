@@ -1,0 +1,40 @@
+@import "./pwrln.css";
+@import "./theme.css";
+
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-fg) var(--color-bg);
+}
+
+body {
+    margin: 0;
+    font-family: var(--font);
+    background: var(--color-bg);
+    color: var(--color-fg);
+
+    min-width: 800px;
+    line-height: 1.4;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b {
+    font-weight: var(--bold-weight);
+}
+
+h1 {
+    color: var(--color-a1);
+}
+
+ol ol {
+    list-style-type: lower-alpha;
+}
+
+fieldset {
+    border: 1px solid var(--color-fg);
+    margin-block: 1em;
+}

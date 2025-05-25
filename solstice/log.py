@@ -62,7 +62,9 @@ class LogTimer:
 		if sys.exception() or hasattr(sys, "last_exc"):
 			return
 		elapsed = time.time() - self.start_time
-		time_str = f"{elapsed:.02f}s" if elapsed >= 1 else f"{elapsed * 1000:.0f}ms"
+		time_str = (
+			f"{elapsed:.02f}s" if elapsed >= 1 else f"{elapsed * 1000:.0f}ms"
+		)
 		success(self.ending_msg.format(time_str))
 		del self.start_time
 
