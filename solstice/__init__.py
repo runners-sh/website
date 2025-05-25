@@ -1,6 +1,5 @@
 import os
 import os.path as path
-import atexit
 import shutil
 
 import frontmatter
@@ -36,7 +35,9 @@ def init(package_name: str | None):
 
 	cli.run_cli()
 
-	env = jinja2.Environment(loader=jinja2.PackageLoader(package_name), autoescape=True)
+	env = jinja2.Environment(
+		loader=jinja2.PackageLoader(package_name), autoescape=True
+	)
 
 
 def dist_path_for(name: str) -> str:
