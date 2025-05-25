@@ -36,12 +36,16 @@ def init(package_name: str | None):
 
 	cli.run_cli()
 
-	timer = LogTimer(f"Building {package_name!r}", f"Finished {package_name!r} in {{}}")
+	timer = LogTimer(
+		f"Building {package_name!r}", f"Finished {package_name!r} in {{}}"
+	)
 	timer.__enter__()
 
 	atexit.register(timer.__exit__)
 
-	env = jinja2.Environment(loader=jinja2.PackageLoader(package_name), autoescape=True)
+	env = jinja2.Environment(
+		loader=jinja2.PackageLoader(package_name), autoescape=True
+	)
 
 
 def dist_path_for(name: str) -> str:
@@ -117,7 +121,7 @@ def page_md(
 			# can't set modification time, just ignore. caching will be unsupported on these platforms
 			pass
 
-		page("blog.html", output_path, content=content, **meta)
+		page(template_name, output_path, content=content, **meta)
 
 
 def recurse_files(root: str, extensions: list[str]):
