@@ -24,11 +24,7 @@ ANSI_COLORS = {
 def log(level: LogLevel, msg: str):
 	# the standard string padding functions don't work as they don't take into account ANSI codes
 	print(
-		"{}{}{}".format(
-			f"[{ANSI_COLORS[level]}{level.name}\x1b[0m]",
-			" " * (8 - len(level.name)),
-			msg,
-		),
+		f"[{ANSI_COLORS[level]}{level.name}\x1b[0m]" + " " * (8 - len(level.name)) + msg,
 		file=sys.stderr,
 	)
 
