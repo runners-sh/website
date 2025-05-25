@@ -50,13 +50,11 @@ fieldset {
 	.admonition-title {
 		/* font-weight: bold; */
 		/* font-size: 1.1em; */
-		top: -0.5lh;
+		top: calc(-0.5lh - var(--admon-border)/2);
 		position: absolute;
-		background: linear-gradient(
-			to bottom,
-			transparent calc(50% - 2px),
-			var(--color-admon-bg) calc(50% - 2px)
-		);
+		background: linear-gradient(to bottom,
+				transparent calc(50% - var(--admon-border)/2 - 0.1px),
+				var(--color-admon-bg) calc(50% - var(--admon-border)/2 - 0.1px));
 		padding-inline: 0.5ch;
 		margin: 0;
 		margin-left: -0.5ch;
