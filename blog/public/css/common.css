@@ -40,32 +40,56 @@ fieldset {
 }
 
 .admonition {
-	padding: 0 15px;
-	margin-block: 20px;
-	border: 1px solid transparent;
-	border-radius: 10px;
-	text-align: left;
+	padding: 0 1rem;
+	margin-block: 2rem;
+	color: var(--color-admon-fg);
+	border: var(--admon-border) solid var(--color-admon-fg);
+	position: relative;
+	background-color: var(--color-admon-bg);
+
 	.admonition-title {
-		font-weight: bold;
-		font-size: 1.2em;
-		text-align: left;
+		/* font-weight: bold; */
+		/* font-size: 1.1em; */
+		top: -0.5lh;
+		position: absolute;
+		background: linear-gradient(
+			to bottom,
+			transparent calc(50% - 2px),
+			var(--color-admon-bg) calc(50% - 2px)
+		);
+		padding-inline: 0.5ch;
+		margin: 0;
+		margin-left: -0.5ch;
 	}
+
+	&::after {
+		content: "";
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0.3em;
+		left: 0.3em;
+		border: 1px solid var(--color-admon-fg);
+		border-left: none;
+		border-top: none;
+	}
+
 	&.note,
 	&.info,
 	&.tips {
-		color: var(--color-info);
-		background-color: var(--color-info-bg);
+		--color-admon-fg: var(--color-info);
+		--color-admon-bg: var(--color-info-bg);
 	}
 	&.warning,
 	&.warn,
 	&.important {
-		color: var(--color-warning);
-		background-color: var(--color-warning-bg);
+		--color-admon-fg: var(--color-warning);
+		--color-admon-bg: var(--color-warning-bg);
 	}
 	&.danger,
 	&.critical {
-		color: var(--color-danger);
-		background-color: var(--color-danger-bg);
+		--color-admon-fg: var(--color-danger);
+		--color-admon-bg: var(--color-danger-bg);
 	}
 }
 

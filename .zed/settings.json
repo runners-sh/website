@@ -3,16 +3,21 @@
 // For a full list of overridable settings, and general information on folder-specific settings,
 // see the documentation: https://zed.dev/docs/configuring-zed#settings-files
 {
-  "languages": {
-    "Python": {
-      "language_servers": ["ruff", "pyright"]
-    },
-    "formatter": {
-      "code_actions_on_format": {
-        "source.fixAll.ruff": true,
-        "source.organizeImports.ruff": true
-      }
-    }
-  },
-  "hard_tabs": true
+	"languages": {
+		"Python": {
+			"language_servers": ["ruff", "pyright"]
+		},
+		"formatter": {
+			"code_actions_on_format": {
+				"source.fixAll.ruff": true,
+				"source.organizeImports.ruff": true
+			}
+		},
+		"Markdown": {
+			"hard_tabs": true,
+			"tab_size": 4,
+			"format_on_save": "off"
+		}
+	},
+	"hard_tabs": true
 }

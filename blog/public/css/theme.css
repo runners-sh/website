@@ -29,19 +29,19 @@
 	--bold-weight: bold;
 
 	--color-info: var(--color-a2);
-	--color-info-bg: color-mix(in lab, var(--color-info) 20%, var(--color-bg));
+	--color-info-bg: color-mix(in lab, var(--color-info) 10%, var(--color-bg));
 
 	--color-warning: #f9cd5f;
 	--color-warning-bg: color-mix(
 		in lab,
-		var(--color-warning) 20%,
+		var(--color-warning) 10%,
 		var(--color-bg)
 	);
 
 	--color-danger: var(--color-a3);
 	--color-danger-bg: color-mix(
 		in lab,
-		var(--color-danger) 20%,
+		var(--color-danger) 10%,
 		var(--color-bg)
 	);
 }
