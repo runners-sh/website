@@ -65,6 +65,20 @@ def run_http_server(port):
 			def log_message(self, format: str, *args):
 				pass
 
+			def send_head(self):
+				if "If-Modified-Since" in self.headers:
+					del self.headers["If-Modified-Since"]
+				if "If-None-Match" in self.headers:
+					del self.headers["If-None-Match"]
+				return super().send_head()
+
+			def end_headers(self):
+				self.send_header("Connection", "close")
+				self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+				self.send_header("Pragma", "no-cache")
+				self.send_header("Expires", "0")
+				return super().end_headers()
+
 		with TCPServer(("", port), Handler) as server:
 			_http_server = server
 			server.serve_forever()
