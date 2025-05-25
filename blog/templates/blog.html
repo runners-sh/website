@@ -97,6 +97,12 @@
 		</fieldset>
 		<fieldset>
 			<legend>Admonition block border width</legend>
+			<label
+				id="vis-cs-label"
+				for="vis-cs"
+				style="display: block; width: 100%; text-align: center"
+				>1px</label
+			>
 			<input
 				type="range"
 				id="vis-cs"
@@ -105,13 +111,15 @@
 				max="16"
 				step="1"
 				value="1"
+				style="width: 100%"
 			/>
 			<script>
-				const r = document.getElementById("vis-cs");
+				const r = document.getElementById("vis-cs"),
+					l = document.getElementById("vis-cs-label");
 				const upd = () => {
 					document.body.style.setProperty(
 						"--admon-border",
-						r.value + "px",
+						(l.textContent = r.value + "px"),
 					);
 				};
 				upd();
