@@ -29,7 +29,7 @@ def init(package_name: str | None):
 
 	base_path = module_path
 	while base_path != "/":
-		if path.exists(path.join(base_path, ".git")):
+		if path.exists(path.join(base_path, "pyproject.toml")):
 			break
 		base_path = path.dirname(base_path)
 	dist_path = path.join(base_path, "dist", package_name)
