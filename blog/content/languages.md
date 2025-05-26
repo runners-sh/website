@@ -107,3 +107,30 @@ void setup()
     </body>
 </html>
 ```
+
+```bash
+case $1 in
+    "init")
+    echo "initialising git repo"
+    [[ ! -d '.git' ]] && echo "creating .git folder" && mkdir .git
+    [[ ! -d '.git/objects' ]] && echo "creating objects folder in .git" && mkdir .git/objects
+    [[ ! -d '.git/refs' ]] && echo "creating objects folder in .git" && mkdir .git/refs
+    [[ ! -f '.git/HEAD' ]] && echo "HEAD missing, creating..." && printf "ref: refs/heads/main\n" > .git/HEAD
+    exit
+    ;;
+    "cat-file")
+    # TODO: add actual parsing to the arguments
+    if [[ ! $2 = '-p' || $3 = '' ]]; then echo "please implement cat-file with params $*"; exit; fi # asserting that the 'hash' is included
+    unzlib "$(fp "$3")"
+    exit
+    ;;
+    "hash-object")
+    if [[ ! $2 = '-w' || $3 = '' ]]; then echo "please implement hash-object with params $*"; exit; fi 
+    SHA=$(printf "blob %s\0%s" "$(stat -c%s "$3")" "$(cat "$3")" | zlib | shasum - | awk '{print $1}')
+    zlib "$(printf "blob %s\0%s" "$(stat -c%s "$3")" "$(cat "$3")")" > "$(fp "$SHA")"
+    echo "$SHA"
+    exit
+    ;;
+esac
+```
+
