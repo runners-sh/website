@@ -52,23 +52,57 @@
       packages = forAllSystems (
         system:
         let
-          ppkgs = pkgs.${system}.python3Packages;
+          opack = import nixpkgs {
+            inherit system;
+            overlays = [
+              (final: prev: {
+                solstice = prev.python313Packages.buildPythonPackage {
+                  name = "solstice";
+                  format = "pyproject";
+                  src = fs.toSource {
+                    root = ./.;
+                    # since we have 2 projects, this prevents shit from breaking
+                    fileset = fs.unions [
+                      ./README.md
+                      ./solstice
+                      ./pyproject.toml
+                    ];
+                  };
+                  propagatedBuildInputs = dependencies prev.python313Packages;
+                };
+
+              })
+            ];
+          };
+
           fs = pkgs.${system}.lib.fileset;
         in
-        {
-          solstice = ppkgs.buildPythonPackage {
-            name = "solstice";
-            format = "pyproject";
+        rec {
+          solstice = opack.solstice;
+          blog = opack.stdenv.mkDerivation {
+            name = "blog";
+            version = "0.1.0";
             src = fs.toSource {
               root = ./.;
-              # since we have 2 projects, this prevents shit from breaking
               fileset = fs.unions [
-                ./README.md
-                ./solstice
+                ./blog
                 ./pyproject.toml
+                ./README.md
               ];
             };
-            propagatedBuildInputs = dependencies ppkgs;
+
+            nativeBuildInputs = [
+              (opack.python313.withPackages (ppkgs: [ solstice ]))
+            ];
+
+            buildPhase = ''
+              python -m blog
+            '';
+
+            installPhase = ''
+              mkdir -p $out
+              cp -r dist/blog/ $out
+            '';
           };
         }
       );

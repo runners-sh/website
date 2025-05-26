@@ -28,6 +28,8 @@ def init(package_name: str | None):
 	while base_path != "/":
 		if path.exists(path.join(base_path, ".git")):
 			break
+		if path.exists(path.join(base_path, package_name)):
+			break
 		base_path = path.dirname(base_path)
 	dist_path = path.join(base_path, "dist", package_name)
 
