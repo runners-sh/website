@@ -38,17 +38,17 @@
 }
 
 main {
-	display: flex;
-	flex-direction: row-reverse;
+	display: grid;
 	gap: 4rem;
+	grid-template-columns: auto 13rem;
 	max-width: 80rem;
 	padding: 4rem;
 	margin: auto;
 
 	/* table of contents */
 	> aside {
-		width: 13rem;
-		flex-shrink: 0;
+		grid-column: 2;
+		grid-row: 1;
 
 		> ol {
 			padding-left: 2em;
@@ -78,7 +78,8 @@ main {
 		}
 	}
 	> article {
-		flex-grow: 1;
+		grid-column: 1;
+		grid-row: 1;
 		> .title-box {
 			overflow: hidden;
 			margin-bottom: 3rem;

@@ -39,7 +39,8 @@ fieldset {
 	margin-block: 1em;
 }
 
-.admonition {
+.admonition,
+.codehilite {
 	padding: 0 1rem;
 	margin-block: 2rem;
 	color: var(--color-admon-fg);
@@ -72,6 +73,7 @@ fieldset {
 		border: calc(var(--admon-border) / 1.5) solid var(--color-admon-fg);
 		border-left: none;
 		border-top: none;
+		pointer-events: none;
 	}
 
 	&.note,
