@@ -38,6 +38,13 @@
 		var(--color-bg)
 	);
 
+	--color-success: #89e815;
+	--color-success-bg: color-mix(
+		in lab,
+		var(--color-success) 10%,
+		var(--color-bg)
+	);
+
 	--color-danger: var(--color-a3);
 	--color-danger-bg: color-mix(
 		in lab,
@@ -45,17 +52,25 @@
 		var(--color-bg)
 	);
 
-	/* weak color 1 */
-	--color-w1: color-mix(in oklab, var(--color-bg), var(--color-fg) 85%);
-	/* weak color 2 */
-	--color-w2: color-mix(in oklab, var(--color-bg), var(--color-fg) 50%);
+	--color-example: var(--color-a1);
+	--color-example-bg: color-mix(
+		in lab,
+		var(--color-example) 10%,
+		var(--color-bg)
+	);
+
+	--color-fg-95: color-mix(in oklab, var(--color-bg), var(--color-fg) 95%);
+	--color-fg-90: color-mix(in oklab, var(--color-bg), var(--color-fg) 90%);
+	--color-fg-85: color-mix(in oklab, var(--color-bg), var(--color-fg) 85%);
+	--color-fg-80: color-mix(in oklab, var(--color-bg), var(--color-fg) 80%);
+	--color-fg-50: color-mix(in oklab, var(--color-bg), var(--color-fg) 50%);
 
 	--color-bg-5: color-mix(in oklab, var(--color-bg), var(--color-fg) 5%);
 	--color-bg-10: color-mix(in oklab, var(--color-bg), var(--color-fg) 10%);
+	--color-bg-15: color-mix(in oklab, var(--color-bg), var(--color-fg) 15%);
 	--color-bg-20: color-mix(in oklab, var(--color-bg), var(--color-fg) 20%);
 
 	/* success; green-ish color */
-	--color-sc: #89e815;
 }
 
 .theme-dark {

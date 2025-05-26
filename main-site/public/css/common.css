@@ -104,7 +104,7 @@ a {
 code {
 	/* the fonts are already monospaced so */
 	font: inherit;
-	border: 1px solid var(--color-w2);
+	border: 1px solid var(--color-fg-50);
 }
 .codehilite code {
 	border: none;

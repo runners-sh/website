@@ -2,6 +2,7 @@ from solstice import *
 from solstice.common import load_verbatim
 
 init(__package__)
+
 copy("public")
 
 ascii_logo = load_verbatim("ascii/logo.asc")
