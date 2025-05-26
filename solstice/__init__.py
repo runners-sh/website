@@ -55,7 +55,9 @@ def page(template_name: str, output_path: str | None = None, **kwargs):
 	- `output_path`: Path to save the rendered HTML file to. Defaults to the template name.
 	- `**kwargs`: Additional keyword arguments to pass to the template.
 	"""
-	dist_path = dist_path_for(output_path or template_name)
+	dist_path = dist_path_for(
+		output_path or (path.splitext(template_name)[0] + ".html")
+	)
 	with open(dist_path, "w") as file:
 		contents = env.get_template(template_name).render(**kwargs)
 		file.write(contents)
