@@ -35,7 +35,9 @@ def init(package_name: str | None):
 
 	cli.run_cli()
 
-	env = jinja2.Environment(loader=jinja2.PackageLoader(package_name), autoescape=True)
+	env = jinja2.Environment(
+		loader=jinja2.PackageLoader(package_name), autoescape=True
+	)
 
 
 def dist_path_for(name: str) -> str:
@@ -53,7 +55,9 @@ def page(template_name: str, output_path: str | None = None, **kwargs):
 	- `output_path`: Path to save the rendered HTML file to. Defaults to the template name.
 	- `**kwargs`: Additional keyword arguments to pass to the template.
 	"""
-	dist_path = dist_path_for(output_path or template_name)
+	dist_path = dist_path_for(
+		output_path or (path.splitext(template_name)[0] + ".html")
+	)
 	with open(dist_path, "w") as file:
 		contents = env.get_template(template_name).render(**kwargs)
 		file.write(contents)
@@ -104,14 +108,12 @@ def page_md(
 			warn("\tkey 'content' is reserved, skipping...")
 			meta.pop("content")
 
-		dist_path = page("blog.html", output_path, content=content, **meta)
+		dist_path = page(template_name, output_path, content=content, **meta)
 		try:
 			os.utime(dist_path, (src_stat.st_mtime, src_stat.st_mtime))
 		except Exception:
 			# can't set modification time, just ignore. caching will be unsupported on these platforms
 			pass
-
-		page(template_name, output_path, content=content, **meta)
 
 
 def recurse_files(root: str, extensions: list[str]):
