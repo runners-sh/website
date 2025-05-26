@@ -1,5 +1,7 @@
 /* Custom syntax highlighting theme by yours truly (Cubic) */
-
+div.codehilite {
+	background-color: var(--color-bg-hl-10);
+}
 pre {
 	line-height: 125%;
 }
