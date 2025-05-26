@@ -18,9 +18,7 @@
 <main>
 	<aside>
 		<h1>Table of contents</h1>
-		<ol>
-			<li>Todo</li>
-		</ol>
+		{{toc|safe}}
 
 		<div class="fancy-hr">
 			<div><span></span><span></span><span></span><span></span></div>
@@ -59,74 +57,6 @@
 				</svg>
 			</li>
 		</ul>
-
-		<h1>Visual Options</h1>
-		<fieldset>
-			<legend>Font</legend>
-			<div>
-				<label for="vis-font-m1pc">M1 PLUS 1 Code</label>
-				<input
-					type="radio"
-					id="vis-font-m1pc"
-					name="vis-font"
-					checked
-				/>
-			</div>
-			<div>
-				<label for="vis-font-iosev">Iosevka</label>
-				<input type="radio" id="vis-font-iosev" name="vis-font" />
-			</div>
-			<p style="margin-block-end: 0">
-				If everything looks like Comic Sans, uh, contact Cubic. That's
-				not supposed to happen
-			</p>
-		</fieldset>
-		<fieldset>
-			<legend>Color scheme</legend>
-			<div>
-				<label for="vis-cs-default">Default</label>
-				<input type="radio" id="vis-cs-default" name="vis-cs" checked />
-			</div>
-			<div>
-				<label for="vis-cs-desat">Desaturated</label>
-				<input type="radio" id="vis-cs-desat" name="vis-cs" />
-			</div>
-			<div>
-				<label for="vis-cs-purple">Purple</label>
-				<input type="radio" id="vis-cs-purple" name="vis-cs" />
-			</div>
-		</fieldset>
-		<fieldset>
-			<legend>Admonition block border width</legend>
-			<label
-				id="vis-cs-label"
-				for="vis-cs"
-				style="display: block; width: 100%; text-align: center"
-				>1px</label
-			>
-			<input
-				type="range"
-				id="vis-cs"
-				name="vis-border"
-				min="0"
-				max="16"
-				step="1"
-				value="1"
-				style="width: 100%"
-			/>
-			<script>
-				const r = document.getElementById("vis-cs"),
-					l = document.getElementById("vis-cs-label");
-				const upd = () => {
-					document.body.style.setProperty(
-						"--admon-border",
-						(l.textContent = r.value + "px"),
-					);
-				};
-				upd();
-				r.addEventListener("input", upd);
-			</script>
-		</fieldset>
 	</aside>
 	<article>
 		<div class="title-box">

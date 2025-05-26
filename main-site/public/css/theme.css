@@ -8,109 +8,6 @@
       - cubic
 */
 @font-face {
-	font-family: "M PLUS 1 Code";
-	font-display: swap;
-	font-weight: 400;
-	src:
-		local("M PLUS 1 Code"),
-		url("../woff/MPLUS1Code-Regular-Kanjiless.woff2") format("woff2");
-}
-@font-face {
-	font-family: "M PLUS 1 Code";
-	font-display: swap;
-	font-weight: 500;
-	src:
-		local("M PLUS 1 Code"),
-		url("../woff/MPLUS1Code-Medium-Kanjiless.woff2") format("woff2");
-}
-
-.theme-dark {
-	--font: "Comic Sans MS", cursive;
-	--bold-weight: bold;
-
-	--color-bg: #0b0b18;
-	--color-fg: #ded5ec;
-	--color-a1: #d468ff;
-	--color-a2: #7aebff;
-	--color-a3: #ff7063;
-
-	--color-info: var(--color-a2);
-	--color-info-bg: color-mix(in lab, var(--color-info) 10%, var(--color-bg));
-
-	--color-warning: #f9cd5f;
-	--color-warning-bg: color-mix(
-		in lab,
-		var(--color-warning) 10%,
-		var(--color-bg)
-	);
-
-	--color-success: #89e815;
-	--color-success-bg: color-mix(
-		in lab,
-		var(--color-success) 10%,
-		var(--color-bg)
-	);
-
-	--color-danger: var(--color-a3);
-	--color-danger-bg: color-mix(
-		in lab,
-		var(--color-danger) 10%,
-		var(--color-bg)
-	);
-
-	--color-example: var(--color-a1);
-	--color-example-bg: color-mix(
-		in lab,
-		var(--color-example) 10%,
-		var(--color-bg)
-	);
-
-	--color-fg-95: color-mix(in oklab, var(--color-bg), var(--color-fg) 95%);
-	--color-fg-90: color-mix(in oklab, var(--color-bg), var(--color-fg) 90%);
-	--color-fg-85: color-mix(in oklab, var(--color-bg), var(--color-fg) 85%);
-	--color-fg-80: color-mix(in oklab, var(--color-bg), var(--color-fg) 80%);
-	--color-fg-50: color-mix(in oklab, var(--color-bg), var(--color-fg) 50%);
-
-	--color-bg-5: color-mix(in oklab, var(--color-bg), var(--color-fg) 5%);
-	--color-bg-10: color-mix(in oklab, var(--color-bg), var(--color-fg) 10%);
-	--color-bg-15: color-mix(in oklab, var(--color-bg), var(--color-fg) 15%);
-	--color-bg-20: color-mix(in oklab, var(--color-bg), var(--color-fg) 20%);
-
-	/* success; green-ish color */
-}
-
-.theme-dark {
-	--font: "M PLUS 1 Code", "Comic Sans MS", emoji, cursive;
-	--bold-weight: 500;
-}
-.theme-dark:has(#vis-font-iosev:checked) {
-	--font: "Iosevka Web", "Comic Sans MS", emoji, cursive;
-	--bold-weight: 700;
-}
-
-.theme-dark {
-	--color-bg: #0b0b18;
-	--color-fg: #ded5ec;
-	--color-a1: #f989ff;
-	--color-a2: #7aebff;
-	--color-a3: #ff7063;
-}
-.theme-dark:has(#vis-cs-desat:checked) {
-	--color-bg: #0b0b18;
-	--color-fg: #ded5ec;
-	--color-a1: #e793ec;
-	--color-a2: #88dfee;
-	--color-a3: #ee8076;
-}
-.theme-dark:has(#vis-cs-purple:checked) {
-	--color-bg: #0b0b18;
-	--color-fg: #ded5ec;
-	--color-a1: #d468ff;
-	--color-a2: #7aebff;
-	--color-a3: #ff7063;
-}
-
-@font-face {
 	font-family: "Iosevka Web";
 	font-display: swap;
 	font-weight: 500;
@@ -125,4 +22,38 @@
 	font-stretch: normal;
 	font-style: normal;
 	src: url("../woff/Iosevka-Bold.woff2") format("woff2");
+}
+
+.theme-dark {
+	--font: "Iosevka Web", "Comic Sans MS", cursive;
+	--bold-weight: 700;
+
+	--color-bg: #0b0b18;
+	--color-fg: #ded5ec;
+	--color-a1: #d468ff;
+	--color-a2: #7aebff;
+	--color-a3: #ff7063;
+
+	--color-heading: var(--color-a1);
+	--color-link: var(--color-a2);
+	--color-bold: var(--color-a3);
+
+	--color-info: var(--color-a2);
+	--color-warning: #f9cd5f;
+	--color-success: #89e815;
+	--color-danger: var(--color-a3);
+	--color-example: var(--color-a1);
+
+	--color-fg-95: color-mix(in oklab, var(--color-bg), var(--color-fg) 95%);
+	--color-fg-90: color-mix(in oklab, var(--color-bg), var(--color-fg) 90%);
+	--color-fg-85: color-mix(in oklab, var(--color-bg), var(--color-fg) 85%);
+	--color-fg-80: color-mix(in oklab, var(--color-bg), var(--color-fg) 80%);
+	--color-fg-50: color-mix(in oklab, var(--color-bg), var(--color-fg) 50%);
+
+	--color-bg-5: color-mix(in oklab, var(--color-bg), var(--color-fg) 5%);
+	--color-bg-10: color-mix(in oklab, var(--color-bg), var(--color-fg) 10%);
+	--color-bg-15: color-mix(in oklab, var(--color-bg), var(--color-fg) 15%);
+	--color-bg-20: color-mix(in oklab, var(--color-bg), var(--color-fg) 20%);
+
+	/* success; green-ish color */
 }

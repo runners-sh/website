@@ -125,7 +125,7 @@ case $1 in
     exit
     ;;
     "hash-object")
-    if [[ ! $2 = '-w' || $3 = '' ]]; then echo "please implement hash-object with params $*"; exit; fi 
+    if [[ ! $2 = '-w' || $3 = '' ]]; then echo "please implement hash-object with params $*"; exit; fi
     SHA=$(printf "blob %s\0%s" "$(stat -c%s "$3")" "$(cat "$3")" | zlib | shasum - | awk '{print $1}')
     zlib "$(printf "blob %s\0%s" "$(stat -c%s "$3")" "$(cat "$3")")" > "$(fp "$SHA")"
     echo "$SHA"
@@ -133,4 +133,3 @@ case $1 in
     ;;
 esac
 ```
-

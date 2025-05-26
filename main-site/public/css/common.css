@@ -25,6 +25,15 @@ b {
 	font-weight: var(--bold-weight);
 }
 
+strong,
+b {
+	color: var(--color-a3);
+}
+
+a {
+	color: var(--color-a2);
+}
+
 h1 {
 	color: var(--color-a1);
 }
@@ -39,13 +48,32 @@ fieldset {
 }
 
 .admonition {
+	&.note,
+	&.info,
+	&.tips {
+		--color-admon-fg: var(--color-info);
+	}
+	&.warning,
+	&.warn,
+	&.important {
+		--color-admon-fg: var(--color-warning);
+	}
+	&.danger,
+	&.critical {
+		--color-admon-fg: var(--color-danger);
+	}
+
+	--color-admon-bg: color-mix(
+		in oklab,
+		var(--color-bg),
+		var(--color-admon-fg) 10%
+	);
 	padding: 0 1rem;
 	margin-block: 2rem;
 	color: var(--color-admon-fg);
 	border: var(--admon-border) solid var(--color-admon-fg);
 	position: relative;
 	background-color: var(--color-admon-bg);
-
 	.admonition-title {
 		/* font-weight: bold; */
 		/* font-size: 1.1em; */
@@ -72,33 +100,6 @@ fieldset {
 		border-left: none;
 		border-top: none;
 	}
-
-	&.note,
-	&.info,
-	&.tips {
-		--color-admon-fg: var(--color-info);
-		--color-admon-bg: var(--color-info-bg);
-	}
-	&.warning,
-	&.warn,
-	&.important {
-		--color-admon-fg: var(--color-warning);
-		--color-admon-bg: var(--color-warning-bg);
-	}
-	&.danger,
-	&.critical {
-		--color-admon-fg: var(--color-danger);
-		--color-admon-bg: var(--color-danger-bg);
-	}
-}
-
-strong,
-b {
-	color: var(--color-a3);
-}
-
-a {
-	color: var(--color-a2);
 }
 
 code {
