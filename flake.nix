@@ -101,8 +101,7 @@
             '';
 
             installPhase = ''
-              mkdir -p $out
-              cp -r dist/blog/ $out
+              cp -r dist/ $out
             '';
           };
 
