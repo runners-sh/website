@@ -42,7 +42,9 @@ def init(package_name: str | None):
 
 	cli.run_cli()
 
-	env = jinja2.Environment(loader=jinja2.PackageLoader(package_name), autoescape=True)
+	env = jinja2.Environment(
+		loader=jinja2.PackageLoader(package_name), autoescape=True
+	)
 
 
 def dist_path_for(name: str) -> str:
@@ -61,7 +63,9 @@ def page(template_name: str, output_path: str | None = None, **kwargs):
 	- `output_path`: Path to save the rendered HTML file to. Defaults to the template name.
 	- `**kwargs`: Additional keyword arguments to pass to the template.
 	"""
-	dist_path = dist_path_for(output_path or (path.splitext(template_name)[0] + ".html"))
+	dist_path = dist_path_for(
+		output_path or (path.splitext(template_name)[0] + ".html")
+	)
 	with open(dist_path, "w") as file:
 		contents = env.get_template(template_name).render(**kwargs)
 		file.write(contents)
@@ -75,7 +79,9 @@ def finalize():
 
 def _minify_all():
 	with LogTimer("Minifying files..."):
-		for dirname, file, name, ext in recurse_files(dist_path, [".css", ".html", ".js"]):
+		for dirname, file, name, ext in recurse_files(
+			dist_path, [".css", ".html", ".js"]
+		):
 			with open(path.join(dirname, file), "r+") as f:
 				contents = f.read()
 				match ext:
@@ -129,8 +135,13 @@ def page_md(
 			warn(f"(in content file '{src_path}'):")
 			warn("\tkey 'content' is reserved, skipping...")
 			meta.pop("content")
-
-		dist_path = page(template_name, output_path, content=content, **meta)
+		dist_path = page(
+			template_name,
+			output_path,
+			content=content,
+			toc=_markdown_instance.toc,  # type: ignore
+			**meta,
+		)
 		try:
 			os.utime(dist_path, (src_stat.st_mtime, src_stat.st_mtime))
 		except Exception:
@@ -179,6 +190,7 @@ _markdown_instance = markdown.Markdown(
 		"admonition",
 		"pymdownx.extra",
 		"pymdownx.tilde",
+		"toc",
 		EmojiExtension(emoji_generator=emoji_to_alt),
 		HighlightExtension(
 			css_class="codehilite",

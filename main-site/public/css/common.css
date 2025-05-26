@@ -130,3 +130,11 @@ table:not(.codehilitetable) {
 	}
 	border-collapse: collapse;
 }
+
+.toc {
+	ul {
+		margin-left: 1em;
+		list-style-type: "> ";
+		padding: 0;
+	}
+}
