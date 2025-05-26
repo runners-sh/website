@@ -1,7 +1,5 @@
 # pyright: reportMissingImports=false, reportMissingModuleSource=false
 
-import re
-
 from minify_html import minify
 
 
