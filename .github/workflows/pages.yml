@@ -1,3 +1,5 @@
+name: CI
+
 # either when a new git tag is pushed to main or when it's manually triggered
 on:
   push:
@@ -23,9 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: pip install -r requirements.txt
-      - run: python -m blog
+      - run: python -m main-site
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: dist/main-site
       - id: deployment
         uses: actions/deploy-pages@v4

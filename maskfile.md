@@ -23,14 +23,14 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## build
+## build (module)
 
 > Build the website
 
 Build files will appear in the `./dist` folder.
 
 ```sh
-python -m blog
+python -m "$module"
 ```
 
 ## test
@@ -70,5 +70,5 @@ pip freeze > requirements.txt
 > Serve the specified website locally
 
 ```sh
-python3 -m $module serve
+python3 -m "$module" serve
 ```
