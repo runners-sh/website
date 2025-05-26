@@ -4,10 +4,12 @@
 import os
 import os.path as path
 import shutil
+from argparse import Namespace
 
 import frontmatter
 import jinja2
 import markdown
+import minify_html
 
 from .log import *
 
@@ -15,6 +17,7 @@ pkgname: str
 env: jinja2.Environment
 module_path: str
 dist_path: str
+cli_args: Namespace
 
 
 def init(package_name: str | None):
@@ -51,6 +54,7 @@ def dist_path_for(name: str) -> str:
 
 
 def page(template_name: str, output_path: str | None = None, **kwargs):
+	global cli_args
 	"""
 	Generate a page from a Jinja2 template.
 	# Arguments
@@ -63,6 +67,15 @@ def page(template_name: str, output_path: str | None = None, **kwargs):
 	)
 	with open(dist_path, "w") as file:
 		contents = env.get_template(template_name).render(**kwargs)
+		if cli_args.release:
+			contents = minify_html.minify(
+				contents,
+				minify_js=True,
+				minify_css=True,
+				remove_processing_instructions=True,
+				allow_removing_spaces_between_attributes=True,
+				allow_optimal_entities=True,
+			)
 		file.write(contents)
 	return dist_path
 
@@ -146,8 +159,9 @@ def copy(dir: str):
 	- `dir`: The directory to copy.
 	"""
 	if path.exists(dir):
+		dist = dist_path_for(dir)
 		with LogTimer(f"Copying directory '{dir}'"):
-			shutil.copytree(dir, dist_path_for(dir), dirs_exist_ok=True)
+			shutil.copytree(dir, dist, dirs_exist_ok=True)
 
 
 from pymdownx.emoji import EmojiExtension
