@@ -18,4 +18,4 @@ title: "Hello, World!"
 		meta, content = load_markdown(f.name)
 
 		assert meta == {"title": "Hello, World!"}
-		assert content == "<h1>Hello, world!</h1>"
+		assert content == '<h1 id="hello-world">Hello, world!</h1>'
