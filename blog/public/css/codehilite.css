@@ -55,13 +55,13 @@ span.linenos.special {
 	color: var(--color-fg);
 } /* Name */
 .codehilite .o {
-	color: var(--color-fg);
+	color: var(--color-a2);
 } /* Operator */
 .codehilite .x {
 	color: var(--color-fg);
 } /* Other */
 .codehilite .p {
-	color: var(--color-fg);
+	color: var(--color-a2);
 } /* Punctuation */
 .codehilite .ch {
 	color: var(--color-w1);
@@ -266,7 +266,7 @@ span.linenos.special {
 	color: var(--color-a3);
 } /* Literal.String.Single */
 .codehilite .ss {
-	color: var(--color-a3);
+	color: var(--color-a1);
 } /* Literal.String.Symbol */
 .codehilite .bp {
 	color: var(--color-a3);
