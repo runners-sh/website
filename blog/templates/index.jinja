@@ -1,1 +1,42 @@
-<meta http-equiv="refresh" content="0; url=./content/gallery.html" />
+{% extends "base.jinja" %} {% block head %}
+<link rel="stylesheet" href="/public/css/index.css" />
+<title>{{title}}</title>
+{% endblock %} {% block body %}
+
+<nav>
+	<a href="#" class="pwrln">root@solrunners ~#</a>
+	<a href="#" class="pwrln pwr-sel">home</a>
+	<a href="#" class="pwrln">blog</a>
+	<a href="#" class="pwrln">zine</a>
+
+	<!-- <span class="pwrln pwr-sp"></span> -->
+	<!-- <a href="//creativecommons.org/licenses/by-nc/4.0" class="pwrln">
+        © 2026 CC BY-NC 4.0
+    </a> -->
+	<span class="pwrln">© 2025 All Rights Reserved, for now</span>
+</nav>
+<main>
+	<div class="title-page">
+		<div class="title-inner">
+			<div class="ascii-logo">{{ascii_logo|safe}}</div>
+			<div class="ascii-name">{{ascii_name|safe}}</div>
+		</div>
+		<div class="barcode">
+			<i class="a1 w18"></i>
+			<i class="w1"></i>
+			<i class="a2 w3"></i>
+			<i class="w1"></i>
+			<i class="a3 w1"></i>
+			<i class="w1"></i>
+			<i class="fg w2"></i>
+			<i class="w1"></i>
+			<i class="a3 w1"></i>
+			<i class="w3"></i>
+			<i class="a3 w1"></i>
+			<i class="w36"></i>
+			<i class="a1 w4"></i>
+		</div>
+	</div>
+</main>
+{% endblock %}
+>>>>>>> 8377fba (git commit -m "homepage design (wip)")

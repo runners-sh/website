@@ -1,52 +1,83 @@
-@import "./theme.css";
+@import "./common.css";
 
-.container {
-    height: 100vh;
+.title-page {
+	width: 70%;
+	max-width: 800px;
+	margin: auto;
+	height: calc(100vh - 10em);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	& > div {
+		width: 100%;
+		display: flex;
+		height: fit-content;
+		justify-content: space-between;
+		align-items: end;
+	}
+
+	.barcode {
+		width: 100%;
+		transform: skew(-30deg);
+		display: flex;
+		font-size: 0.5rem;
+		margin: 2em;
+		margin-top: 6em;
+
+		i {
+			height: 1.5rem;
+		}
+		> :first-child {
+			width: max(100% - 50rem, 4rem);
+		}
+
+		> * {
+			background: var(--color-bg);
+		}
+		.a1 {
+			background: var(--color-a1);
+		}
+		.a2 {
+			background: var(--color-a2);
+		}
+		.a3 {
+			background: var(--color-a3);
+		}
+		.fg {
+			background: var(--color-fg);
+		}
+		.w1 {
+			flex-grow: 1;
+		}
+		.w2 {
+			flex-grow: 2;
+		}
+		.w3 {
+			flex-grow: 3;
+		}
+		.w4 {
+			flex-grow: 4;
+		}
+		.w6 {
+			flex-grow: 6;
+		}
+		.w18 {
+			flex-grow: 18;
+		}
+		.w36 {
+			flex-grow: 36;
+		}
+	}
+}
+.ascii-logo {
+	color: var(--color-a1);
+	font-weight: bold;
+	letter-spacing: 0.01em;
 }
 
-.mc {
-    display: grid;
-    place-items: center;
-    height: 100%;
-}
-@media (max-width: 800px) {
-    .mc {
-        color: red !important;
-    }
-}
-
-path {
-    fill: currentColor;
-}
-
-main {
-    width: 100%;
-    height: 50%;
-    position: relative;
-    > svg {
-        color: var(--color-accent-400);
-        height: 100%;
-        width: auto;
-    }
-    > div {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        text-align: right;
-        > ul {
-            padding: 0;
-            > li {
-                display: block;
-                > svg {
-                    height: 1em;
-                }
-            }
-        }
-        > h1 {
-            color: var(--color-accent-800);
-            font-size: 6rem;
-            margin-block-start: 0;
-            margin-right: -0.07em;
-        }
-    }
+.ascii-name {
+	color: var(--color-a1);
+	margin-bottom: 0.3lh;
+	font-size: 1.2em;
 }

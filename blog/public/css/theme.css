@@ -53,16 +53,16 @@
 	--color-sc: #89e815;
 }
 
-.theme-dark:has(#vis-font-m1pc:checked) {
-	--font: "M PLUS 1 Code", "Comic Sans MS", cursive;
+.theme-dark {
+	--font: "M PLUS 1 Code", "Comic Sans MS", emoji, cursive;
 	--bold-weight: 500;
 }
 .theme-dark:has(#vis-font-iosev:checked) {
-	--font: "Iosevka Web", "Comic Sans MS", cursive;
+	--font: "Iosevka Web", "Comic Sans MS", emoji, cursive;
 	--bold-weight: 700;
 }
 
-.theme-dark:has(#vis-cs-default:checked) {
+.theme-dark {
 	--color-bg: #0b0b18;
 	--color-fg: #ded5ec;
 	--color-a1: #f989ff;
