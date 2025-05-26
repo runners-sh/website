@@ -49,6 +49,11 @@
 	--color-w1: color-mix(in oklab, var(--color-bg), var(--color-fg) 85%);
 	/* weak color 2 */
 	--color-w2: color-mix(in oklab, var(--color-bg), var(--color-fg) 50%);
+
+	--color-bg-5: color-mix(in oklab, var(--color-bg), var(--color-fg) 5%);
+	--color-bg-10: color-mix(in oklab, var(--color-bg), var(--color-fg) 10%);
+	--color-bg-20: color-mix(in oklab, var(--color-bg), var(--color-fg) 20%);
+
 	/* success; green-ish color */
 	--color-sc: #89e815;
 }

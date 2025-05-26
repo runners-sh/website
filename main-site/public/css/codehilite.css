@@ -1,7 +1,34 @@
 /* Custom syntax highlighting theme by yours truly (Cubic) */
 
+/* Custom syntax highlighting theme by yours truly (Cubic) */
+div.codehilite {
+	background-color: var(--color-bg-5);
+}
 pre {
 	line-height: 125%;
+}
+.codehilite {
+	--color-admon-fg: var(--color-w2);
+	margin-block: 2rem;
+	padding: 0.5lh 0.2lh;
+}
+.codehilitetable {
+	display: grid;
+	grid-template-columns: 2rem auto;
+	tbody,
+	tr {
+		display: contents;
+	}
+	td {
+		display: block;
+	}
+	td.code {
+		overflow-x: auto;
+		scrollbar-width: thin;
+	}
+	pre {
+		margin-block: 0.2rem;
+	}
 }
 td.linenos .normal {
 	color: var(--color-w1);
