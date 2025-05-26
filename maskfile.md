@@ -70,5 +70,5 @@ pip freeze > requirements.txt
 > Serve the specified website locally
 
 ```sh
-python3 -m blog serve
+python3 -m $module serve
 ```
