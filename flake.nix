@@ -79,6 +79,7 @@
         in
         rec {
           solstice = opack.solstice;
+
           blog = opack.stdenv.mkDerivation {
             name = "blog";
             version = "0.1.0";
@@ -104,6 +105,8 @@
               cp -r dist/blog/ $out
             '';
           };
+
+          default = blog;
         }
       );
     };
