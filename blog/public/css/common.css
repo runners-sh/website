@@ -50,11 +50,13 @@ fieldset {
 	.admonition-title {
 		/* font-weight: bold; */
 		/* font-size: 1.1em; */
-		top: calc(-0.5lh - var(--admon-border)/2);
+		top: calc(-0.5lh - var(--admon-border) / 2);
 		position: absolute;
-		background: linear-gradient(to bottom,
-				transparent calc(50% - var(--admon-border)/2 - 0.1px),
-				var(--color-admon-bg) calc(50% - var(--admon-border)/2 - 0.1px));
+		background: linear-gradient(
+			to bottom,
+			transparent calc(50% - var(--admon-border) / 2 - 1px),
+			var(--color-admon-bg) calc(50% - var(--admon-border) / 2 - 1px)
+		);
 		padding-inline: 0.5ch;
 		margin: 0;
 		margin-left: -0.5ch;
@@ -99,7 +101,17 @@ b {
 a {
 	color: var(--color-a2);
 }
-table {
+
+code {
+	/* the fonts are already monospaced so */
+	font: inherit;
+	border: 1px solid var(--color-w2);
+}
+.codehilite code {
+	border: none;
+}
+
+table:not(.codehilitetable) {
 	th,
 	td {
 		text-align: left;

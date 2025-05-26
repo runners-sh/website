@@ -145,6 +145,23 @@ def copy(dir: str):
 			shutil.copytree(dir, dist_path_for(dir), dirs_exist_ok=True)
 
 
+from pymdownx.highlight import HighlightExtension
+from pymdownx.emoji import EmojiExtension, to_alt as emoji_to_alt
+
+_markdown_instance = markdown.Markdown(
+	extensions=[
+		"admonition",
+		"pymdownx.extra",
+		"pymdownx.tilde",
+		EmojiExtension(emoji_generator=emoji_to_alt),
+		HighlightExtension(
+			css_class="codehilite",
+			linenums=True,
+		),
+	],
+)
+
+
 def load_markdown(file_path: str) -> tuple[dict, str]:
 	"""
 	Load a markdown file with frontmatter metadata, and convert it into HTML.
@@ -157,14 +174,8 @@ def load_markdown(file_path: str) -> tuple[dict, str]:
 	"""
 	with open(file_path, "r") as f:
 		meta, content = frontmatter.parse(f.read())
-		return meta, markdown.markdown(
-			content,
-			extensions=[
-				"markdown.extensions.extra",
-				"markdown.extensions.admonition",
-				"markdown.extensions.codehilite",
-			],
-		)
+		_markdown_instance.reset()
+		return meta, _markdown_instance.convert(content)
 
 
 from . import common  # noqa: E402 F401

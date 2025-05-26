@@ -44,6 +44,13 @@
 		var(--color-danger) 10%,
 		var(--color-bg)
 	);
+
+	/* weak color 1 */
+	--color-w1: color-mix(in oklab, var(--color-bg), var(--color-fg) 85%);
+	/* weak color 2 */
+	--color-w2: color-mix(in oklab, var(--color-bg), var(--color-fg) 50%);
+	/* success; green-ish color */
+	--color-sc: #89e815;
 }
 
 .theme-dark:has(#vis-font-m1pc:checked) {
