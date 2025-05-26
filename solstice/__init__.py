@@ -1,10 +1,13 @@
+# ruff: noqa: F401 E402
+# pyright: reportMissingImports=false, reportMissingModuleSource=false
+
 import os
 import os.path as path
 import shutil
 
-import frontmatter  # type: ignore (removes pyright hallucination)
+import frontmatter
 import jinja2
-import markdown  # type: ignore (removes pyright hallucination)
+import markdown
 
 from .log import *
 
@@ -147,8 +150,9 @@ def copy(dir: str):
 			shutil.copytree(dir, dist_path_for(dir), dirs_exist_ok=True)
 
 
+from pymdownx.emoji import EmojiExtension
+from pymdownx.emoji import to_alt as emoji_to_alt
 from pymdownx.highlight import HighlightExtension
-from pymdownx.emoji import EmojiExtension, to_alt as emoji_to_alt
 
 _markdown_instance = markdown.Markdown(
 	extensions=[
