@@ -4,17 +4,20 @@
 import os
 import os.path as path
 import shutil
+from argparse import Namespace
 
 import frontmatter
 import jinja2
 import markdown
 
 from .log import *
+from .minify import *
 
 pkgname: str
 env: jinja2.Environment
 module_path: str
 dist_path: str
+cli_args: Namespace
 
 
 def init(package_name: str | None):
@@ -38,9 +41,7 @@ def init(package_name: str | None):
 
 	cli.run_cli()
 
-	env = jinja2.Environment(
-		loader=jinja2.PackageLoader(package_name), autoescape=True
-	)
+	env = jinja2.Environment(loader=jinja2.PackageLoader(package_name), autoescape=True)
 
 
 def dist_path_for(name: str) -> str:
@@ -51,6 +52,7 @@ def dist_path_for(name: str) -> str:
 
 
 def page(template_name: str, output_path: str | None = None, **kwargs):
+	global cli_args
 	"""
 	Generate a page from a Jinja2 template.
 	# Arguments
@@ -58,13 +60,29 @@ def page(template_name: str, output_path: str | None = None, **kwargs):
 	- `output_path`: Path to save the rendered HTML file to. Defaults to the template name.
 	- `**kwargs`: Additional keyword arguments to pass to the template.
 	"""
-	dist_path = dist_path_for(
-		output_path or (path.splitext(template_name)[0] + ".html")
-	)
+	dist_path = dist_path_for(output_path or (path.splitext(template_name)[0] + ".html"))
 	with open(dist_path, "w") as file:
 		contents = env.get_template(template_name).render(**kwargs)
 		file.write(contents)
 	return dist_path
+
+
+def finalize():
+	if cli_args.release:
+		_minify_all()
+
+
+def _minify_all():
+	with LogTimer("Minifying files..."):
+		for dirname, file, name, ext in recurse_files(dist_path, [".css", ".html", ".js"]):
+			with open(path.join(dirname, file), "r+") as f:
+				contents = f.read()
+				match ext:
+					case ".html":
+						contents = minify_html(contents)
+				f.seek(0)
+				f.write(contents)
+				f.truncate()
 
 
 def page_md(
@@ -128,14 +146,14 @@ def recurse_files(root: str, extensions: list[str]):
 	- `extensions`: A list of file extensions to filter by (e.g., ['.md', '.txt']).
 
 	# Yields
-	Tuples of (directory name, file name, file base name) for each matching file.
+	Tuples of (directory name, file name, file base name, extension) for each matching file.
 	"""
 	for dirname, dirs, files in os.walk(root):
 		for file in files:
 			name, ext = path.splitext(file)
 			if ext not in extensions:
 				continue
-			yield (dirname, file, name)
+			yield (dirname, file, name, ext)
 
 
 def copy(dir: str):
@@ -146,8 +164,9 @@ def copy(dir: str):
 	- `dir`: The directory to copy.
 	"""
 	if path.exists(dir):
+		dist = dist_path_for(dir)
 		with LogTimer(f"Copying directory '{dir}'"):
-			shutil.copytree(dir, dist_path_for(dir), dirs_exist_ok=True)
+			shutil.copytree(dir, dist, dirs_exist_ok=True)
 
 
 from pymdownx.emoji import EmojiExtension

@@ -2,6 +2,8 @@ import argparse
 import shutil
 import sys
 
+import solstice
+
 from . import *
 
 
@@ -15,9 +17,11 @@ def run_cli():
 
 	parser = argparse.ArgumentParser("solstice", description="")
 	parser.add_argument("cmd", nargs="?", default="build", help='"build", "clean", or "serve"')
+	parser.add_argument("--release", action="store_true")
 	parser.add_argument("-p", "--port", default=5123, type=int)
 
 	args = parser.parse_args()
+	solstice.cli_args = args
 
 	match args.cmd:
 		case "build":

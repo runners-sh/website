@@ -5,6 +5,7 @@ iniconfig==2.1.0
 Jinja2==3.1.6
 Markdown==3.8
 MarkupSafe==3.0.2
+minify_html==0.16.4
 mypy_extensions==1.1.0
 packaging==25.0
 pathspec==0.12.1
