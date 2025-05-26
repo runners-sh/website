@@ -9,6 +9,7 @@ from argparse import Namespace
 import frontmatter
 import jinja2
 import markdown
+from l2m4m import LaTeX2MathMLExtension
 
 from .log import *
 from .minify import *
@@ -183,6 +184,7 @@ _markdown_instance = markdown.Markdown(
 			css_class="codehilite",
 			linenums=True,
 		),
+		LaTeX2MathMLExtension(),
 	],
 )
 
