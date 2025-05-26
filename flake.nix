@@ -45,6 +45,7 @@
           packages = with pkgs.${system}; [
             (python313.withPackages dependencies)
             mask
+            (writeShellScriptBin "serve" "python -m blog serve")
           ];
         };
 
