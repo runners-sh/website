@@ -100,10 +100,10 @@ def run_http_server(port):
 def hotreload():
 	import runpy
 	import time
-	from datetime import datetime
-	from pygments import formatters, highlight, lexers
 	import traceback
+	from datetime import datetime
 
+	from pygments import formatters, highlight, lexers
 	from watchfiles import watch  # type: ignore (removes pyright hallucination)
 
 	it = watch(module_path)
