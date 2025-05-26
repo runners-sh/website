@@ -28,6 +28,12 @@
 	--font: "Comic Sans MS", cursive;
 	--bold-weight: bold;
 
+	--color-bg: #0b0b18;
+	--color-fg: #ded5ec;
+	--color-a1: #d468ff;
+	--color-a2: #7aebff;
+	--color-a3: #ff7063;
+
 	--color-info: var(--color-a2);
 	--color-info-bg: color-mix(in lab, var(--color-info) 10%, var(--color-bg));
 

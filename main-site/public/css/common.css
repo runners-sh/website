@@ -68,7 +68,7 @@ fieldset {
 		position: absolute;
 		top: 0.3em;
 		left: 0.3em;
-		border: calc(var(--admon-border) / 1.5) solid var(--color-admon-fg);
+		border: var(--admon-border) solid var(--color-admon-fg);
 		border-left: none;
 		border-top: none;
 	}
