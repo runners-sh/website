@@ -101,11 +101,12 @@ def hotreload():
 	import runpy
 	import time
 	from datetime import datetime
+	from pygments import formatters, highlight, lexers
+	import traceback
 
 	from watchfiles import watch  # type: ignore (removes pyright hallucination)
 
 	it = watch(module_path)
-	is_first = True
 
 	# wait for server to start
 	while not _http_server:
@@ -114,23 +115,22 @@ def hotreload():
 		return
 	_addr, port = _http_server.server_address
 
-	sys.stderr.write("\x1b[2J\x1b[1;1H")  # clear screen, reset cursor
-	sys.stderr.flush()
-
-	info(f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}")
-
 	while True:
-		sys.stderr.write("\x1b[2;1H")  # move cursor to (0, 1)
-		sys.stderr.flush()
+		sys.stderr.write("\x1b[2J\x1b[H")  # clear screen, reset cursor
 
-		if is_first:
-			# we don't want to wait for a file change so just give the first build a free pass
-			is_first = False
-		else:
-			next(it)
+		info(f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}\n")
 
-		sys.stderr.write("\x1b[0J\x1b[B")  # clear from cursor down, move cursor down
-		sys.stderr.flush()
 		info(f"Starting build at {datetime.now()}")
 
-		runpy.run_module(pkgname)
+		try:
+			runpy.run_module(pkgname)
+		except BaseException:
+			tb_text = "".join(traceback.format_exc())
+
+			lexer = lexers.get_lexer_by_name("pytb", stripall=True)
+			formatter = formatters.TerminalFormatter()
+			tb_colored = highlight(tb_text, lexer, formatter)
+
+			print(tb_colored, file=sys.stderr)
+
+		next(it)
