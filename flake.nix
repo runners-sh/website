@@ -16,33 +16,34 @@
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
       pkgs = forAllSystems (system: nixpkgs.legacyPackages.${system});
 
+      dependencies =
+        ppkgs: with ppkgs; [
+          anyio
+          click
+          idna
+          iniconfig
+          jinja2
+          markdown
+          markupsafe
+          mypy-extensions
+          packaging
+          pathspec
+          platformdirs
+          pluggy
+          pytest
+          python-frontmatter
+          pyyaml
+          ruff
+          sniffio
+          watchfiles
+          setuptools
+        ];
     in
     {
       devShells = forAllSystems (system: {
         default = pkgs.${system}.mkShellNoCC {
           packages = with pkgs.${system}; [
-            (python313.withPackages (
-              ppkgs: with ppkgs; [
-                anyio
-                click
-                idna
-                iniconfig
-                jinja2
-                markdown
-                markupsafe
-                mypy-extensions
-                packaging
-                pathspec
-                platformdirs
-                pluggy
-                pytest
-                python-frontmatter
-                pyyaml
-                ruff
-                sniffio
-                watchfiles
-              ]
-            ))
+            (python313.withPackages dependencies)
             mask
           ];
         };
@@ -51,12 +52,24 @@
       packages = forAllSystems (
         system:
         let
-          sps = pkgs.${system};
+          ppkgs = pkgs.${system}.python3Packages;
+          fs = pkgs.${system}.lib.fileset;
         in
         {
-          alive = sps.python313Packages.alive-progress.overrideAttrs ({
-            postInstall = ''rm $out/LICENSE'';
-          });
+          solstice = ppkgs.buildPythonPackage {
+            name = "solstice";
+            format = "pyproject";
+            src = fs.toSource {
+              root = ./.;
+              # since we have 2 projects, this prevents shit from breaking
+              fileset = fs.unions [
+                ./README.md
+                ./solstice
+                ./pyproject.toml
+              ];
+            };
+            propagatedBuildInputs = dependencies ppkgs;
+          };
         }
       );
     };
