@@ -17,7 +17,7 @@
       pkgs = forAllSystems (system: nixpkgs.legacyPackages.${system});
 
       dependencies =
-        ppkgs: with ppkgs; [
+        sys: ppkgs: with ppkgs; [
           anyio
           click
           idna
@@ -39,13 +39,14 @@
           watchfiles
           setuptools
           minify-html
+          self.packages.${sys}.l2m4m
         ];
     in
     {
       devShells = forAllSystems (system: {
         default = pkgs.${system}.mkShellNoCC {
           packages = with pkgs.${system}; [
-            (python313.withPackages dependencies)
+            (python313.withPackages (dependencies system))
             mask
             (writeShellScriptBin "serve" "python -m blog serve")
           ];
@@ -71,9 +72,23 @@
                       ./pyproject.toml
                     ];
                   };
-                  propagatedBuildInputs = dependencies prev.python313Packages;
+                  propagatedBuildInputs = dependencies system prev.python313Packages;
                 };
-
+                l2m4m = prev.python313Packages.buildPythonPackage {
+                  name = "l2m4m";
+                  format = "pyproject";
+                  src = prev.fetchFromGitLab {
+                    owner = "parcifal";
+                    repo = "l2m4m";
+                    rev = "471c74b85b61b9e1b4546c510c4b840d960c2eaa";
+                    hash = "sha256-3W8x9cThvQ7yM5n/eiQ9fISd1kvUvWQ4A9gYRFnWNbw=";
+                  };
+                  propagatedBuildInputs = with prev.python313Packages; [
+                    markdown
+                    latex2mathml
+                    setuptools
+                  ];
+                };
               })
             ];
           };
@@ -82,6 +97,8 @@
         in
         rec {
           solstice = opack.solstice;
+
+          l2m4m = opack.l2m4m;
 
           blog = opack.stdenv.mkDerivation {
             name = "blog";
