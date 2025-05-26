@@ -30,6 +30,7 @@
           pathspec
           platformdirs
           pluggy
+          pymdown-extensions
           pytest
           python-frontmatter
           pyyaml
@@ -37,6 +38,7 @@
           sniffio
           watchfiles
           setuptools
+          minify-html
         ];
     in
     {
