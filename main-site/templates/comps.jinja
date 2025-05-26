@@ -1,0 +1,13 @@
+{% macro navbar(selected=0) %}
+	{{ navbar_item("/", "root@solrunners ~#", False) }}
+	{{ navbar_item("/", "home", selected == 0) }}
+	{{ navbar_item("/blog", "blog", selected == 1) }}
+{% endmacro %}
+
+{% macro navbar_item(url, text, selected) %}
+	{% if selected %}
+		<a href="{{url}}" class="pwrln pwr-sel">{{text}}</a>
+	{% else %}
+		<a href="{{url}}" class="pwrln">{{text}}</a>
+	{% endif %}
+{% endmacro %}

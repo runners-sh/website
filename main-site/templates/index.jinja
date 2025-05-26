@@ -1,13 +1,11 @@
+{% import "comps.jinja" as comps %}
 {% extends "base.jinja" %} {% block head %}
 <link rel="stylesheet" href="/public/css/index.css" />
 <title>{{title}}</title>
 {% endblock %} {% block body %}
 
 <nav>
-	<a href="#" class="pwrln">root@solrunners ~#</a>
-	<a href="#" class="pwrln pwr-sel">home</a>
-	<a href="#" class="pwrln">blog</a>
-	<a href="#" class="pwrln">zine</a>
+	{{ comps.navbar(selected=0) }}
 
 	<!-- <span class="pwrln pwr-sp"></span> -->
 	<!-- <a href="//creativecommons.org/licenses/by-nc/4.0" class="pwrln">
