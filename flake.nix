@@ -48,7 +48,7 @@
           packages = with pkgs.${system}; [
             (python313.withPackages (dependencies system))
             mask
-            (writeShellScriptBin "serve" "python -m blog serve")
+            (writeShellScriptBin "serve" "python -m main-site serve")
           ];
         };
 
@@ -100,13 +100,13 @@
 
           l2m4m = opack.l2m4m;
 
-          blog = opack.stdenv.mkDerivation {
-            name = "blog";
+          main-site = opack.stdenv.mkDerivation {
+            name = "main-site";
             version = "0.1.0";
             src = fs.toSource {
               root = ./.;
               fileset = fs.unions [
-                ./blog
+                ./mmain-site
                 ./pyproject.toml
                 ./README.md
               ];
@@ -117,7 +117,7 @@
             ];
 
             buildPhase = ''
-              python -m blog
+              python -m main-site
             '';
 
             installPhase = ''
@@ -125,7 +125,7 @@
             '';
           };
 
-          default = blog;
+          default = main-site;
         }
       );
     };
