@@ -2,6 +2,7 @@
 title: Cat States
 author: itepastra
 date: 2025-05-26
+id: 14d4f16f1afbf8e517b6a91dc8d4d5e3
 ---
 
 ## Classical cat states
@@ -13,7 +14,7 @@ states will have to suffice.
 A place where you can often find a cat is on a surface that you wanted to use, like a desk or a table
 which makes this a very common state for the cat to be in as seen below here.
 
-![cat on a desk](/public/img/cats/on_desk.jpg) 
+![cat on a desk](/public/img/cats/on_desk.jpg)
 
 Cats may also try to seek out shelter at various moments of the day, good shelter includes boxes,
 baskets and other things scattered about. As long as the cat is not expected to be there it's good
@@ -59,7 +60,7 @@ Now that we have some (very basic) idea of what a coherent state is, let's go in
 even more whacky state than the fock state, namely the schrödinger cat state.
 A cat state consists of 2 (or more) coherent states, this isn't that weird on it's own, but in this specific
 case the two coherent states are in a **quantum superposition**, where one of the two states has a phase
-of $-1$, such that you'd get $\mathcal{N} (|\alpha\rangle + |-\alpha\rangle)$ or 
+of $-1$, such that you'd get $\mathcal{N} (|\alpha\rangle + |-\alpha\rangle)$ or
 $\mathcal{N} (|\alpha\rangle - |-\alpha\rangle)$, where the state with the $+$ is called the even
 cat state and the state with the $-$ is the odd cat state. the $\mathcal{N}$ is a normalisation factor
 which I'm not going into, but it should be included for completeness sake.

@@ -58,8 +58,8 @@ class LogTimer:
 		info(self.initial_msg)
 		self.start_time = time.time()
 
-	def __exit__(self, *args):
-		if sys.exception() or hasattr(sys, "last_exc"):
+	def __exit__(self, exc_type, exc_value, traceback):
+		if exc_value or hasattr(sys, "last_exc"):
 			return
 		elapsed = time.time() - self.start_time
 		time_str = f"{elapsed:.02f}s" if elapsed >= 1 else f"{elapsed * 1000:.0f}ms"

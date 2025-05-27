@@ -3,15 +3,19 @@
 from solstice import *
 
 
-def load_verbatim(path: str) -> str:
+def read_file(path: str) -> str:
 	with open(path, "r") as file:
-		return (
-			file.read()
-			.replace("&", "&amp;")
-			.replace(" ", "&nbsp;")
-			.replace("<", "&lt;")
-			.replace(">", "&gt;")
-			.replace('"', "&quot;")
-			.replace("'", "&apos;")
-			.replace("\n", "<br>")
-		)
+		return file.read()
+
+
+def read_file_sanitized(path: str) -> str:
+	return (
+		read_file(path)
+		.replace("&", "&amp;")
+		.replace(" ", "&nbsp;")
+		.replace("<", "&lt;")
+		.replace(">", "&gt;")
+		.replace('"', "&quot;")
+		.replace("'", "&apos;")
+		.replace("\n", "<br>")
+	)

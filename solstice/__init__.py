@@ -11,6 +11,10 @@ import jinja2
 import markdown
 from l2m4m import LaTeX2MathMLExtension
 
+from . import (
+	common,
+	funbar,
+)
 from .log import *
 from .minify import *
 
@@ -86,12 +90,7 @@ def _minify_all():
 				f.truncate()
 
 
-def page_md(
-	template_name: str,
-	src_path: str,
-	output_path: str,
-	**kwargs,
-):
+class MarkdownPage:
 	"""
 	Generate a page from a markdown file with frontmatter metadata.
 	# Arguments
@@ -105,42 +104,73 @@ def page_md(
 	- Keys from the frontmatter metadata in the markdown file will be shadowed by `**kwargs` if they overlap.
 	"""
 
-	src_stat = os.stat(src_path)
-	try:
-		out_stat = os.stat(dist_path_for(output_path))
-		if out_stat.st_mtime == src_stat.st_mtime:
-			info(f"{src_path} not modified since last build, ignoring")
-			return
-	except FileNotFoundError:
-		pass
-
-	with LogTimer(
-		f"Markdown process {src_path} -> {output_path}",
-		f"Finished building '{output_path}' in {{}}",
+	def __init__(
+		self,
+		template_name: str,
+		src_path: str,
+		output_path: str,
 	):
-		meta, content = load_markdown(src_path)
-		for key, val in kwargs.items():
-			if key in meta.keys():
-				warn(f"(in content file '{src_path}'):")
-				warn(f"\tkey '{key}' is reserved by the caller, skipping...")
-			meta[key] = val
+		self.template_name = template_name
+		self.src_path = src_path
+		self.output_path = output_path
 
-		if "content" in meta:
-			warn(f"(in content file '{src_path}'):")
-			warn("\tkey 'content' is reserved, skipping...")
-			meta.pop("content")
-		dist_path = page(
-			template_name,
-			output_path,
-			content=content,
-			toc=_markdown_instance.toc,  # type: ignore
-			**meta,
-		)
+		src_stat = os.stat(src_path)
 		try:
-			os.utime(dist_path, (src_stat.st_mtime, src_stat.st_mtime))
-		except Exception:
-			# can't set modification time, just ignore. caching will be unsupported on these platforms
+			out_stat = os.stat(dist_path_for(output_path))
+			if out_stat.st_mtime == src_stat.st_mtime:
+				info(f"{src_path} not modified since last build, ignoring")
+				self.cached = True
+				return
+		except FileNotFoundError:
 			pass
+
+		self.cached = False
+		self._log_timer = LogTimer(
+			f"Markdown process {src_path} -> {output_path}",
+			f"Finished building '{output_path}' in {{}}",
+		)
+
+		self.meta, self.content = load_markdown(src_path)
+
+		self.params = {}
+
+	def template_params(self, **params):
+		self.params |= params
+
+	def __enter__(self):
+		return self
+
+	def __exit__(self, exc_type, exc_value, traceback):
+		if exc_value:
+			return
+		self.process()
+
+	def process(self):
+		params = self.params
+		for key, val in self.meta.items():
+			if key in params:
+				warn(f"(in content file '{self.src_path}'):")
+				warn(f"\tkey '{key}' is reserved by the caller, skipping...")
+			else:
+				params[key] = val
+
+		if "content" in params:
+			warn(f"(in content file '{self.src_path}'):")
+			warn("\tkey 'content' is reserved, skipping...")
+			params.pop("content")
+		page(
+			self.template_name,
+			self.output_path,
+			content=self.content,
+			toc=_markdown_instance.toc,  # type: ignore
+			**params,
+		)
+
+
+def page_md(template_name: str, src_path: str, output_path: str, **kwargs):
+	with MarkdownPage(template_name, src_path, output_path) as page:
+		if kwargs and not page.cached:
+			page.template_params(**kwargs)
 
 
 def recurse_files(root: str, extensions: list[str]):
@@ -207,8 +237,9 @@ def load_markdown(file_path: str) -> tuple[dict, str]:
 	"""
 	with open(file_path, "r") as f:
 		meta, content = frontmatter.parse(f.read())
-		_markdown_instance.reset()
-		return meta, _markdown_instance.convert(content)
+		return meta, convert_markdown(content)
 
 
-from . import common  # noqa: E402 F401
+def convert_markdown(markdown: str) -> str:
+	_markdown_instance.reset()
+	return _markdown_instance.convert(markdown)
