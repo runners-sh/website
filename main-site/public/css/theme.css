@@ -42,4 +42,6 @@
 	--color-bg-10: color-mix(in oklab, var(--color-bg), var(--color-fg) 10%);
 	--color-bg-15: color-mix(in oklab, var(--color-bg), var(--color-fg) 15%);
 	--color-bg-20: color-mix(in oklab, var(--color-bg), var(--color-fg) 20%);
+
+	--shadowbox-spacing: 6px;
 }

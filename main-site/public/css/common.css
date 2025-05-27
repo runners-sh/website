@@ -52,37 +52,37 @@ fieldset {
 	&.note,
 	&.info,
 	&.tips {
-		--color-admon-fg: var(--color-info);
+		--color-shadowbox-fg: var(--color-info);
 	}
 	&.warning,
 	&.warn,
 	&.important {
-		--color-admon-fg: var(--color-warning);
+		--color-shadowbox-fg: var(--color-warning);
 	}
 	&.danger,
 	&.critical {
-		--color-admon-fg: var(--color-danger);
+		--color-shadowbox-fg: var(--color-danger);
 	}
 	&.example {
-		--color-admon-fg: var(--color-example);
+		--color-shadowbox-fg: var(--color-example);
 	}
 	&.ok,
 	&.success,
 	&.tip {
-		--color-admon-fg: var(--color-success);
+		--color-shadowbox-fg: var(--color-success);
 	}
 
-	--color-admon-bg: color-mix(
+	--color-shadowbox-bg: color-mix(
 		in oklab,
 		var(--color-bg),
-		var(--color-admon-fg) 10%
+		var(--color-shadowbox-fg) 10%
 	);
 	padding: 0 1rem;
 	margin-block: 2rem;
-	color: var(--color-admon-fg);
-	border: 1px solid var(--color-admon-fg);
+	color: var(--color-shadowbox-fg);
+	border: 1px solid var(--color-shadowbox-fg);
 	position: relative;
-	background-color: var(--color-admon-bg);
+	background-color: var(--color-shadowbox-bg);
 	.admonition-title {
 		/* font-weight: bold; */
 		/* font-size: 1.1em; */
@@ -91,7 +91,7 @@ fieldset {
 		background: linear-gradient(
 			to bottom,
 			transparent calc(50% - 1.5px),
-			var(--color-admon-bg) calc(50% - 1.5px)
+			var(--color-shadowbox-bg) calc(50% - 1.5px)
 		);
 		padding-inline: 0.5ch;
 		margin: 0;
@@ -104,9 +104,9 @@ fieldset {
 		height: 100%;
 		pointer-events: none;
 		position: absolute;
-		top: 0.3em;
-		left: 0.3em;
-		border: 1px solid var(--color-admon-fg);
+		top: var(--shadowbox-spacing);
+		left: var(--shadowbox-spacing);
+		border: 1px solid var(--color-shadowbox-fg);
 		border-left: none;
 		border-top: none;
 	}

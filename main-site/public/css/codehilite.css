@@ -1,13 +1,13 @@
 /* Custom syntax highlighting theme by yours truly (Cubic) */
 div.codehilite {
 	background-color: var(--color-bg-5);
-	scrollbar-color: var(--color-fg) var(--color-admon-bg);
+	scrollbar-color: var(--color-fg) var(--color-shadowbox-bg);
 }
 pre {
 	line-height: 125%;
 }
 .codehilite {
-	--color-admon-fg: var(--color-fg-50);
+	--color-shadowbox-fg: var(--color-fg-50);
 	margin-block: 2rem;
 	padding: 0.5lh 0.2lh;
 }
