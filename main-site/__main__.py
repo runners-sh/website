@@ -22,6 +22,8 @@ for dirname, file, name, _ in recurse_files("blog", [".md"]):
 			pg_id: Any = pg.meta.get("id")
 			pg.template_params(funbar=funbar.funbar_html_from_seed(pg_id))
 
+posts.sort(key=lambda x: x["date"], reverse=True)
+
 page("blog-overview.jinja", "blog/index.html", posts=posts)
 
 finalize()

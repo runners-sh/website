@@ -63,6 +63,14 @@ fieldset {
 	&.critical {
 		--color-admon-fg: var(--color-danger);
 	}
+	&.example {
+		--color-admon-fg: var(--color-example);
+	}
+	&.ok,
+	&.success,
+	&.tip {
+		--color-admon-fg: var(--color-success);
+	}
 
 	--color-admon-bg: color-mix(
 		in oklab,
