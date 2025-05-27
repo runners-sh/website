@@ -1,0 +1,19 @@
+@import "./common.css";
+
+main {
+	display: grid;
+	max-width: 80rem;
+	padding: 4rem;
+	margin: auto;
+	
+	> ul {
+		> li {
+			list-style: none;
+			margin-left: 0;
+		}
+	}
+}
+
+img {
+	max-width: 100%;
+}

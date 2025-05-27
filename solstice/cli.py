@@ -16,7 +16,9 @@ def run_cli():
 		return
 
 	parser = argparse.ArgumentParser("solstice", description="")
-	parser.add_argument("cmd", nargs="?", default="build", help='"build", "clean", or "serve"')
+	parser.add_argument(
+		"cmd", nargs="?", default="build", help='"build", "clean", or "serve"'
+	)
 	parser.add_argument("--release", action="store_true")
 	parser.add_argument("-p", "--port", default=5123, type=int)
 
@@ -83,10 +85,23 @@ def run_http_server(port):
 					del self.headers["If-None-Match"]
 				return super().send_head()
 
+			# from https://stackoverflow.com/questions/28419287/configuring-simplehttpserver-to-assume-html-for-suffixless-urls
+			def do_GET(self):
+				path = self.translate_path(self.path)
+
+				# If the path doesn't exist, assume it's a resource suffixed '.html'.
+				if not os.path.exists(path):
+					self.path = self.path + ".html"
+
+				# Call the superclass methods to actually serve the page.
+				SimpleHTTPRequestHandler.do_GET(self)
+
 			def end_headers(self):
 				# do not remove these! firefox improperly caches resources and will break if it is not explicitly told to not cache anything
 				self.send_header("Connection", "close")
-				self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+				self.send_header(
+					"Cache-Control", "no-cache, no-store, must-revalidate"
+				)
 				self.send_header("Pragma", "no-cache")
 				self.send_header("Expires", "0")
 				return super().end_headers()
@@ -126,7 +141,9 @@ def hotreload():
 	while True:
 		sys.stderr.write("\x1b[2J\x1b[H")  # clear screen, reset cursor
 
-		info(f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}\n")
+		info(
+			f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}\n"
+		)
 
 		info(f"Starting build at {datetime.now()}")
 

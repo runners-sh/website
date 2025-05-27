@@ -1,0 +1,35 @@
+{% import "comps.jinja" as comps %}
+{% extends "base.jinja" %}
+{% block head %}
+<link rel="stylesheet" href="/public/css/blog-overview.css" />
+<title>blogs - solrunners</title>
+{% endblock %}
+
+{% block body %}
+<nav>
+	{{ comps.navbar(selected=1) }}
+	<!-- <span class="pwrln pwr-sp"></span> -->
+	<!-- <a href="//creativecommons.org/licenses/by-nc/4.0" class="pwrln">
+        © 2026 CC BY-NC 4.0
+    </a> -->
+	<span class="pwrln">© 2025 All Rights Reserved, for now</span>
+</nav>
+<main>
+
+	<div class="title-box">
+		<h1>blogs</h1>
+	</div>
+
+	<ul>
+	{% for post in posts %}
+		<li>
+			<a href="{{post.url}}">
+				<span class="post-title">{{post.title}}</span>
+				<span class="post-author">{{post.author}}</span>
+				<time datetime="{{date}}">{{post.date}}</time>
+			</a>
+		</li>
+	{% endfor %}
+	</ul>
+</main>
+{% endblock %}
