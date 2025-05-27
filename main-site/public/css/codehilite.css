@@ -1,6 +1,7 @@
 /* Custom syntax highlighting theme by yours truly (Cubic) */
 div.codehilite {
 	background-color: var(--color-bg-5);
+	scrollbar-color: var(--color-fg) var(--color-admon-bg);
 }
 pre {
 	line-height: 125%;

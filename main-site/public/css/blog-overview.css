@@ -1,0 +1,49 @@
+@import "./common.css";
+
+main {
+	display: grid;
+	max-width: 80rem;
+	padding: 4rem;
+	margin: auto;
+
+	> ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+}
+
+a.post-container {
+	--color-admon-fg: var(--color-fg-85);
+	transition: color background-color transform;
+	transition-duration: 80ms;
+	&::after {
+		transition: top left;
+		transition-duration: inherit;
+		top: 0em;
+		left: 0em;
+	}
+	&:hover {
+		--color-admon-fg: var(--color-a2);
+	}
+	&:hover:not(:active) {
+		transform: translate(-0.15em, -0.15em);
+		&::after {
+			top: 0.3em;
+			left: 0.3em;
+		}
+	}
+	text-decoration: none;
+	display: block;
+	padding: 16px;
+	margin-top: 0;
+
+	.post-title {
+		font-size: 1.25rem;
+		font-weight: bold;
+	}
+}
+
+img {
+	max-width: 100%;
+}

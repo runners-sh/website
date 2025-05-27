@@ -8,15 +8,22 @@ copy("public")
 
 ascii_logo = common.read_file("ascii/logo.asc")
 ascii_name = common.read_file("ascii/name.asc")
+
 page("index.jinja", ascii_logo=ascii_logo, ascii_name=ascii_name)
 
+posts = []
 for dirname, file, name, _ in recurse_files("blog", [".md"]):
 	src_path = path.join(dirname, file)
 	dist_path = path.join(dirname, name + ".html")
-	with MarkdownPage("blog.jinja", src_path, dist_path) as page:
-		if not page.cached:
-			page_id: Any = page.meta.get("id")
-			page.template_params(funbar=funbar.funbar_html_from_seed(page_id))
+	with MarkdownPage("blog.jinja", src_path, dist_path) as pg:
+		posts.append(pg.meta | {"url": "/" + dist_path.removesuffix(".html")})
 
+		if not pg.cached:
+			pg_id: Any = pg.meta.get("id")
+			pg.template_params(funbar=funbar.funbar_html_from_seed(pg_id))
+
+posts.sort(key=lambda x: x["date"], reverse=True)
+
+page("blog-overview.jinja", "blog/index.html", posts=posts)
 
 finalize()
