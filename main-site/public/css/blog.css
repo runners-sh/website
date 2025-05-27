@@ -62,15 +62,22 @@ main {
 
 			> li {
 				margin-block: 0.25em;
-				> svg {
+
+				a {
+					text-decoration: none;
+				}
+
+				svg {
 					height: 1lh;
 					aspect-ratio: 1;
 					vertical-align: bottom;
+
 					path {
 						fill: currentColor;
 					}
 				}
-				> svg:last-child {
+
+				svg:last-child {
 					vertical-align: baseline;
 					height: 0.5lh;
 				}
