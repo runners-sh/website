@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: pip install -r requirements.txt
-      - run: python -m main-site
+      - run: python -m main-site build --release
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/main-site
