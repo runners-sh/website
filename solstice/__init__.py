@@ -138,9 +138,11 @@ class MarkdownPage:
 		self.params |= params
 
 	def __enter__(self):
+		self._log_timer.__enter__()
 		return self
 
 	def __exit__(self, exc_type, exc_value, traceback):
+		self._log_timer.__exit__(exc_type, exc_value, traceback)
 		if exc_value:
 			return
 		self.process()
