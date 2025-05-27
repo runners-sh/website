@@ -84,13 +84,21 @@ def run_http_server(port):
 				return super().send_head()
 
 			def end_headers(self):
+				# do not remove these! firefox improperly caches resources and will break if it is not explicitly told to not cache anything
 				self.send_header("Connection", "close")
 				self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
 				self.send_header("Pragma", "no-cache")
 				self.send_header("Expires", "0")
 				return super().end_headers()
 
-		with TCPServer(("", port), Handler) as server:
+		class ReuseAddrTCPServer(TCPServer):
+			allow_reuse_address = True
+			allow_reuse_port = True
+
+			def __init__(self, *args, **kwargs):
+				super().__init__(*args, **kwargs)
+
+		with ReuseAddrTCPServer(("", port), Handler) as server:
 			_http_server = server
 			server.serve_forever()
 	finally:
