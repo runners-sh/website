@@ -1,60 +1,60 @@
 nav {
-    display: flex;
-    gap: 2.9ch;
+	display: flex;
+	gap: 2.9ch;
 
-    text-wrap: nowrap;
-    letter-spacing: 0.2ch;
-    height: 1.4rem;
-    line-height: 1.4em;
+	text-wrap: nowrap;
+	letter-spacing: 0.2ch;
+	height: 1.4rem;
+	line-height: 1.4em;
 }
 
 .pwrln:first-child {
-    --bg: var(--color-a1);
-    font-weight: var(--bold-weight);
-    padding: 0 3ch;
+	--bg: var(--color-a1);
+	font-weight: bold;
+	padding: 0 3ch;
 }
 .pwrln:last-child {
-    margin-left: auto;
+	margin-left: auto;
 }
 .pwrln {
-    --bg: var(--color-a3);
-    background: var(--bg);
-    height: 100%;
+	--bg: var(--color-a3);
+	background: var(--bg);
+	height: 100%;
 
-    position: relative;
-    padding: 0 1.5ch;
+	position: relative;
+	padding: 0 1.5ch;
 
-    color: var(--color-bg);
-    letter-spacing: inherit;
+	color: var(--color-bg);
+	letter-spacing: inherit;
 }
 .pwrln:not(:hover) {
-    text-decoration: none;
+	text-decoration: none;
 }
 
 .pwrln:not(:first-child)::before,
 .pwrln:not(:last-child)::after {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    font-size: 1.4em;
+	position: absolute;
+	top: 0;
+	height: 100%;
+	font-size: 1.4em;
 
-    content: "";
-    display: inline-block;
-    width: 3ch;
+	content: "";
+	display: inline-block;
+	width: 3ch;
 
-    z-index: 2;
-    background: var(--bg);
+	z-index: 2;
+	background: var(--bg);
 }
 .pwrln::before {
-    left: -1ch;
-    clip-path: polygon(0ch 0%, 1ch 50%, 0ch 100%, 2ch 100%, 2ch 0%);
+	left: -1ch;
+	clip-path: polygon(0ch 0%, 1ch 50%, 0ch 100%, 2ch 100%, 2ch 0%);
 }
 .pwrln::after {
-    right: -2ch;
-    clip-path: polygon(1ch 0%, 2ch 50%, 1ch 100%, 0ch 100%, 0ch 0%);
+	right: -2ch;
+	clip-path: polygon(1ch 0%, 2ch 50%, 1ch 100%, 0ch 100%, 0ch 0%);
 }
 .pwrln.pwr-sel {
-    --bg: var(--color-a2);
+	--bg: var(--color-a2);
 }
 /* .pwrln.pwr-sp {
     --bg: var(--color-bg-dim);

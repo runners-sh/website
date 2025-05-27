@@ -6,7 +6,7 @@ pre {
 	line-height: 125%;
 }
 .codehilite {
-	--color-admon-fg: var(--color-w2);
+	--color-admon-fg: var(--color-fg-50);
 	margin-block: 2rem;
 	padding: 0.5lh 0.2lh;
 }

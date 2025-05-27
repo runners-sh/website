@@ -105,6 +105,7 @@ main {
 				position: absolute;
 
 				transform: skew(-30deg);
+				transform-origin: left top;
 				display: flex;
 				font-size: 0.5rem;
 				transition-property: height, transform;
@@ -153,7 +154,6 @@ main {
 				}
 			}
 			.barcode:has(b:hover) {
-				transform: none;
 				height: 800%;
 
 				b.a1,

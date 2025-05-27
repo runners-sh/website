@@ -1,32 +1,20 @@
 @import "./pwrln.css";
 
-/*
-    the kanjiless fonts are just the ttf fonts edited in fontforge to remove all the japanese lettering
-    say what you will about that but it reduced the font size from 1.7MiB to 12.2KiB
-    (that's a 99.3% decrease! also tbf a lot of the size savings probably come from woff2's better compression
-    but also jeez holy hell, 99% reduction)
-      - cubic
-*/
 @font-face {
 	font-family: "Iosevka Web";
-	font-display: swap;
-	font-weight: 500;
-	font-stretch: normal;
-	font-style: normal;
+	font-display: block;
+	font-weight: normal;
 	src: url("../woff/Iosevka-Regular.woff2") format("woff2");
 }
 @font-face {
 	font-family: "Iosevka Web";
-	font-display: swap;
-	font-weight: 700;
-	font-stretch: normal;
-	font-style: normal;
+	font-display: block;
+	font-weight: bold;
 	src: url("../woff/Iosevka-Bold.woff2") format("woff2");
 }
 
 .theme-dark {
-	--font: "Iosevka Web", "Comic Sans MS", cursive;
-	--bold-weight: 700;
+	--font: "Iosevka", "Iosevka Web", "Comic Sans MS", cursive;
 
 	--color-bg: #0b0b18;
 	--color-fg: #ded5ec;
@@ -54,6 +42,4 @@
 	--color-bg-10: color-mix(in oklab, var(--color-bg), var(--color-fg) 10%);
 	--color-bg-15: color-mix(in oklab, var(--color-bg), var(--color-fg) 15%);
 	--color-bg-20: color-mix(in oklab, var(--color-bg), var(--color-fg) 20%);
-
-	/* success; green-ish color */
 }
