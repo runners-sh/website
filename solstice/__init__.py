@@ -46,7 +46,9 @@ def init(package_name: str | None):
 
 	cli.run_cli()
 
-	env = jinja2.Environment(loader=jinja2.PackageLoader(package_name), autoescape=True)
+	env = jinja2.Environment(
+		loader=jinja2.PackageLoader(package_name), autoescape=True
+	)
 
 
 def dist_path_for(name: str) -> str:
@@ -65,7 +67,9 @@ def page(template_name: str, output_path: str | None = None, **kwargs):
 	- `output_path`: Path to save the rendered HTML file to. Defaults to the template name.
 	- `**kwargs`: Additional keyword arguments to pass to the template.
 	"""
-	dist_path = dist_path_for(output_path or (path.splitext(template_name)[0] + ".html"))
+	dist_path = dist_path_for(
+		output_path or (path.splitext(template_name)[0] + ".html")
+	)
 	with open(dist_path, "w") as file:
 		contents = env.get_template(template_name).render(**kwargs)
 		file.write(contents)
@@ -79,7 +83,9 @@ def finalize():
 
 def _minify_all():
 	with LogTimer("Minifying files..."):
-		for dirname, file, name, ext in recurse_files(dist_path, [".css", ".html", ".js"]):
+		for dirname, file, name, ext in recurse_files(
+			dist_path, [".css", ".html", ".js"]
+		):
 			with open(path.join(dirname, file), "r+") as f:
 				contents = f.read()
 				match ext:
@@ -114,15 +120,15 @@ class MarkdownPage:
 		self.src_path = src_path
 		self.output_path = output_path
 
-		src_stat = os.stat(src_path)
-		try:
-			out_stat = os.stat(dist_path_for(output_path))
-			if out_stat.st_mtime == src_stat.st_mtime:
-				info(f"{src_path} not modified since last build, ignoring")
-				self.cached = True
-				return
-		except FileNotFoundError:
-			pass
+		# src_stat = os.stat(src_path)
+		# try:
+		# 	out_stat = os.stat(dist_path_for(output_path))
+		# 	if out_stat.st_mtime == src_stat.st_mtime:
+		# 		info(f"{src_path} not modified since last build, ignoring")
+		# 		self.cached = True
+		# 		return
+		# except FileNotFoundError:
+		# 	pass
 
 		self.cached = False
 		self._log_timer = LogTimer(
@@ -143,27 +149,28 @@ class MarkdownPage:
 	def __exit__(self, exc_type, exc_value, traceback):
 		if exc_value:
 			return
-		self.process()
+		self.render()
 
-	def process(self):
-		params = self.params
+	def render(self):
 		for key, val in self.meta.items():
-			if key in params:
+			if key in self.params:
 				warn(f"(in content file '{self.src_path}'):")
 				warn(f"\tkey '{key}' is reserved by the caller, skipping...")
 			else:
-				params[key] = val
+				self.params[key] = val
 
-		if "content" in params:
-			warn(f"(in content file '{self.src_path}'):")
-			warn("\tkey 'content' is reserved, skipping...")
-			params.pop("content")
+		for key in ["content", "toc"]:
+			if key in self.params:
+				warn(f"(in content file '{self.src_path}'):")
+				warn(f"\tkey '{key}' is reserved, skipping...")
+				self.params.pop(key)
+
 		page(
 			self.template_name,
 			self.output_path,
 			content=self.content,
 			toc=_markdown_instance.toc,  # type: ignore
-			**params,
+			**self.params,
 		)
 
 
