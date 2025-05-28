@@ -49,6 +49,7 @@
             (python313.withPackages (dependencies system))
             mask
             (writeShellScriptBin "serve" "python -m main-site serve")
+            (writeShellScriptBin "barcode" "python -m main-site barcode")
           ];
         };
 
