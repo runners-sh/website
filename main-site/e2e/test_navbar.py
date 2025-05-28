@@ -20,9 +20,9 @@ def driver():
 	)
 	sleep(0.5)
 
-	options = webdriver.ChromeOptions()
-	options.add_argument("--headless=new")
-	driver = webdriver.Chrome(options=options)
+	options = webdriver.FirefoxOptions()
+	options.add_argument("--headless")
+	driver = webdriver.Firefox(options=options)
 	driver.implicitly_wait(5)
 
 	yield driver
