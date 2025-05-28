@@ -102,6 +102,7 @@ main {
 			> div {
 				color: var(--color-a2);
 				font-size: 1.2em;
+				height: 1lh;
 				> div {
 					float: right;
 				}
@@ -109,9 +110,11 @@ main {
 		}
 	}
 	.barcode {
-		width: 100%;
+		width: calc(100% + 1rem);
 		height: 1.5rem;
 		position: absolute;
+
+		overflow: hidden;
 
 		transform: skew(-30deg);
 		transform-origin: left top;
@@ -122,7 +125,9 @@ main {
 
 		z-index: 1;
 
-		overflow: hidden;
+		/* hack: use em size as width of barcode elements */
+		font-size: min(max(0.7vw - 0.1rem, 0.25rem), 0.5em);
+
 		> b {
 			height: 100%;
 			transition: background 100ms ease-out;
@@ -133,6 +138,9 @@ main {
 			flex-shrink: 0;
 		}
 		> :first-child {
+			flex-grow: 6;
+		}
+		> :last-child {
 			flex-grow: 1;
 		}
 		span {
@@ -160,27 +168,24 @@ main {
 			display: inline-block;
 			position: absolute;
 			content: "";
-			left: -3rem;
+			left: -7em;
 			bottom: 0;
 			height: 1.7rem;
 			width: 100%;
 			background: #eee;
 		}
 		span:nth-of-type(5) {
-			margin-left: -0.1em;
-			width: 7.4em;
+			margin-left: -0.2em;
+			width: 7.5em;
 		}
 		span:nth-of-type(8) {
 			margin-left: -0.1em;
 			margin-right: -6.9em;
 
 			&::after {
-				left: 3rem;
+				left: 7em;
 			}
 		}
-
-		/* hack: use em size as width of barcode elements */
-		font-size: min(max(0.7vw - 0.1rem, 0.25rem), 0.5em);
 
 		> * {
 			background: var(--color-bg);

@@ -23,10 +23,12 @@ a.post-container {
 		top: 0;
 		left: 0;
 	}
-	&:hover {
+	&:hover,
+	&:focus {
 		--color-shadowbox-fg: var(--color-a2);
 	}
-	&:hover:not(:active) {
+	&:hover:not(:active),
+	&:focus:not(:active) {
 		translate: calc(-0.5 * var(--shadowbox-spacing));
 		&::after {
 			top: var(--shadowbox-spacing);

@@ -79,8 +79,10 @@ fieldset {
 	);
 	padding: 0 1rem;
 	margin-block: 2rem;
+	margin-right: 6px;
 	color: var(--color-shadowbox-fg);
 	border: 1px solid var(--color-shadowbox-fg);
+
 	position: relative;
 	background-color: var(--color-shadowbox-bg);
 	.admonition-title {
@@ -118,7 +120,7 @@ code {
 	outline: 1px solid var(--color-fg-50);
 }
 .codehilite code {
-	border: none;
+	outline: none;
 }
 
 table:not(.codehilitetable) {
