@@ -1,13 +1,18 @@
-{% macro navbar(selected=0) %}
-	{{ navbar_item("/", "root@solrunners ~#", False) }}
-	{{ navbar_item("/", "home", selected == 0) }}
-	{{ navbar_item("/blog", "blog", selected == 1) }}
+{% macro navbar(selected) %}
+<nav>
+	{{ navbar_item("/", "root@solrunners ~#") }}
+	{{ navbar_item("/", "home", selected) }}
+	{{ navbar_item("/blog", "blog", selected) }}
+
+    <!-- <span class="pwrln pwr-sp"></span> -->
+	<!-- <a href="//creativecommons.org/licenses/by-nc/4.0" class="pwrln">
+           © 2026 CC BY-NC 4.0
+       </a> -->
+	<span class="pwrln">© 2025 All Rights Reserved, for now</span>
+</nav>
 {% endmacro %}
 
 {% macro navbar_item(url, text, selected) %}
-	{% if selected %}
-		<a href="{{url}}" class="pwrln pwr-sel">{{text}}</a>
-	{% else %}
-		<a href="{{url}}" class="pwrln">{{text}}</a>
-	{% endif %}
+	{% set tag_name = "a" if url else "div" %}
+	<{{ tag_name }}{% if url %} href="{{url}}"{% endif %} class="pwrln {% if text == selected %}pwr-sel{% endif %}">{{text}}</{{ tag_name }}>
 {% endmacro %}

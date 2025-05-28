@@ -16,14 +16,13 @@ def run_cli():
 		return
 
 	parser = argparse.ArgumentParser("solstice", description="")
-	parser.add_argument(
-		"cmd", nargs="?", default="build", help='"build", "clean", or "serve"'
-	)
+	parser.add_argument("cmd", nargs="?", default="build", help='"build", "clean", or "serve"')
 	parser.add_argument("--release", action="store_true")
 	parser.add_argument("-p", "--port", default=5123, type=int)
 
 	args = parser.parse_args()
-	solstice.cli_args = args
+	if args.release:
+		solstice.profile = "prod"
 
 	match args.cmd:
 		case "build":
@@ -99,9 +98,7 @@ def run_http_server(port):
 			def end_headers(self):
 				# do not remove these! firefox improperly caches resources and will break if it is not explicitly told to not cache anything
 				self.send_header("Connection", "close")
-				self.send_header(
-					"Cache-Control", "no-cache, no-store, must-revalidate"
-				)
+				self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
 				self.send_header("Pragma", "no-cache")
 				self.send_header("Expires", "0")
 				return super().end_headers()
@@ -141,9 +138,7 @@ def hotreload():
 	while True:
 		sys.stderr.write("\x1b[2J\x1b[H")  # clear screen, reset cursor
 
-		info(
-			f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}\n"
-		)
+		info(f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}\n")
 
 		info(f"Starting build at {datetime.now()}")
 

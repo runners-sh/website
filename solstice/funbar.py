@@ -6,6 +6,8 @@ The choice of EAN-8 is because it's horizontal, it fits in the narrow height of 
 [1]: https://ref.gs1.org/standards/genspecs/, 1.4.5 for RCN range, 5.2.1 for the EAN-8 specification
 """
 
+import itertools
+
 # A = NUMBER_SETS[digit]
 # B = NUMBER_SETS[digit][::-1]
 # C = NUMBER_SETS[digit] # but C has the dark bars first
@@ -23,7 +25,7 @@ NUMBER_SETS = [
 	[3, 1, 1, 2],
 ]
 
-assert all(sum(widths) == 7 for widths in NUMBER_SETS)
+assert all(len(widths) == 4 and sum(widths) == 7 for widths in NUMBER_SETS)
 
 NORMAL_GUARD_BAR = [1, 1, 1]
 CENTER_GUARD_BAR = [1, 1, 1, 1, 1]
@@ -38,7 +40,7 @@ def barcode_to_digits(barcode: Barcode) -> list[int]:
 		barcode = [*map(int, barcode)]
 
 	assert type(barcode) is list  # for type checking
-	assert len(barcode) in (7, 9), f"invalid barcode length: {len(barcode)}"
+	assert len(barcode) in (7, 8), f"invalid barcode length: {len(barcode)}"
 	assert barcode[0] in (2, 4), (
 		f"invalid starting digit for {''.join(map(str, barcode))}, must start with 2 or 4 to be an RCN code (see comments of {__file__} for why)"
 	)
@@ -57,14 +59,10 @@ def check_digit_for(digits: list[int]) -> int:
 	return -sum(digit * (3, 1)[i % 2] for i, digit in enumerate(digits[:7])) % 10
 
 
-def bar_widths_from_ean8(barcode: Barcode, invert=False, padding=6) -> list[int]:
+def bar_widths_from_ean8(barcode: Barcode) -> list[int]:
 	digits = barcode_to_digits(barcode)
 
 	barcode = []
-	if invert:
-		barcode.append(0)  # flip the first bar
-	if padding > 0:
-		barcode.append(padding)
 	barcode += NORMAL_GUARD_BAR
 	for c in digits[:4]:
 		barcode += NUMBER_SETS[c]
@@ -72,30 +70,8 @@ def bar_widths_from_ean8(barcode: Barcode, invert=False, padding=6) -> list[int]
 	for c in digits[4:]:
 		barcode += NUMBER_SETS[c]
 	barcode += NORMAL_GUARD_BAR
-	if padding > 0:
-		barcode.append(padding)
 
 	return barcode
-
-
-# A unique "pepper" to prefix seeds with when hashing. Make sure this is secure!
-SOLSTICE_PEPPER = b"\x97\xf2k\x82v\xbf8\xf7\x01\x123\x9a^\xfb&d"
-
-
-def html_from_bar_widths(
-	bar_widths: list[int],
-	colors: list[str] = ["fg", "a1", "a2", "a3"],
-	width_prefix: str = "w",
-	element_name: str = "b",
-) -> str:
-	from random import Random
-
-	rand = Random()
-	rand.seed(bytes(bar_widths))
-	return "".join(
-		f'<{element_name} class="{width_prefix}{bar_width} {rand.choice(colors) if i % 2 == 0 else ""}"></{element_name}>'
-		for i, bar_width in enumerate(bar_widths)
-	)
 
 
 _barcode_cache = None
@@ -132,7 +108,7 @@ def flush_barcode_cache():
 	if _barcode_cache_path is None or _barcode_cache is None:
 		return
 	with open(_barcode_cache_path, "w") as file:
-		file.writelines(map(str, _barcode_cache))
+		file.writelines(f"{code:08}\n" for code in _barcode_cache)
 
 
 def generate_rcn_barcode() -> Barcode:
@@ -156,5 +132,51 @@ def generate_rcn_barcode() -> Barcode:
 	)
 
 
-def html_from_ean8(ean8):
-	return html_from_bar_widths(bar_widths_from_ean8(ean8))
+SOLSTICE_PEPPER = b"\x97\xf2k\x82v\xbf8\xf7\x01\x123\x9a^\xfb&d"
+
+
+def html_from_ean8(
+	ean8,
+	colors: list[str] = ["fg", "a1", "a2", "a3"],
+	width_prefix: str = "w",
+	element_name: str = "b",
+	padding: int = 6,
+):
+	digits = barcode_to_digits(ean8)
+
+	from random import Random
+
+	rand = Random()
+	rand.seed(bytes(digits))
+
+	elements = []
+
+	is_visible = True
+
+	def element(*bar_widths):
+		nonlocal is_visible
+		for bar_width in bar_widths:
+			elements.append(
+				f'<{element_name} class="{width_prefix}{bar_width} {rand.choice(colors) if is_visible else ""}"></{element_name}>'
+			)
+			is_visible = not is_visible
+
+	def digit(digit):
+		elements.append(f"<span>{digit}</span>")
+
+	# TODO: light mode barcodes
+	if padding > 0:
+		element(padding)
+	element(*NORMAL_GUARD_BAR)
+	for c in digits[:4]:
+		digit(c)
+		element(*NUMBER_SETS[c])
+	element(*CENTER_GUARD_BAR)
+	for c in digits[4:]:
+		digit(c)
+		element(*NUMBER_SETS[c])
+	element(*NORMAL_GUARD_BAR)
+	if padding > 0:
+		element(padding)
+
+	return "".join(elements)

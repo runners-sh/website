@@ -50,6 +50,10 @@ main {
 		width: 13rem;
 		flex-shrink: 0;
 
+		> :first-child {
+			margin-block-start: 0;
+		}
+
 		> ol {
 			padding-left: 2em;
 		}
@@ -87,12 +91,13 @@ main {
 	> article {
 		min-width: 0;
 		flex-grow: 1;
+		overflow: hidden;
+		position: relative;
 		> .title-box {
-			overflow: hidden;
-			margin-bottom: 3rem;
+			margin-block: 3.5rem 3rem;
 			> h1 {
 				font-size: 2.5em;
-				margin-block: 2rem 1rem;
+				margin-bottom: 1rem;
 			}
 			> div {
 				color: var(--color-a2);
@@ -101,75 +106,121 @@ main {
 					float: right;
 				}
 			}
-			div:has(.barcode) {
-				position: relative;
-				margin: 0 -2rem;
-				height: 1.5rem;
-			}
-			.barcode {
-				width: 100%;
-				height: 100%;
-				position: absolute;
+		}
+	}
+	.barcode {
+		width: 100%;
+		height: 1.5rem;
+		position: absolute;
 
-				transform: skew(-30deg);
-				transform-origin: left top;
-				display: flex;
-				font-size: 0.5rem;
-				transition-property: height, transform;
-				transition-duration: 80ms;
-				transition-timing-function: cubic-bezier(0, 0, 0.3, 1);
-				b {
-					height: 100%;
-					transition: 100ms ease-out;
-				}
-				i {
-					height: 1.5rem;
-				}
-				> :first-child {
-					width: max(100% - 50rem, 4rem);
-				}
+		transform: skew(-30deg);
+		transform-origin: left top;
+		display: flex;
+		transition-property: height, transform;
+		transition-duration: 80ms;
+		transition-timing-function: cubic-bezier(0, 0, 0.3, 1);
 
-				> * {
-					background: var(--color-bg);
-				}
-				.a1 {
-					background: var(--color-a1);
-				}
-				.a2 {
-					background: var(--color-a2);
-				}
-				.a3 {
-					background: var(--color-a3);
-				}
-				.fg {
-					background: var(--color-fg);
-				}
-				.w1 {
-					flex-grow: 1;
-				}
-				.w2 {
-					flex-grow: 2;
-				}
-				.w3 {
-					flex-grow: 3;
-				}
-				.w4 {
-					flex-grow: 4;
-				}
-				.w6 {
-					flex-grow: 6;
-				}
-			}
-			.barcode:has(b:hover) {
-				height: 800%;
+		z-index: 1;
 
-				b.a1,
-				b.a2,
-				b.a3,
-				b.fg {
-					background: #eee;
-				}
+		overflow: hidden;
+		> b {
+			height: 100%;
+			transition: background 100ms ease-out;
+			flex-shrink: 0;
+		}
+		> i {
+			height: 1.5rem;
+			flex-shrink: 0;
+		}
+		> :first-child {
+			flex-grow: 1;
+		}
+		span {
+			width: 7.2em;
+			margin-right: -7.3em;
+			margin-left: 0.1em;
+			position: relative;
+			text-align: center;
+			background: #eee;
+			color: var(--color-bg);
+			height: 6em;
+			top: min(16rem, 20vw);
+			translate: 0 -100%;
+			pointer-events: none;
+			line-height: 1.2;
+
+			&::first-letter {
+				font-weight: bold;
+				font-size: 5em;
 			}
+		}
+		span:nth-of-type(1)::after,
+		span:nth-of-type(5)::after,
+		span:nth-of-type(8)::after {
+			display: inline-block;
+			position: absolute;
+			content: "";
+			left: -3rem;
+			bottom: 0;
+			height: 1.7rem;
+			width: 100%;
+			background: #eee;
+		}
+		span:nth-of-type(5) {
+			margin-left: -0.1em;
+			width: 7.4em;
+		}
+		span:nth-of-type(8) {
+			margin-left: -0.1em;
+			margin-right: -6.9em;
+
+			&::after {
+				left: 3rem;
+			}
+		}
+
+		/* hack: use em size as width of barcode elements */
+		font-size: min(max(0.7vw - 0.1rem, 0.25rem), 0.5em);
+
+		> * {
+			background: var(--color-bg);
+		}
+		.a1 {
+			background: var(--color-a1);
+		}
+		.a2 {
+			background: var(--color-a2);
+		}
+		.a3 {
+			background: var(--color-a3);
+		}
+		.fg {
+			background: var(--color-fg);
+		}
+		.w1 {
+			width: 1em;
+		}
+		.w2 {
+			width: 2em;
+		}
+		.w3 {
+			width: 3em;
+		}
+		.w4 {
+			width: 4em;
+		}
+		.w6 {
+			width: 6em;
+		}
+	}
+	.barcode:has(b:hover) {
+		height: min(16rem, 20vw);
+
+		b.a1,
+		b.a2,
+		b.a3,
+		b.fg {
+			background: #eee;
 		}
 	}
 }

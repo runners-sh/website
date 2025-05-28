@@ -5,11 +5,11 @@ import os
 import os.path as path
 import shutil
 from argparse import Namespace
+from typing import Literal
 
 import frontmatter
 import jinja2
 import markdown
-from l2m4m import LaTeX2MathMLExtension
 
 from . import (
 	common,
@@ -22,7 +22,7 @@ pkgname: str
 env: jinja2.Environment
 module_path: str
 dist_path: str
-cli_args: Namespace
+profile: Literal["dev", "prod"] = "dev"
 
 
 def init(package_name: str | None):
@@ -47,6 +47,7 @@ def init(package_name: str | None):
 	cli.run_cli()
 
 	env = jinja2.Environment(loader=jinja2.PackageLoader(package_name), autoescape=True)
+	env.globals["profile"] = profile
 
 
 def dist_path_for(name: str) -> str:
@@ -67,13 +68,13 @@ def page(template_name: str, output_path: str | None = None, **kwargs):
 	"""
 	dist_path = dist_path_for(output_path or (path.splitext(template_name)[0] + ".html"))
 	with open(dist_path, "w") as file:
-		contents = env.get_template(template_name).render(**kwargs)
+		contents = env.get_template(template_name).render(kwargs)
 		file.write(contents)
 	return dist_path
 
 
 def finalize():
-	if cli_args.release:
+	if profile == "prod":
 		_minify_all()
 
 
@@ -114,17 +115,23 @@ class MarkdownPage:
 		self.src_path = src_path
 		self.output_path = output_path
 
+		self.cached = False
+
+		"""
+		# TODO: caching implementation. currently this won't reload everything if e.g. __main__.py is modified
+
 		src_stat = os.stat(src_path)
 		try:
 			out_stat = os.stat(dist_path_for(output_path))
-			if out_stat.st_mtime == src_stat.st_mtime:
-				info(f"{src_path} not modified since last build, ignoring")
+			if out_stat.st_mtime >= src_stat.st_mtime:
+				info(f"{src_path} not modified since last build")
 				self.cached = True
+				self.meta = frontmatter.load(src_path).metadata
 				return
 		except FileNotFoundError:
 			pass
+		"""
 
-		self.cached = False
 		self._log_timer = LogTimer(
 			f"Markdown process {src_path} -> {output_path}",
 			f"Finished building '{output_path}' in {{}}",
@@ -138,14 +145,16 @@ class MarkdownPage:
 		self.params |= params
 
 	def __enter__(self):
-		self._log_timer.__enter__()
+		if not self.cached:
+			self._log_timer.__enter__()
 		return self
 
 	def __exit__(self, exc_type, exc_value, traceback):
-		self._log_timer.__exit__(exc_type, exc_value, traceback)
 		if exc_value:
 			return
-		self.process()
+		if not self.cached:
+			self._log_timer.__exit__(exc_type, exc_value, traceback)
+			self.process()
 
 	def process(self):
 		params = self.params
@@ -210,6 +219,7 @@ def copy(dir: str):
 from pymdownx.emoji import EmojiExtension
 from pymdownx.emoji import to_alt as emoji_to_alt
 from pymdownx.highlight import HighlightExtension
+from l2m4m import LaTeX2MathMLExtension
 
 _markdown_instance = markdown.Markdown(
 	extensions=[

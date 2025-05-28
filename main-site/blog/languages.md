@@ -2,7 +2,7 @@
 title: Programming Languages Gallery
 author: Cubic
 date: 2025-05-26
-id: 9fa3b5a0227b34baefba44a5f2c53c80
+barcode: 29015535
 ---
 
 ```rs
