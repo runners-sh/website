@@ -14,23 +14,23 @@ main {
 }
 
 a.post-container {
-	--color-admon-fg: var(--color-fg-85);
+	--color-shadowbox-fg: var(--color-fg-85);
 	transition: color background-color transform;
 	transition-duration: 80ms;
 	&::after {
 		transition: top left;
 		transition-duration: inherit;
-		top: 0em;
-		left: 0em;
+		top: 0;
+		left: 0;
 	}
 	&:hover {
-		--color-admon-fg: var(--color-a2);
+		--color-shadowbox-fg: var(--color-a2);
 	}
 	&:hover:not(:active) {
-		transform: translate(-0.15em, -0.15em);
+		translate: calc(-0.5 * var(--shadowbox-spacing));
 		&::after {
-			top: 0.3em;
-			left: 0.3em;
+			top: var(--shadowbox-spacing);
+			left: var(--shadowbox-spacing);
 		}
 	}
 	text-decoration: none;
