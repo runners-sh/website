@@ -1,7 +1,7 @@
-from time import sleep
 import subprocess
-import pytest
+from time import sleep
 
+import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 

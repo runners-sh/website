@@ -46,9 +46,7 @@ def init(package_name: str | None):
 
 	cli.run_cli()
 
-	env = jinja2.Environment(
-		loader=jinja2.PackageLoader(package_name), autoescape=True
-	)
+	env = jinja2.Environment(loader=jinja2.PackageLoader(package_name), autoescape=True)
 	env.globals["profile"] = profile
 
 
@@ -68,9 +66,7 @@ def page(template_name: str, output_path: str | None = None, **kwargs):
 	- `output_path`: Path to save the rendered HTML file to. Defaults to the template name.
 	- `**kwargs`: Additional keyword arguments to pass to the template.
 	"""
-	dist_path = dist_path_for(
-		output_path or (path.splitext(template_name)[0] + ".html")
-	)
+	dist_path = dist_path_for(output_path or (path.splitext(template_name)[0] + ".html"))
 	with open(dist_path, "w") as file:
 		contents = env.get_template(template_name).render(kwargs)
 		file.write(contents)
@@ -84,9 +80,7 @@ def finalize():
 
 def _minify_all():
 	with LogTimer("Minifying files..."):
-		for dirname, file, name, ext in recurse_files(
-			dist_path, [".css", ".html", ".js"]
-		):
+		for dirname, file, name, ext in recurse_files(dist_path, [".css", ".html", ".js"]):
 			with open(path.join(dirname, file), "r+") as f:
 				contents = f.read()
 				match ext:
