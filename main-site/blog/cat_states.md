@@ -2,7 +2,7 @@
 title: Cat States
 author: itepastra
 date: 2025-05-26
-id: 14d4f16f1afbf8e517b6a91dc8d4d5e3
+barcode: 20028862
 ---
 
 ## Classical cat states
