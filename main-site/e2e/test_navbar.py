@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from time import sleep
 
 import pytest
@@ -12,7 +13,7 @@ url_blog = f"{url_base}/blog/"
 
 @pytest.fixture
 def driver():
-	proc = subprocess.Popen(["python", "-m", "main-site", "serve"])
+	proc = subprocess.Popen([sys.executable, "-m", "main-site", "serve"])
 	sleep(0.5)
 
 	options = webdriver.ChromeOptions()
