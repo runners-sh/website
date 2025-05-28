@@ -13,7 +13,11 @@ url_blog = f"{url_base}/blog/"
 
 @pytest.fixture
 def driver():
-	proc = subprocess.Popen([sys.executable, "-m", "main-site", "serve"])
+	proc = subprocess.Popen(
+		[sys.executable, "-m", "main-site", "serve"],
+		stdout=subprocess.DEVNULL,
+		stderr=subprocess.DEVNULL,
+	)
 	sleep(0.5)
 
 	options = webdriver.ChromeOptions()
