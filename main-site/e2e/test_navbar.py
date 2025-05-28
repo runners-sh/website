@@ -2,8 +2,8 @@ import subprocess
 from time import sleep
 
 import pytest
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from selenium import webdriver  # type: ignore
+from selenium.webdriver.common.by import By  # type: ignore
 
 url_base = "http://localhost:5123"
 url_home = f"{url_base}/"
