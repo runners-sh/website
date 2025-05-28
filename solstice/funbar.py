@@ -6,7 +6,6 @@ The choice of EAN-8 is because it's horizontal, it fits in the narrow height of 
 [1]: https://ref.gs1.org/standards/genspecs/, 1.4.5 for RCN range, 5.2.1 for the EAN-8 specification
 """
 
-import itertools
 
 # A = NUMBER_SETS[digit]
 # B = NUMBER_SETS[digit][::-1]

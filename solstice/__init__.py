@@ -216,10 +216,10 @@ def copy(dir: str):
 			shutil.copytree(dir, dist, dirs_exist_ok=True)
 
 
+from l2m4m import LaTeX2MathMLExtension
 from pymdownx.emoji import EmojiExtension
 from pymdownx.emoji import to_alt as emoji_to_alt
 from pymdownx.highlight import HighlightExtension
-from l2m4m import LaTeX2MathMLExtension
 
 _markdown_instance = markdown.Markdown(
 	extensions=[
