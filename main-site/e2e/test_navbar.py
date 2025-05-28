@@ -31,15 +31,27 @@ def driver():
 	driver.quit()
 
 
-def test_navbar_urls(driver):
+def test_navbar_root_solrunners_url(driver):
 	driver.get(url_base)
 
 	navbar = driver.find_element(By.XPATH, "//nav")
-	blog_link = navbar.find_element(By.LINK_TEXT, "blog")
-	blog_link.click()
-	assert driver.current_url == url_blog
+	home_link = navbar.find_element(By.LINK_TEXT, "root@solrunners ~#")
+	home_link.click()
+
+
+def test_navbar_home_url(driver):
+	driver.get(url_base)
 
 	navbar = driver.find_element(By.XPATH, "//nav")
 	home_link = navbar.find_element(By.LINK_TEXT, "home")
 	home_link.click()
 	assert driver.current_url == url_home
+
+
+def test_navbar_blog_url(driver):
+	driver.get(url_base)
+
+	navbar = driver.find_element(By.XPATH, "//nav")
+	home_link = navbar.find_element(By.LINK_TEXT, "blog")
+	home_link.click()
+	assert driver.current_url == url_blog
