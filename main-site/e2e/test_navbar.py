@@ -1,0 +1,40 @@
+from time import sleep
+import subprocess
+import pytest
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+url_base = "http://localhost:5123"
+url_home = f"{url_base}/"
+url_blog = f"{url_base}/blog/"
+
+
+@pytest.fixture
+def driver():
+	proc = subprocess.Popen(["python", "-m", "main-site", "serve"])
+	sleep(0.5)
+
+	options = webdriver.ChromeOptions()
+	options.add_argument("--headless=new")
+	driver = webdriver.Chrome(options=options)
+	driver.implicitly_wait(5)
+
+	yield driver
+
+	proc.kill()
+	driver.quit()
+
+
+def test_navbar_urls(driver):
+	driver.get(url_base)
+
+	navbar = driver.find_element(By.XPATH, "//nav")
+	blog_link = navbar.find_element(By.LINK_TEXT, "blog")
+	blog_link.click()
+	assert driver.current_url == url_blog
+
+	navbar = driver.find_element(By.XPATH, "//nav")
+	home_link = navbar.find_element(By.LINK_TEXT, "home")
+	home_link.click()
+	assert driver.current_url == url_home
