@@ -29,7 +29,8 @@ a.post-container {
 	}
 	&:hover:not(:active),
 	&:focus:not(:active) {
-		translate: calc(-0.5 * var(--shadowbox-spacing));
+		translate: calc(-0.5 * var(--shadowbox-spacing))
+			calc(-0.5 * var(--shadowbox-spacing));
 		&::after {
 			top: var(--shadowbox-spacing);
 			left: var(--shadowbox-spacing);
