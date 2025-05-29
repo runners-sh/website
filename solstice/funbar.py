@@ -32,9 +32,9 @@ CENTER_GUARD_BAR = [1, 1, 1, 1, 1]
 type Barcode = int | str | list[int]
 
 
-def barcode_to_digits(barcode: Barcode) -> list[int]:
+def barcode_to_digits(barcode: Barcode, num_digits=8) -> list[int]:
 	if type(barcode) is int:
-		barcode = f"{barcode:08}"
+		barcode = str(barcode).zfill(num_digits)
 	if type(barcode) is str:
 		barcode = [*map(int, barcode)]
 
@@ -110,7 +110,7 @@ def flush_barcode_cache():
 		file.writelines(f"{code:08}\n" for code in _barcode_cache)
 
 
-def generate_rcn_barcode() -> Barcode:
+def generate_rcn_barcode() -> str:
 	"""
 	Generates a random RCN (private use) barcode.
 	"""
@@ -122,7 +122,8 @@ def generate_rcn_barcode() -> Barcode:
 		# only 2 and 4 are valid RCN starting digits so just check a random bit to decide
 		first_digit = (2, 4)[integer >> 127]
 
-		barcode = first_digit * 1000000 + integer % 1000000
+		barcode = f"{first_digit}{integer % 1000000:06}"
+		barcode += str(check_digit_for([*map(int, barcode)]))
 		if barcode not in get_barcode_cache():
 			return barcode
 

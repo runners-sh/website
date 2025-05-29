@@ -16,11 +16,13 @@ def run_cli():
 		return
 
 	parser = argparse.ArgumentParser("solstice", description="")
-	parser.add_argument("cmd", nargs="?", default="build", help='"build", "clean", or "serve"')
+	parser.add_argument(
+		"cmd", nargs="?", default="build", help='"build", "clean", "serve", or "barcode"'
+	)
 	parser.add_argument("--release", action="store_true")
 	parser.add_argument("-p", "--port", default=5123, type=int)
 
-	args = parser.parse_args()
+	args, unknown = parser.parse_known_args()
 	if args.release:
 		solstice.profile = "prod"
 
@@ -29,6 +31,17 @@ def run_cli():
 			return
 		case "clean":
 			clean()
+			sys.exit(0)
+		case "barcode":
+			if len(unknown) > 0 and len(unknown[0]) == 7:
+				code = "".join(map(str, funbar.barcode_to_digits(unknown[0], num_digits=7)))
+			else:
+				if len(unknown) > 0:
+					warn(
+						"argument given to barcode command should either be nonexistent for a random barcode or a number of length 7 to generate a custom one"
+					)
+				code = funbar.generate_rcn_barcode()
+			print(f"{code:08}")
 			sys.exit(0)
 		case "serve":
 			import threading
@@ -49,6 +62,9 @@ def run_cli():
 				thread.join()
 
 			sys.exit(0)
+		case _:
+			error(f"Invalid command {args.cmd!r}")
+			sys.exit(1)
 
 
 def clean():
