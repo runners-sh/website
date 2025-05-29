@@ -1,68 +1,63 @@
 import argparse
-import shutil
+import os
 import sys
+from typing import Callable
 
-import solstice
+from .log import info
+from .sitegen import SiteGenerator
 
-from . import *
 
-
-def run_cli():
+def parse_cli():
 	"""
-	Runs the CLI. This should configure all the variables for the build then return if the build should proceed. Otherwise, this should exit the program.
+	Parse arguments from the CLI.
 	"""
-	if _http_server is not None:
-		# we're hot reloading, ignore this function call
-		return
-
 	parser = argparse.ArgumentParser("solstice", description="")
-	parser.add_argument("cmd", nargs="?", default="build", help='"build", "clean", or "serve"')
+	parser.add_argument(
+		"cmd", nargs="?", default="build", help='"build", "clean", or "serve"'
+	)
 	parser.add_argument("--release", action="store_true")
 	parser.add_argument("-p", "--port", default=5123, type=int)
 
 	args = parser.parse_args()
-	if args.release:
-		solstice.profile = "prod"
 
-	match args.cmd:
-		case "build":
-			return
-		case "clean":
-			clean()
-			sys.exit(0)
-		case "serve":
-			import threading
-
-			clean()
-
-			thread = threading.Thread(target=run_http_server, args=(args.port,))
-			thread.start()
-
-			try:
-				hotreload()
-			except KeyboardInterrupt:
-				sys.stderr.write("\x1b[0J")  # clear from cursor down
-				sys.stderr.flush()
-				info("Shutting down cleanly...")
-				assert _http_server
-				_http_server.shutdown()
-				thread.join()
-
-			sys.exit(0)
+	return args
 
 
-def clean():
-	try:
-		with LogTimer(f"Cleaning {dist_path}"):
-			shutil.rmtree(dist_path)
-	except FileNotFoundError:
-		warn("Nothing to clean.")
+def entrypoint(gen: SiteGenerator):
+	def inner(func):
+		args = parse_cli()
+		match args.cmd:
+			case "build":
+				func()
+			case "clean":
+				gen.clean()
+			case "serve":
+				import threading
+
+				gen.clean()
+				thread = threading.Thread(
+					target=run_http_server, args=(args.port, gen.output_path)
+				)
+				thread.start()
+				try:
+					hotreload(gen, func)
+				except KeyboardInterrupt:
+					sys.stderr.write("\x1b[0J")  # clear from cursor down
+					sys.stderr.flush()
+					info("Shutting down cleanly...")
+					assert _http_server
+					_http_server.shutdown()
+					thread.join()
+		return func
+
+	return inner
 
 
 _http_server = None
+_http_server_exception = None
 
 
-def run_http_server(port):
+def run_http_server(port, dist_path):
 	global _http_server
 	try:
 		from http.server import SimpleHTTPRequestHandler
@@ -98,7 +93,9 @@ def run_http_server(port):
 			def end_headers(self):
 				# do not remove these! firefox improperly caches resources and will break if it is not explicitly told to not cache anything
 				self.send_header("Connection", "close")
-				self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+				self.send_header(
+					"Cache-Control", "no-cache, no-store, must-revalidate"
+				)
 				self.send_header("Pragma", "no-cache")
 				self.send_header("Expires", "0")
 				return super().end_headers()
@@ -114,11 +111,10 @@ def run_http_server(port):
 			_http_server = server
 			server.serve_forever()
 	finally:
-		_http_server = sys.exception()
+		_http_server_exception = sys.exception()
 
 
-def hotreload():
-	import runpy
+def hotreload(gen: SiteGenerator, build_func: Callable):
 	import time
 	import traceback
 	from datetime import datetime
@@ -126,24 +122,29 @@ def hotreload():
 	from pygments import formatters, highlight, lexers
 	from watchfiles import watch  # type: ignore (removes pyright hallucination)
 
-	it = watch(module_path)
+	it = watch(gen.module_path)
 
 	# wait for server to start
-	while not _http_server:
+	while True:
 		time.sleep(0.1)
-	if isinstance(_http_server, BaseException):
-		return
+		if _http_server:
+			break
+		if _http_server_exception:
+			return
+
 	_addr, port = _http_server.server_address
 
 	while True:
 		sys.stderr.write("\x1b[2J\x1b[H")  # clear screen, reset cursor
 
-		info(f"Watching module {pkgname} for changes. Visit website on http://localhost:{port}\n")
+		info(
+			f"Watching module {gen.module_name} for changes. Visit website on http://localhost:{port}\n"
+		)
 
 		info(f"Starting build at {datetime.now()}")
 
 		try:
-			runpy.run_module(pkgname)
+			build_func()
 		except BaseException:
 			tb_text = "".join(traceback.format_exc())
 

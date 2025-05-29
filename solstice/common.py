@@ -2,20 +2,4 @@
 
 from solstice import *
 
-
-def read_file(path: str) -> str:
-	with open(path, "r") as file:
-		return file.read()
-
-
-def read_file_sanitized(path: str) -> str:
-	return (
-		read_file(path)
-		.replace("&", "&amp;")
-		.replace(" ", "&nbsp;")
-		.replace("<", "&lt;")
-		.replace(">", "&gt;")
-		.replace('"', "&quot;")
-		.replace("'", "&apos;")
-		.replace("\n", "<br>")
-	)
+from . import funbar  # noqa: F401 E402

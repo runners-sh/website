@@ -6,6 +6,9 @@ The choice of EAN-8 is because it's horizontal, it fits in the narrow height of 
 [1]: https://ref.gs1.org/standards/genspecs/, 1.4.5 for RCN range, 5.2.1 for the EAN-8 specification
 """
 
+import os.path as path
+
+from .log import warn
 
 # A = NUMBER_SETS[digit]
 # B = NUMBER_SETS[digit][::-1]
@@ -55,7 +58,9 @@ def barcode_to_digits(barcode: Barcode) -> list[int]:
 
 
 def check_digit_for(digits: list[int]) -> int:
-	return -sum(digit * (3, 1)[i % 2] for i, digit in enumerate(digits[:7])) % 10
+	return (
+		-sum(digit * (3, 1)[i % 2] for i, digit in enumerate(digits[:7])) % 10
+	)
 
 
 def bar_widths_from_ean8(barcode: Barcode) -> list[int]:
@@ -77,12 +82,12 @@ _barcode_cache = None
 _barcode_cache_path = None
 
 
-def get_barcode_cache():
+def get_barcode_cache(output_path: str):
 	global _barcode_cache, _barcode_cache_path
 	if _barcode_cache is None:
-		from . import dist_path, path, warn
-
-		_barcode_cache_path = path.join(dist_path, path.pardir, "barcode_cache.txt")
+		_barcode_cache_path = path.join(
+			output_path, path.pardir, "barcode_cache.txt"
+		)
 		try:
 			with open(_barcode_cache_path, "r") as file:
 				_barcode_cache = set(map(int, filter(len, file)))
@@ -110,7 +115,7 @@ def flush_barcode_cache():
 		file.writelines(f"{code:08}\n" for code in _barcode_cache)
 
 
-def generate_rcn_barcode() -> Barcode:
+def generate_rcn_barcode(dist_path) -> Barcode:
 	"""
 	Generates a random RCN (private use) barcode.
 	"""
@@ -123,7 +128,7 @@ def generate_rcn_barcode() -> Barcode:
 		first_digit = (2, 4)[integer >> 127]
 
 		barcode = first_digit * 1000000 + integer % 1000000
-		if barcode not in get_barcode_cache():
+		if barcode not in get_barcode_cache(dist_path):
 			return barcode
 
 	raise RuntimeError(
