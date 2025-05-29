@@ -1,3 +1,4 @@
+from runners_common import funbar
 from solstice import *
 
 ctx = SiteGenerator(
@@ -29,7 +30,7 @@ def build():
 
 			barcode = pg.meta.get("barcode")
 			if barcode is not None:
-				common.funbar.get_barcode_cache(ctx.output_path).add(barcode)
+				funbar.get_barcode_cache(ctx.output_path).add(barcode)
 				if orig_page := barcode_set.get(barcode):
 					raise Exception(
 						f"duplicate barcode for pages {orig_page} and {src_path}: {barcode}"
@@ -40,7 +41,7 @@ def build():
 					f"Barcode not provided for {src_path}, using dummy barcode"
 				)
 				barcode = 69
-			pg.set_params(funbar=common.funbar.html_from_ean8(barcode))
+			pg.set_params(funbar=funbar.html_from_ean8(barcode))
 
 	posts.sort(key=lambda x: x["date"], reverse=True)
 

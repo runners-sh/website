@@ -8,7 +8,7 @@ The choice of EAN-8 is because it's horizontal, it fits in the narrow height of 
 
 import os.path as path
 
-from .log import warn
+from solstice.log import warn
 
 # A = NUMBER_SETS[digit]
 # B = NUMBER_SETS[digit][::-1]
