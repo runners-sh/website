@@ -3,6 +3,6 @@
 import os
 from os import path
 
-from . import cli, common
+from . import cli
 from .log import LogTimer, debug, error, info, warn
 from .sitegen import *
