@@ -292,20 +292,20 @@ class Page:
 		"""
 		self._set_params_internal(
 			"key '{}' is set multiple times.",
-			**params,
+			params,
 		)
 
 	def _set_params_internal(
 		self,
 		dup_warn: str,
+		params: dict[str, Any],
 		overwrite=True,
-		**params,
 	):
 		"""
 		Internal method to set parameters for the page. Allows customization of the warning message for duplicate keys.
 		# Arguments
 		- `dup_warn`: The warning message to show when a key is set multiple times.
-		- `overwrite`: If True, overwrite existing keys; otherwise, keep the existing value.
+		- `overwrite`: If `True`, overwrite existing keys; otherwise, keep the existing value.
 		- `**params`: The parameters to set for the page.
 		"""
 		for key, val in params.items():
@@ -380,13 +380,15 @@ class MarkdownPage(Page):
 	def build(self):
 		self._set_params_internal(
 			"frontmatter: key '{}' is already set by the caller, skipping...",
+			self.meta,
 			overwrite=False,
-			**self.meta,
 		)
 		self._set_params_internal(
 			"key '{}' is reserved for markdown content.",
-			content=self.content,
-			toc=self.toc,
+			{
+				"content": self.content,
+				"toc": self.toc,
+			},
 		)
 
 		return super().build()

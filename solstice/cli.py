@@ -116,7 +116,7 @@ def run_http_server(port, dir):
 				super().do_GET()
 
 			def end_headers(self):
-				# Do not remove!
+				# Do not remove!				
 				# Firefox also needs to be explicitly told to not cache anything with the following headers.
 				self.send_header("Connection", "close")
 				self.send_header(
