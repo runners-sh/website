@@ -88,9 +88,7 @@ class SiteGenerator:
 		# default to '/dist' in module directory
 		self.output_path = output_path or path.join(self.module_path, "./dist")
 
-		self.templates_path = templates_path or path.join(
-			self.module_path, "./templates"
-		)
+		self.templates_path = templates_path or path.join(self.module_path, "./templates")
 
 		self.profile = profile
 
@@ -155,9 +153,7 @@ class SiteGenerator:
 		except FileNotFoundError:
 			warn("Nothing to clean.")
 
-	def page(
-		self, template_name: str, output_path: str | None = None, **kwargs
-	):
+	def page(self, template_name: str, output_path: str | None = None, **kwargs):
 		with Page(self, template_name, output_path) as pg:
 			pg.set_params(**kwargs)
 

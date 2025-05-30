@@ -12,9 +12,7 @@ def parse_cli():
 	Parse arguments from the CLI.
 	"""
 	parser = argparse.ArgumentParser("solstice", description="")
-	parser.add_argument(
-		"cmd", nargs="?", default="build", help='"build", "clean", or "serve"'
-	)
+	parser.add_argument("cmd", nargs="?", default="build", help='"build", "clean", or "serve"')
 	parser.add_argument("--release", action="store_true")
 	parser.add_argument("-p", "--port", default=5123, type=int)
 
@@ -35,9 +33,7 @@ def entrypoint(gen: SiteGenerator):
 				import threading
 
 				gen.clean()
-				thread = threading.Thread(
-					target=run_http_server, args=(args.port, gen.output_path)
-				)
+				thread = threading.Thread(target=run_http_server, args=(args.port, gen.output_path))
 				thread.start()
 				try:
 					hotreload(gen, func)
@@ -93,9 +89,7 @@ def run_http_server(port, dist_path):
 			def end_headers(self):
 				# do not remove these! firefox improperly caches resources and will break if it is not explicitly told to not cache anything
 				self.send_header("Connection", "close")
-				self.send_header(
-					"Cache-Control", "no-cache, no-store, must-revalidate"
-				)
+				self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
 				self.send_header("Pragma", "no-cache")
 				self.send_header("Expires", "0")
 				return super().end_headers()
