@@ -5,14 +5,16 @@
 {
 	"languages": {
 		"Python": {
-			"language_servers": ["ruff", "pyright"]
-		},
-		"formatter": {
-			"code_actions_on_format": {
-				"source.fixAll.ruff": true,
-				"source.organizeImports.ruff": true
+			"language_servers": ["ruff", "pyright"],
+			"format_on_save": "on",
+			"formatter": {
+				"code_actions": {
+					"source.fixAll.ruff": true,
+					"source.organizeImports.ruff": true
+				}
 			}
 		},
+
 		"Markdown": {
 			"hard_tabs": true,
 			"tab_size": 4,
