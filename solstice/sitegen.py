@@ -62,9 +62,9 @@ class SiteGenerator:
 
 	```python
 	import solstice
-	ctx = solstice.SiteGenerator(__package__)
-	ctx.page("index.jinja", title="Hello world!")
-	ctx.copy("public")
+	ssg = solstice.SiteGenerator(__package__)
+	ssg.page("index.jinja", title="Hello world!")
+	ssg.copy("public")
 	```
 	"""
 
@@ -205,8 +205,8 @@ class SiteGenerator:
 		# Example
 		```python
 		import solstice
-		ctx = solstice.SiteGenerator(__package__)
-		ctx.page("home.jinja", output_path="index.html", title="Hello world!")
+		ssg = solstice.SiteGenerator(__package__)
+		ssg.page("home.jinja", output_path="index.html", title="Hello world!")
 		```
 		"""
 		with Page(self, template_name, output_path) as pg:
@@ -230,8 +230,8 @@ class SiteGenerator:
 		# Example
 		```python
 		import solstice
-		ctx = solstice.SiteGenerator(__package__)
-		ctx.markdown_page("blog.jinja", "posts/my_post.md", output_path="blog/my_post.html")
+		ssg = solstice.SiteGenerator(__package__)
+		ssg.markdown_page("blog.jinja", "posts/my_post.md", output_path="blog/my_post.html")
 		```
 		"""
 		with MarkdownPage(self, template_name, content_path, output_path) as pg:
@@ -247,8 +247,8 @@ class Page:
 	```python
 	import solstice
 
-	ctx = solstice.SiteGenerator(__package__)
-	with solstice.Page(ctx, "index.jinja") as page:
+	ssg = solstice.SiteGenerator(__package__)
+	with solstice.Page(ssg, "index.jinja") as page:
 		page.set_params(title="Hello world!")
 
 	# The page will be built automatically when exiting the context.
@@ -281,8 +281,8 @@ class Page:
 		# Example
 		```python
 		import solstice
-		ctx = solstice.SiteGenerator(__package__)
-		with solstice.Page(ctx, "index.jinja") as page:
+		ssg = solstice.SiteGenerator(__package__)
+		with solstice.Page(ssg, "index.jinja") as page:
 			page.set_params(
 				title="Hello world!",
 				description="This is my homepage.",
@@ -345,9 +345,9 @@ class MarkdownPage(Page):
 	```python
 	import solstice
 
-	ctx = solstice.SiteGenerator(__package__)
+	ssg = solstice.SiteGenerator(__package__)
 	with solstice.MarkdownPage(
-		ctx,
+		ssg,
 		"blog.jinja",
 		content_path="posts/my_post.md",
 		output_path="blog/my_post.html"

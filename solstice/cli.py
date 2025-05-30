@@ -23,7 +23,7 @@ def parse_cli():
 	return args
 
 
-def entrypoint(ctx: SiteGenerator):
+def entrypoint(ssg: SiteGenerator):
 	"""
 	`@cli.entrypoint` is used to mark the function that builds your site. It will wrap this function
 	into the CLI, calling it when building/hot-reloading.
@@ -33,12 +33,12 @@ def entrypoint(ctx: SiteGenerator):
 	import solstice
 	from solstice import cli
 
-	ctx = solstice.SiteGenerator(__package__)
+	ssg = solstice.SiteGenerator(__package__)
 
-	@cli.entrypoint(ctx)
+	@cli.entrypoint(ssg)
 	def build():
-	    ctx.page("index.jinja", title="Hello world!")
-	    ctx.copy("public")
+	    ssg.page("index.jinja", title="Hello world!")
+	    ssg.copy("public")
 	```
 	"""
 
@@ -48,19 +48,19 @@ def entrypoint(ctx: SiteGenerator):
 			case "build":  # Build the website
 				func()
 			case "clean":  # Clean output dir
-				ctx.clean()
+				ssg.clean()
 			case "serve":  # Serve with hot-reloading
 				import threading
 
-				ctx.clean()
+				ssg.clean()
 
 				thread = threading.Thread(
-					target=run_http_server, args=(args.port, ctx.output_path)
+					target=run_http_server, args=(args.port, ssg.output_path)
 				)
 				thread.start()
 
 				try:
-					hotreload(ctx, func)
+					hotreload(ssg, func)
 				except KeyboardInterrupt:  # Ctrl+C, finalize
 					sys.stderr.write("\x1b[0J")  # clear from cursor down
 					sys.stderr.flush()
@@ -116,7 +116,7 @@ def run_http_server(port, dir):
 				super().do_GET()
 
 			def end_headers(self):
-				# Do not remove!				
+				# Do not remove!
 				# Firefox also needs to be explicitly told to not cache anything with the following headers.
 				self.send_header("Connection", "close")
 				self.send_header(
@@ -141,7 +141,7 @@ def run_http_server(port, dir):
 		_http_server_exception = sys.exception()
 
 
-def hotreload(ctx: SiteGenerator, build_func: Callable):
+def hotreload(ssg: SiteGenerator, build_func: Callable):
 	import time
 	import traceback
 	from datetime import datetime
@@ -149,7 +149,7 @@ def hotreload(ctx: SiteGenerator, build_func: Callable):
 	from pygments import formatters, highlight, lexers
 	from watchfiles import watch  # type: ignore (removes pyright hallucination)
 
-	it = watch(ctx.module_path)  # file watcher
+	it = watch(ssg.module_path)  # file watcher
 
 	# wait for server to start
 	while True:
@@ -165,7 +165,7 @@ def hotreload(ctx: SiteGenerator, build_func: Callable):
 		sys.stderr.write("\x1b[2J\x1b[H")  # clear screen, reset cursor
 
 		info(
-			f"Watching module {ctx.module_name} for changes. Visit website on http://localhost:{port}\n"
+			f"Watching module {ssg.module_name} for changes. Visit website on http://localhost:{port}\n"
 		)
 
 		info(f"Starting build at {datetime.now()}")

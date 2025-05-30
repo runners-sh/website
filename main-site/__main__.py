@@ -3,18 +3,18 @@ from os import path
 from runners_common import funbar
 from solstice import *
 
-ctx = SiteGenerator(
+ssg = SiteGenerator(
 	__package__,  # type: ignore
 	output_path="../dist/main-site",
 )
 
 
-@cli.entrypoint(ctx)
+@cli.entrypoint(ssg)
 def build():
-	ctx.copy("public")
+	ssg.copy("public")
 	ascii_logo = read_file("ascii/logo.asc")
 	ascii_name = read_file("ascii/name.asc")
-	ctx.page("index.jinja", ascii_logo=ascii_logo, ascii_name=ascii_name)
+	ssg.page("index.jinja", ascii_logo=ascii_logo, ascii_name=ascii_name)
 
 	posts = []
 
@@ -25,22 +25,26 @@ def build():
 	for dirname, file, name, _ in recurse_files("blog", [".md"]):
 		src_path = path.join(dirname, file)
 		dist_path = path.join(dirname, name + ".html")
-		with MarkdownPage(ctx, "blog.jinja", src_path, dist_path) as pg:
-			posts.append(pg.meta | {"url": "/" + dist_path.removesuffix(".html")})
+		with MarkdownPage(ssg, "blog.jinja", src_path, dist_path) as pg:
+			posts.append(
+				pg.meta | {"url": "/" + dist_path.removesuffix(".html")}
+			)
 
 			barcode = pg.meta.get("barcode")
 			if barcode is not None:
-				funbar.get_barcode_cache(ctx.output_path).add(barcode)
+				funbar.get_barcode_cache(ssg.output_path).add(barcode)
 				if orig_page := barcode_set.get(barcode):
 					raise Exception(
 						f"duplicate barcode for pages {orig_page} and {src_path}: {barcode}"
 					)
 				barcode_set[barcode] = src_path
 			if barcode is None:
-				warn(f"Barcode not provided for {src_path}, using dummy barcode")
+				warn(
+					f"Barcode not provided for {src_path}, using dummy barcode"
+				)
 				barcode = 69
 			pg.set_params(funbar=funbar.html_from_ean8(barcode))
 
 	posts.sort(key=lambda x: x["date"], reverse=True)
 
-	ctx.page("blog-overview.jinja", "blog/index.html", posts=posts)
+	ssg.page("blog-overview.jinja", "blog/index.html", posts=posts)
