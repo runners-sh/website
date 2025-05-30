@@ -266,8 +266,8 @@ class Page:
 		self.gen = gen
 
 		self._log_timer = LogTimer(
-			f"Building '{template_name}' -> '{output_path}'...",
-			f"Built '{output_path}' in {{}}",
+			f"Building '{template_name}' -> '{self.output_path}'...",
+			f"Built '{self.output_path}' in {{}}",
 		)
 		self.params = {}
 
@@ -372,7 +372,7 @@ class MarkdownPage(Page):
 		super().__init__(gen, template_name, output_path)
 		self._log_timer = LogTimer(
 			f"Building '{content_path}' -> '{output_path}'...",
-			f"Built '{output_path}' in {{}}",
+			f"Built '{self.output_path}' in {{}}",
 		)
 		self.content_path = content_path
 		self.content, self.toc, self.meta = self.gen.load_md(self.content_path)
