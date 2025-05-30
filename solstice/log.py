@@ -3,6 +3,17 @@ import sys
 import time
 from enum import Enum
 
+__all__ = [
+	"LogLevel",
+	"LogTimer",
+	"log",
+	"debug",
+	"info",
+	"success",
+	"warn",
+	"error",
+]
+
 
 class LogLevel(Enum):
 	DEBUG = 0
@@ -65,15 +76,3 @@ class LogTimer:
 		time_str = f"{elapsed:.02f}s" if elapsed >= 1 else f"{elapsed * 1000:.0f}ms"
 		success(self.ending_msg.format(time_str))
 		del self.start_time
-
-
-__all__ = [
-	"LogLevel",
-	"LogTimer",
-	"log",
-	"debug",
-	"info",
-	"success",
-	"warn",
-	"error",
-]
