@@ -40,6 +40,7 @@
           setuptools
           minify-html
           self.packages.${sys}.l2m4m
+          selenium
         ];
     in
     {
@@ -49,6 +50,7 @@
             (python313.withPackages (dependencies system))
             mask
             (writeShellScriptBin "serve" "python -m main-site serve")
+            firefox
           ];
         };
 
