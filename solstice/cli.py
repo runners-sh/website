@@ -12,7 +12,9 @@ def parse_cli():
 	Parse arguments from the CLI.
 	"""
 	parser = argparse.ArgumentParser("solstice", description="")
-	parser.add_argument("cmd", nargs="?", default="build", help='"build", "clean", or "serve"')
+	parser.add_argument(
+		"cmd", nargs="?", default="build", help='"build", "clean", or "serve"'
+	)
 	parser.add_argument("--release", action="store_true")
 	parser.add_argument("-p", "--port", default=5123, type=int)
 
@@ -21,23 +23,45 @@ def parse_cli():
 	return args
 
 
-def entrypoint(gen: SiteGenerator):
+def entrypoint(ctx: SiteGenerator):
+	"""
+	`@cli.entrypoint` is used to mark the function that builds your site. It will wrap this function
+	into the CLI, calling it when building/hot-reloading.
+
+	# Example
+	```python
+	import solstice
+	from solstice import cli
+
+	ctx = solstice.SiteGenerator(__package__)
+
+	@cli.entrypoint(ctx)
+	def build():
+	    ctx.page("index.jinja", title="Hello world!")
+	    ctx.copy("public")
+	```
+	"""
+
 	def inner(func):
 		args = parse_cli()
 		match args.cmd:
-			case "build":
+			case "build":  # Build the website
 				func()
-			case "clean":
-				gen.clean()
-			case "serve":
+			case "clean":  # Clean output dir
+				ctx.clean()
+			case "serve":  # Serve with hot-reloading
 				import threading
 
-				gen.clean()
-				thread = threading.Thread(target=run_http_server, args=(args.port, gen.output_path))
+				ctx.clean()
+
+				thread = threading.Thread(
+					target=run_http_server, args=(args.port, ctx.output_path)
+				)
 				thread.start()
+
 				try:
-					hotreload(gen, func)
-				except KeyboardInterrupt:
+					hotreload(ctx, func)
+				except KeyboardInterrupt:  # Ctrl+C, finalize
 					sys.stderr.write("\x1b[0J")  # clear from cursor down
 					sys.stderr.flush()
 					info("Shutting down cleanly...")
@@ -53,7 +77,10 @@ _http_server = None
 _http_server_exception = None
 
 
-def run_http_server(port, dist_path):
+def run_http_server(port, dir):
+	"""
+	Background process that serves the content at `dir`
+	"""
 	global _http_server
 	try:
 		from http.server import SimpleHTTPRequestHandler
@@ -63,12 +90,15 @@ def run_http_server(port, dist_path):
 			protocol_version = "HTTP/1.1"
 
 			def __init__(self, *args, **kwargs):
-				super().__init__(*args, directory=dist_path, **kwargs)
+				super().__init__(*args, directory=dir, **kwargs)
 
-			def log_message(self, format: str, *args):
+			def log_message(self, format: str, *args):  # discard log messages
 				pass
 
 			def send_head(self):
+				# Do not remove!
+				# Firefox doesn't play well with Python's HTTP server caching, therefore we disable caching altogether.
+				# This is not a big deal as this server is only for development anyway.
 				if "If-Modified-Since" in self.headers:
 					del self.headers["If-Modified-Since"]
 				if "If-None-Match" in self.headers:
@@ -83,18 +113,21 @@ def run_http_server(port, dist_path):
 				if not os.path.exists(path):
 					self.path = self.path + ".html"
 
-				# Call the superclass methods to actually serve the page.
-				SimpleHTTPRequestHandler.do_GET(self)
+				super().do_GET()
 
 			def end_headers(self):
-				# do not remove these! firefox improperly caches resources and will break if it is not explicitly told to not cache anything
+				# Do not remove!
+				# Firefox also needs to be explicitly told to not cache anything with the following headers.
 				self.send_header("Connection", "close")
-				self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+				self.send_header(
+					"Cache-Control", "no-cache, no-store, must-revalidate"
+				)
 				self.send_header("Pragma", "no-cache")
 				self.send_header("Expires", "0")
 				return super().end_headers()
 
 		class ReuseAddrTCPServer(TCPServer):
+			# Workaround that prevents the server from sometimes being unable to bind to the address, even if no process is currently bound to it.
 			allow_reuse_address = True
 			allow_reuse_port = True
 
@@ -108,7 +141,7 @@ def run_http_server(port, dist_path):
 		_http_server_exception = sys.exception()
 
 
-def hotreload(gen: SiteGenerator, build_func: Callable):
+def hotreload(ctx: SiteGenerator, build_func: Callable):
 	import time
 	import traceback
 	from datetime import datetime
@@ -116,14 +149,14 @@ def hotreload(gen: SiteGenerator, build_func: Callable):
 	from pygments import formatters, highlight, lexers
 	from watchfiles import watch  # type: ignore (removes pyright hallucination)
 
-	it = watch(gen.module_path)
+	it = watch(ctx.module_path)  # file watcher
 
 	# wait for server to start
 	while True:
 		time.sleep(0.1)
-		if _http_server:
+		if _http_server:  # Server started
 			break
-		if _http_server_exception:
+		if _http_server_exception:  # Server crashed
 			return
 
 	_addr, port = _http_server.server_address
@@ -132,7 +165,7 @@ def hotreload(gen: SiteGenerator, build_func: Callable):
 		sys.stderr.write("\x1b[2J\x1b[H")  # clear screen, reset cursor
 
 		info(
-			f"Watching module {gen.module_name} for changes. Visit website on http://localhost:{port}\n"
+			f"Watching module {ctx.module_name} for changes. Visit website on http://localhost:{port}\n"
 		)
 
 		info(f"Starting build at {datetime.now()}")
@@ -140,12 +173,12 @@ def hotreload(gen: SiteGenerator, build_func: Callable):
 		try:
 			build_func()
 		except BaseException:
+			# catch all exceptions to prevent hot-reload breakage, and output them in a similar fashion to stderr.
 			tb_text = "".join(traceback.format_exc())
-
 			lexer = lexers.get_lexer_by_name("pytb", stripall=True)
 			formatter = formatters.TerminalFormatter()
 			tb_colored = highlight(tb_text, lexer, formatter)
 
 			print(tb_colored, file=sys.stderr)
 
-		next(it)
+		next(it)  # wait for file changes
