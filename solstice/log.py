@@ -4,6 +4,18 @@ import time
 from enum import Enum
 
 
+__all__ = [
+	"LogLevel",
+	"LogTimer",
+	"log",
+	"debug",
+	"info",
+	"success",
+	"warn",
+	"error",
+]
+
+
 class LogLevel(Enum):
 	DEBUG = 0
 	INFO = 10
@@ -24,7 +36,9 @@ ANSI_COLORS = {
 def log(level: LogLevel, msg: str):
 	# the standard string padding functions don't work as they don't take into account ANSI codes
 	print(
-		f"[{ANSI_COLORS[level]}{level.name}\x1b[0m]" + " " * (8 - len(level.name)) + msg,
+		f"[{ANSI_COLORS[level]}{level.name}\x1b[0m]"
+		+ " " * (8 - len(level.name))
+		+ msg,
 		file=sys.stderr,
 	)
 
@@ -62,18 +76,8 @@ class LogTimer:
 		if exc_value or hasattr(sys, "last_exc"):
 			return
 		elapsed = time.time() - self.start_time
-		time_str = f"{elapsed:.02f}s" if elapsed >= 1 else f"{elapsed * 1000:.0f}ms"
+		time_str = (
+			f"{elapsed:.02f}s" if elapsed >= 1 else f"{elapsed * 1000:.0f}ms"
+		)
 		success(self.ending_msg.format(time_str))
 		del self.start_time
-
-
-__all__ = [
-	"LogLevel",
-	"LogTimer",
-	"log",
-	"debug",
-	"info",
-	"success",
-	"warn",
-	"error",
-]
