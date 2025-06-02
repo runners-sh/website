@@ -6,6 +6,13 @@ main {
 	padding: 4rem;
 	margin: auto;
 
+	@media (max-width: 800px) {
+		flex-direction: column;
+		gap: 1rem;
+		padding: 1rem 2rem;
+		align-items: left;
+	}
+
 	> ul {
 		margin: 0;
 		padding: 0;

@@ -4,18 +4,16 @@ nav {
 
 	text-wrap: nowrap;
 	letter-spacing: 0.2ch;
-	height: 1.4rem;
+
 	line-height: 1.4em;
+	overflow: hidden;
+
+	@media (max-width: 600px) {
+		row-gap: 0.5rem;
+		flex-wrap: wrap;
+	}
 }
 
-.pwrln:first-child {
-	--bg: var(--color-a1);
-	font-weight: bold;
-	padding: 0 3ch;
-}
-.pwrln:last-child {
-	margin-left: auto;
-}
 .pwrln {
 	--bg: var(--color-a3);
 	background: var(--bg);
@@ -27,6 +25,15 @@ nav {
 	color: var(--color-bg);
 	letter-spacing: inherit;
 }
+.pwrln:first-child {
+	--bg: var(--color-a1);
+	font-weight: bold;
+	padding: 0 3ch;
+}
+.pwrln:last-child {
+	margin-left: auto;
+}
+
 .pwrln:not(:hover) {
 	text-decoration: none;
 }
