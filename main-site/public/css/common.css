@@ -3,6 +3,7 @@
 html {
 	scrollbar-width: thin;
 	scrollbar-color: var(--color-fg) var(--color-bg);
+	scroll-padding-top: 4rem;
 }
 
 body {
