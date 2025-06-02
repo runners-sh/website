@@ -3,7 +3,7 @@
 html {
 	scrollbar-width: thin;
 	scrollbar-color: var(--color-fg) var(--color-bg);
-	@media (prefers-reduced-motion) {
+	@media not prefers-reduced-motion {
 		scroll-padding-top: 10vh;
 		scroll-behavior: smooth;
 	}
