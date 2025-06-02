@@ -38,16 +38,33 @@
 }
 
 main {
-	display: flex;
-	flex-direction: row-reverse;
+	display: grid;
+	grid-auto-columns: 1fr 13em;
+	grid-auto-rows: auto auto 1fr;
 	gap: 4rem;
+	row-gap: 0rem;
 	max-width: 80rem;
 	padding: 4rem;
 	margin: auto;
 
+	@media (max-width: 800px) {
+		flex-direction: column;
+		gap: 2rem;
+		padding: 2rem;
+		padding-top: 4rem;
+		align-items: left;
+	}
+
 	/* table of contents */
 	> aside {
-		width: 13rem;
+		grid-row: 1 / 4;
+		grid-column: 2 / 3;
+
+		@media (max-width: 800px) {
+			grid-row: 2 / 3;
+			grid-column: 1 / 3;
+		}
+
 		flex-shrink: 0;
 
 		> :first-child {
@@ -88,13 +105,19 @@ main {
 			}
 		}
 	}
-	> article {
-		min-width: 0;
-		flex-grow: 1;
-		overflow: hidden;
-		position: relative;
+	> .title-box-container {
+		grid-row: 1 / 2;
+		grid-column: 1 / 2;
+
+		@media (max-width: 800px) {
+			grid-row: 1 / 2;
+			grid-column: 1 / 3;
+		}
+
+		display: flex;
+		flex-direction: column;
 		> .title-box {
-			margin-block: 3.5rem 3rem;
+			margin-block: 0 2rem;
 			> h1 {
 				font-size: 2.5em;
 				margin-bottom: 1rem;
@@ -108,125 +131,146 @@ main {
 				}
 			}
 		}
-	}
-	.barcode {
-		width: calc(100% + 1rem);
-		height: 1.5rem;
-		position: absolute;
+		> .barcode {
+			--barcode-base-height: 1.5rem;
+			--barcode-full-height: min(16rem, 20vw);
+			--barcode-slice-width: calc(0.7vw - 0.1rem);
 
+			width: calc(100% + 1rem);
+			height: var(--barcode-base-height);
+
+			overflow: hidden;
+			transform: skew(-30deg);
+			transform-origin: left top;
+			display: flex;
+			transition-property: height, transform, margin;
+			transition-duration: 80ms;
+			transition-timing-function: cubic-bezier(0, 0, 0.3, 1);
+
+			z-index: 1;
+
+			/* hack: use em size as width of barcode elements */
+			/* black magic, do not touch, contact cubic instead */
+			font-size: min(max(var(--barcode-slice-width), 0.25rem), 0.5em);
+			@media (max-width: 800px) {
+				/* patch for mobile */
+				--barcode-slice-width: calc(1vw - 0.1rem);
+			}
+
+			> b {
+				height: 100%;
+				transition: background 100ms ease-out;
+				flex-shrink: 0;
+			}
+			> i {
+				height: 1.5rem;
+				flex-shrink: 0;
+			}
+			> :first-child {
+				flex-grow: 6;
+			}
+			> :last-child {
+				flex-grow: 1;
+			}
+			span {
+				width: 7.2em;
+				margin-right: -7.3em;
+				margin-left: 0.1em;
+				position: relative;
+				text-align: center;
+				background: #eee;
+				color: var(--color-bg);
+				height: 6em;
+				top: min(16rem, 20vw);
+				translate: 0 -100%;
+				pointer-events: none;
+				line-height: 1.2;
+
+				&::first-letter {
+					font-weight: bold;
+					font-size: 5em;
+				}
+			}
+			span:nth-of-type(1)::after,
+			span:nth-of-type(5)::after,
+			span:nth-of-type(8)::after {
+				display: inline-block;
+				position: absolute;
+				content: "";
+				left: -7em;
+				bottom: 0;
+				height: 1.7rem;
+				width: 100%;
+				background: #eee;
+			}
+			span:nth-of-type(5) {
+				margin-left: -0.2em;
+				width: 7.5em;
+			}
+			span:nth-of-type(8) {
+				margin-left: -0.1em;
+				margin-right: -6.9em;
+
+				&::after {
+					left: 7em;
+				}
+			}
+
+			> * {
+				background: var(--color-bg);
+			}
+			.a1 {
+				background: var(--color-a1);
+			}
+			.a2 {
+				background: var(--color-a2);
+			}
+			.a3 {
+				background: var(--color-a3);
+			}
+			.fg {
+				background: var(--color-fg);
+			}
+			.w1 {
+				width: 1em;
+			}
+			.w2 {
+				width: 2em;
+			}
+			.w3 {
+				width: 3em;
+			}
+			.w4 {
+				width: 4em;
+			}
+			.w6 {
+				width: 6em;
+			}
+		}
+		.barcode:has(b:hover) {
+			height: var(--barcode-full-height);
+			margin-bottom: calc(
+				var(--barcode-base-height) - var(--barcode-full-height)
+			);
+			b.a1,
+			b.a2,
+			b.a3,
+			b.fg {
+				background: #eee;
+			}
+		}
+	}
+	> article {
+		grid-row: 2 / 4;
+		grid-column: 1 / 2;
+
+		@media (max-width: 800px) {
+			grid-row: 3 / 4;
+			grid-column: 1 / 3;
+		}
+		min-width: 0;
 		overflow: hidden;
-
-		transform: skew(-30deg);
-		transform-origin: left top;
-		display: flex;
-		transition-property: height, transform;
-		transition-duration: 80ms;
-		transition-timing-function: cubic-bezier(0, 0, 0.3, 1);
-
-		z-index: 1;
-
-		/* hack: use em size as width of barcode elements */
-		font-size: min(max(0.7vw - 0.1rem, 0.25rem), 0.5em);
-
-		> b {
-			height: 100%;
-			transition: background 100ms ease-out;
-			flex-shrink: 0;
-		}
-		> i {
-			height: 1.5rem;
-			flex-shrink: 0;
-		}
-		> :first-child {
-			flex-grow: 6;
-		}
-		> :last-child {
-			flex-grow: 1;
-		}
-		span {
-			width: 7.2em;
-			margin-right: -7.3em;
-			margin-left: 0.1em;
-			position: relative;
-			text-align: center;
-			background: #eee;
-			color: var(--color-bg);
-			height: 6em;
-			top: min(16rem, 20vw);
-			translate: 0 -100%;
-			pointer-events: none;
-			line-height: 1.2;
-
-			&::first-letter {
-				font-weight: bold;
-				font-size: 5em;
-			}
-		}
-		span:nth-of-type(1)::after,
-		span:nth-of-type(5)::after,
-		span:nth-of-type(8)::after {
-			display: inline-block;
-			position: absolute;
-			content: "";
-			left: -7em;
-			bottom: 0;
-			height: 1.7rem;
-			width: 100%;
-			background: #eee;
-		}
-		span:nth-of-type(5) {
-			margin-left: -0.2em;
-			width: 7.5em;
-		}
-		span:nth-of-type(8) {
-			margin-left: -0.1em;
-			margin-right: -6.9em;
-
-			&::after {
-				left: 7em;
-			}
-		}
-
-		> * {
-			background: var(--color-bg);
-		}
-		.a1 {
-			background: var(--color-a1);
-		}
-		.a2 {
-			background: var(--color-a2);
-		}
-		.a3 {
-			background: var(--color-a3);
-		}
-		.fg {
-			background: var(--color-fg);
-		}
-		.w1 {
-			width: 1em;
-		}
-		.w2 {
-			width: 2em;
-		}
-		.w3 {
-			width: 3em;
-		}
-		.w4 {
-			width: 4em;
-		}
-		.w6 {
-			width: 6em;
-		}
-	}
-	.barcode:has(b:hover) {
-		height: min(16rem, 20vw);
-
-		b.a1,
-		b.a2,
-		b.a3,
-		b.fg {
-			background: #eee;
-		}
+		position: relative;
 	}
 }
 

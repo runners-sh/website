@@ -1,9 +1,10 @@
 @import "./common.css";
 
 .title-page {
-	width: 70%;
 	max-width: 800px;
+	min-width: 0;
 	margin: 2rem auto;
+	padding-inline: 4rem;
 	height: calc(100vh - 10rem);
 	display: flex;
 	align-items: center;
@@ -12,11 +13,16 @@
 	& > div {
 		width: 100%;
 		display: flex;
+		flex-wrap: wrap;
 		height: fit-content;
 		justify-content: space-between;
 		align-items: end;
 		color: var(--color-a1);
 		font-weight: bold;
+
+		@media (max-width: 800px) {
+			justify-content: center;
+		}
 
 		.ascii-logo {
 			letter-spacing: 0.01em;
