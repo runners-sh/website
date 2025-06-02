@@ -113,6 +113,9 @@ def environment():
 		sleep(0.5)
 
 		options = webdriver.FirefoxOptions()
+		profile = webdriver.FirefoxProfile()
+		profile.set_preference("ui.prefersReducedMotion", 1)
+		options.profile = profile
 		options.add_argument("--headless")
 		driver = webdriver.Firefox(options=options)
 		driver.implicitly_wait(5)
@@ -179,7 +182,6 @@ def test_bold(environment):
 def test_links(environment):
 	driver, gallery_url = environment
 	driver.get(gallery_url)
-
 	article = driver.find_element(By.TAG_NAME, "article")
 	element = article.find_element(By.LINK_TEXT, "links")
 	element.click()

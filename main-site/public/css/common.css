@@ -3,8 +3,10 @@
 html {
 	scrollbar-width: thin;
 	scrollbar-color: var(--color-fg) var(--color-bg);
-	scroll-padding-top: 10vh;
-	scroll-behavior: smooth;
+	@media (prefers-reduced-motion) {
+		scroll-padding-top: 10vh;
+		scroll-behavior: smooth;
+	}
 }
 
 body {
