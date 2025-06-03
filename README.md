@@ -8,7 +8,7 @@ Requirements:
 
 This project uses the [`mask` command runner](https://github.com/jacobdeichert/mask). You can install it from the AUR or crates.io. Refer to [`maskfile.md`](maskfile.md) for manual installation instructions.
 
-To initialize the environment, run `mask init`. This sets up a python venv and installs the required packages.
+To initialize the environment, run `mask init`. This sets up a python venv and installs the required packages. Don't forget to `source .venv/bin/activate` afterwards!
 
 ### Nix (flakes)
 
