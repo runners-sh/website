@@ -111,11 +111,8 @@ def flush_barcode_cache():
 		file.writelines(f"{code:08}\n" for code in _barcode_cache)
 
 
-<<<<<<< HEAD:runners_common/funbar.py
+
 def generate_rcn_barcode(dist_path) -> Barcode:
-=======
-def generate_rcn_barcode() -> str:
->>>>>>> 59e1b69 (feat: barcode cli):solstice/funbar.py
 	"""
 	Generates a random RCN (private use) barcode.
 	"""
@@ -127,14 +124,9 @@ def generate_rcn_barcode() -> str:
 		# only 2 and 4 are valid RCN starting digits so just check a random bit to decide
 		first_digit = (2, 4)[integer >> 127]
 
-<<<<<<< HEAD:runners_common/funbar.py
-		barcode = first_digit * 1000000 + integer % 1000000
-		if barcode not in get_barcode_cache(dist_path):
-=======
 		barcode = f"{first_digit}{integer % 1000000:06}"
 		barcode += str(check_digit_for([*map(int, barcode)]))
-		if barcode not in get_barcode_cache():
->>>>>>> 59e1b69 (feat: barcode cli):solstice/funbar.py
+		if barcode not in get_barcode_cache(dist_path):
 			return barcode
 
 	raise RuntimeError(

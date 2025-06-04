@@ -72,3 +72,10 @@ pip freeze > requirements.txt
 ```sh
 python3 -m "$module" serve
 ```
+
+## barcode
+> Generate a random EAN-8 barcode
+
+```sh
+python3 -m runners_common barcode
+```
