@@ -51,7 +51,7 @@ The barcode needs to be an 8-digit sequence where:
 - The first digit must be `2` or `4`
 - The last digit is the checksum of the code. The website builder will let you know what it should be if it is incorrect.
 
-You can generate a random barcode that isn't already in use with `mask new-post`.
+You can generate a random barcode that isn't already in use with `mask barcode`.
 
 ### Images
 Image attachments go into `main-site/public/img` and should be linked to with `![alt-text](/public/img/<file name>)`. We recommend you use lossy formats that are widely supported (e.g. AVIF or JPEG) for images without transparency. SVGs are also supported.
