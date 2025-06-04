@@ -9,6 +9,7 @@ changelog:
       labels: 
         - Semver-Minor
       exclude:
+        labels: 
         - content
     - title: Other Changes
       labels:
