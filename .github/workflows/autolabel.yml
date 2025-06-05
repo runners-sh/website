@@ -16,12 +16,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_TITLE: ${{ github.event.pull_request.title }}
-        
+
       - name: Apply label
         run: |
           if [ -n "$SEMTYPE" ]; then
-            gh pr edit ${{ github.event.pull_request.number }} --add-label "$SEMTYPE"
+            gh pr edit ${{ github.event.pull_request.number }} --add-label "$SEMTYPE" || true
           else
             echo "No semantic type found in PR title."
-          fi
-    
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
