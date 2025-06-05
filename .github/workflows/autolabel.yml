@@ -1,0 +1,27 @@
+name: Semantic Autolabel
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  autolabel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get semantic type
+        id: sem_type
+        run: echo '$PR_TITLE' | sed -E 's/^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert|content)(\(\w+\))?:/\1/g' >> $SEMTYPE
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        
+      - name: Apply label
+        run: |
+          if [ -n "$SEMTYPE" ]; then
+            gh pr edit ${{ github.event.pull_request.number }} --add-label "$SEMTYPE"
+          else
+            echo "No semantic type found in PR title."
+          fi
+    
