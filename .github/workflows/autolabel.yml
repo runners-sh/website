@@ -12,14 +12,22 @@ jobs:
 
       - name: Get semantic type
         id: sem_type
-        run: echo '$PR_TITLE' | sed -E 's/^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert|content)(\(\w+\))?:/\1/g' >> $SEMTYPE
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: export SEMTYPE="$(echo '$PR_TITLE' | sed -E 's/^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert|content)(\(\w+\))?!?:/\1/g')"
+        env:          
           PR_TITLE: ${{ github.event.pull_request.title }}
+
+      - name: Get breaking
+        id: breaking
+        run: |
+          if [[ "$(echo '$PR_TITLE' | sed -E 's/^[a-z]+(\(\w+\))?(!?):.*/\2/g')" == '!' ]]; then
+            export BREAKING="true"          
+          fi
 
       - name: Apply label
         run: |
-          if [ -n "$SEMTYPE" ]; then
+          if [ -n "$BREAKING" ]; then
+            gh pr edit ${{ github.event.pull_request.number }} --add-label "breaking" || true          
+          elif [ -n "$SEMTYPE" ]; then
             gh pr edit ${{ github.event.pull_request.number }} --add-label "$SEMTYPE" || true
           else
             echo "No semantic type found in PR title."

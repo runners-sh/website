@@ -1,16 +1,16 @@
 changelog:
   categories:
     - title: Breaking Changes 🛠
-        - Semver-Major        
+        - breaking
     - title: New Content 🎉
       labels:
         - content
     - title: New Features
-      labels: 
-        - Semver-Minor
+      labels:
+        - feat
       exclude:
-        labels: 
-        - content
+        labels:
+          - content
     - title: Other Changes
       labels:
         - "*"
