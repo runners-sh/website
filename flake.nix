@@ -18,39 +18,29 @@
 
       dependencies =
         sys: ppkgs: with ppkgs; [
-          anyio
-          click
-          idna
-          iniconfig
           jinja2
-          markdown
-          markupsafe
-          mypy-extensions
-          packaging
-          pathspec
-          platformdirs
-          pluggy
           pymdown-extensions
-          pytest
           python-frontmatter
-          pyyaml
-          ruff
-          sniffio
-          watchfiles
-          setuptools
-          minify-html
+          markdown
           self.packages.${sys}.l2m4m
-          selenium
         ];
     in
     {
       devShells = forAllSystems (system: {
         default = pkgs.${system}.mkShellNoCC {
           packages = with pkgs.${system}; [
-            (python313.withPackages (dependencies system))
-            mask
+            (python313.withPackages (
+              ppkgs:
+              dependencies system ppkgs
+              ++ [
+                ppkgs.pytest
+                ppkgs.selenium
+                ppkgs.watchfiles
+              ]
+            ))
             (writeShellScriptBin "serve" "python -m main-site serve")
-            firefox
+            mask # if there is a desire to use the maskfile
+            firefox # to function as a selenium test driver
           ];
         };
 
@@ -92,6 +82,20 @@
                   ];
                 };
               })
+              (final: prev: {
+                runners-common = prev.python313Packages.buildPythonPackage {
+                  name = "runners_common";
+                  format = "pyproject";
+                  src = fs.toSource {
+                    root = ./.;
+                    fileset = fs.unions [
+                      ./runners_common
+                      ./pyproject.toml
+                    ];
+                  };
+                  propagatedBuildInputs = [ prev.solstice ];
+                };
+              })
             ];
           };
 
@@ -102,20 +106,25 @@
 
           l2m4m = opack.l2m4m;
 
+          runners-common = opack.runners-common;
+
           main-site = opack.stdenv.mkDerivation {
             name = "main-site";
             version = "0.1.0";
             src = fs.toSource {
               root = ./.;
               fileset = fs.unions [
-                ./mmain-site
+                ./main-site
                 ./pyproject.toml
                 ./README.md
               ];
             };
 
             nativeBuildInputs = [
-              (opack.python313.withPackages (ppkgs: [ solstice ]))
+              (opack.python313.withPackages (ppkgs: [
+                solstice
+                runners-common
+              ]))
             ];
 
             buildPhase = ''
