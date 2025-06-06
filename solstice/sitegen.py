@@ -62,16 +62,13 @@ class SiteGenerator:
 
 	```python
 	import solstice
-	ssg = solstice.SiteGenerator(__package__)
+	ssg = solstice.SiteGenerator()
 	ssg.page("index.jinja", title="Hello world!")
 	ssg.copy("public")
 	```
 	"""
 
-	module_name: str
-	""" Name of the current module """
-
-	module_path: str
+	project_dir: str
 	""" Path to the current module directory """
 
 	output_path: str
@@ -90,22 +87,24 @@ class SiteGenerator:
 
 	def __init__(
 		self,
-		module_name: str,
+		project_dir: str | None = None,
 		output_path: str | None = None,
 		templates_path: str | None = None,
 		profile: Literal["dev", "prod"] = "dev",
 	):
-		self.module_name = module_name
+		if project_dir is None:
+			import inspect
 
-		# Python black magic to get the module path
-		self.module_path = __import__(module_name).__path__[0]
-		os.chdir(self.module_path)
+			# python magic to get the path of the caller
+			prev_frame = inspect.stack()[1]
+			project_dir = path.dirname(path.abspath(prev_frame.filename))
 
-		self.output_path = output_path or path.join(self.module_path, "dist")
+		self.project_dir = project_dir
+		os.chdir(self.project_dir)
 
-		self.templates_path = templates_path or path.join(
-			self.module_path, "templates"
-		)
+		self.output_path = output_path or "dist"
+
+		self.templates_path = templates_path or "templates"
 
 		self.profile = profile
 
@@ -192,9 +191,7 @@ class SiteGenerator:
 		except FileNotFoundError:
 			warn("Nothing to clean.")
 
-	def page(
-		self, template_name: str, output_path: str | None = None, **kwargs
-	):
+	def page(self, template_name: str, output_path: str | None = None, **kwargs):
 		"""
 		Generate a page using the specified template and optionally an output path.
 		# Arguments
@@ -205,7 +202,7 @@ class SiteGenerator:
 		# Example
 		```python
 		import solstice
-		ssg = solstice.SiteGenerator(__package__)
+		ssg = solstice.SiteGenerator()
 		ssg.page("home.jinja", output_path="index.html", title="Hello world!")
 		```
 		"""
@@ -230,7 +227,7 @@ class SiteGenerator:
 		# Example
 		```python
 		import solstice
-		ssg = solstice.SiteGenerator(__package__)
+		ssg = solstice.SiteGenerator()
 		ssg.markdown_page("blog.jinja", "posts/my_post.md", output_path="blog/my_post.html")
 		```
 		"""
@@ -247,7 +244,7 @@ class Page:
 	```python
 	import solstice
 
-	ssg = solstice.SiteGenerator(__package__)
+	ssg = solstice.SiteGenerator()
 	with solstice.Page(ssg, "index.jinja") as page:
 		page.set_params(title="Hello world!")
 
@@ -281,7 +278,7 @@ class Page:
 		# Example
 		```python
 		import solstice
-		ssg = solstice.SiteGenerator(__package__)
+		ssg = solstice.SiteGenerator()
 		with solstice.Page(ssg, "index.jinja") as page:
 			page.set_params(
 				title="Hello world!",
@@ -345,7 +342,7 @@ class MarkdownPage(Page):
 	```python
 	import solstice
 
-	ssg = solstice.SiteGenerator(__package__)
+	ssg = solstice.SiteGenerator()
 	with solstice.MarkdownPage(
 		ssg,
 		"blog.jinja",

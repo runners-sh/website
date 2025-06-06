@@ -6,11 +6,11 @@ import solstice.log as log
 from . import funbar
 
 parser = argparse.ArgumentParser("solstice", description="")
-subparsers = parser.add_subparsers(title="subcommands", description="valid subcommands:", required=True, dest="cmd")
-
-barcode_parser = subparsers.add_parser(
-	"barcode", help="Generate a random barcode or a custom one"
+subparsers = parser.add_subparsers(
+	title="subcommands", description="valid subcommands:", required=True, dest="cmd"
 )
+
+barcode_parser = subparsers.add_parser("barcode", help="Generate a random barcode or a custom one")
 barcode_parser.add_argument(
 	"code",
 	nargs="?",
@@ -27,6 +27,6 @@ match args.cmd:
 				log.warn(
 					"argument given to barcode command should either be nonexistent for a random barcode or a number of length 7 to generate a custom one"
 				)
-			code = funbar.generate_rcn_barcode("./dist/main-site") # [TODO]: yikes
+			code = funbar.generate_rcn_barcode("./dist/main-site")  # [TODO]: yikes
 		print(f"{code:08}")
 		sys.exit(0)
