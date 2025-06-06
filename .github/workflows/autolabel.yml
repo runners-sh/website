@@ -34,3 +34,5 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEMTYPE: ${{ steps.sem_type.outputs.SEMTYPE }}
+          BREAKING: ${{ steps.breaking.outputs.BREAKING }}
