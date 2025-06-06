@@ -1,7 +1,7 @@
 name: Semantic Autolabel
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
   autolabel:
@@ -13,7 +13,7 @@ jobs:
       - name: Get semantic type
         id: sem_type
         run: |
-          SEMTYPE=$(sed -E 's/^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert|content)(\(\w+\))?!?:.*/\1/g' <<< "$PR_TITLE")
+          SEMTYPE=$(sed -E 's/^([a-z]+)(\(\w+\))?!?:.*/\1/g' <<< "$PR_TITLE")
           echo "SEMTYPE=$SEMTYPE" >> "$GITHUB_OUTPUT"
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
