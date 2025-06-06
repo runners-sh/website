@@ -149,7 +149,7 @@ def hotreload(ssg: SiteGenerator, build_func: Callable):
 	from pygments import formatters, highlight, lexers
 	from watchfiles import watch  # type: ignore (removes pyright hallucination)
 
-	it = watch(ssg.module_path)  # file watcher
+	it = watch(ssg.project_dir)  # file watcher
 
 	# wait for server to start
 	while True:
@@ -165,7 +165,7 @@ def hotreload(ssg: SiteGenerator, build_func: Callable):
 		sys.stderr.write("\x1b[2J\x1b[H")  # clear screen, reset cursor
 
 		info(
-			f"Watching module {ssg.module_name} for changes. Visit website on http://localhost:{port}\n"
+			f"Watching path {ssg.project_dir} for changes. Visit website on http://localhost:{port}\n"
 		)
 
 		info(f"Starting build at {datetime.now()}")

@@ -3,11 +3,7 @@ from os import path
 from runners_common import funbar
 from solstice import *
 
-ssg = SiteGenerator(
-	__package__,  # type: ignore
-	output_path="../dist/main-site",
-)
-
+ssg = SiteGenerator(output_path="../dist/main-site")
 
 @cli.entrypoint(ssg)
 def build():

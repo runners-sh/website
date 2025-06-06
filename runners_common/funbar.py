@@ -82,6 +82,9 @@ _barcode_cache_path = None
 
 def get_barcode_cache(output_path: str):
 	global _barcode_cache, _barcode_cache_path
+
+	# TODO: implement barcode cache as a file
+	"""
 	if _barcode_cache is None:
 		_barcode_cache_path = path.join(output_path, path.pardir, "barcode_cache.txt")
 		try:
@@ -100,6 +103,8 @@ def get_barcode_cache(output_path: str):
 		import atexit
 
 		atexit.register(flush_barcode_cache)
+	"""
+	_barcode_cache = set()
 
 	return _barcode_cache
 
