@@ -3,6 +3,7 @@ title: Markdown widget gallery
 author: peppidesu & Cubic
 date: 1984-04-01
 barcode: 45322761
+hidden: true
 ---
 
 # Heading 1 <h1>
