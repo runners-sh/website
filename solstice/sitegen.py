@@ -191,9 +191,7 @@ class SiteGenerator:
 		except FileNotFoundError:
 			warn("Nothing to clean.")
 
-	def page(
-		self, template_name: str, output_path: str | None = None, **kwargs
-	):
+	def page(self, template_name: str, output_path: str | None = None, **kwargs):
 		"""
 		Generate a page using the specified template and optionally an output path.
 		# Arguments

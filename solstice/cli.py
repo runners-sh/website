@@ -12,9 +12,7 @@ def parse_cli():
 	Parse arguments from the CLI.
 	"""
 	parser = argparse.ArgumentParser("solstice", description="")
-	parser.add_argument(
-		"cmd", nargs="?", default="build", help='"build", "clean", or "serve"'
-	)
+	parser.add_argument("cmd", nargs="?", default="build", help='"build", "clean", or "serve"')
 	parser.add_argument("--release", action="store_true")
 	parser.add_argument("-p", "--port", default=5123, type=int)
 
@@ -54,9 +52,7 @@ def entrypoint(ssg: SiteGenerator):
 
 				ssg.clean()
 
-				thread = threading.Thread(
-					target=run_http_server, args=(args.port, ssg.output_path)
-				)
+				thread = threading.Thread(target=run_http_server, args=(args.port, ssg.output_path))
 				thread.start()
 
 				try:
@@ -119,9 +115,7 @@ def run_http_server(port, dir):
 				# Do not remove!
 				# Firefox also needs to be explicitly told to not cache anything with the following headers.
 				self.send_header("Connection", "close")
-				self.send_header(
-					"Cache-Control", "no-cache, no-store, must-revalidate"
-				)
+				self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
 				self.send_header("Pragma", "no-cache")
 				self.send_header("Expires", "0")
 				return super().end_headers()

@@ -6,10 +6,6 @@ The choice of EAN-8 is because it's horizontal, it fits in the narrow height of 
 [1]: https://ref.gs1.org/standards/genspecs/, 1.4.5 for RCN range, 5.2.1 for the EAN-8 specification
 """
 
-import os.path as path
-
-from solstice.log import warn
-
 # A = NUMBER_SETS[digit]
 # B = NUMBER_SETS[digit][::-1]
 # C = NUMBER_SETS[digit] # but C has the dark bars first
@@ -85,6 +81,9 @@ def get_barcode_cache(output_path: str):
 
 	# TODO: implement barcode cache as a file
 	"""
+	import os.path as path
+	from solstice.log import warn
+
 	if _barcode_cache is None:
 		_barcode_cache_path = path.join(output_path, path.pardir, "barcode_cache.txt")
 		try:
@@ -114,7 +113,6 @@ def flush_barcode_cache():
 		return
 	with open(_barcode_cache_path, "w") as file:
 		file.writelines(f"{code:08}\n" for code in _barcode_cache)
-
 
 
 def generate_rcn_barcode(dist_path) -> Barcode:

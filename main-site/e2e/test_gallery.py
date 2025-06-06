@@ -126,7 +126,6 @@ def environment():
 		driver.quit()
 
 
-
 def test_toc_heading_link_layers(environment):
 	driver, gallery_url = environment
 	driver.get(gallery_url)
