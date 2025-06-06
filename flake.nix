@@ -92,6 +92,20 @@
                   ];
                 };
               })
+              (final: prev: {
+                runners-common = prev.python313Packages.buildPythonPackage {
+                  name = "runners_common";
+                  format = "pyproject";
+                  src = fs.toSource {
+                    root = ./.;
+                    fileset = fs.unions [
+                      ./runners_common
+                      ./pyproject.toml
+                    ];
+                  };
+                  propagatedBuildInputs = [ prev.solstice ];
+                };
+              })
             ];
           };
 
@@ -102,20 +116,25 @@
 
           l2m4m = opack.l2m4m;
 
+          runners-common = opack.runners-common;
+
           main-site = opack.stdenv.mkDerivation {
             name = "main-site";
             version = "0.1.0";
             src = fs.toSource {
               root = ./.;
               fileset = fs.unions [
-                ./mmain-site
+                ./main-site
                 ./pyproject.toml
                 ./README.md
               ];
             };
 
             nativeBuildInputs = [
-              (opack.python313.withPackages (ppkgs: [ solstice ]))
+              (opack.python313.withPackages (ppkgs: [
+                solstice
+                runners-common
+              ]))
             ];
 
             buildPhase = ''
