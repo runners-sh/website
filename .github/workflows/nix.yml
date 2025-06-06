@@ -1,9 +1,9 @@
-name: nix
+name: Nix
 on: [push]
 
 jobs:
   build:
-    name: Build Nix targets
+    name: Build targets
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
