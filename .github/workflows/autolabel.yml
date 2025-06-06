@@ -33,13 +33,12 @@ jobs:
 
       - name: Apply label
         run: |
+          gh pr edit ${{ github.event.pull_request.number }} --remove-label "feat,fix,content" || true
           if [ -n "$BREAKING" ]; then
             gh pr edit ${{ github.event.pull_request.number }} --add-label "breaking" || true
           elif [ -n "$SEMTYPE" ]; then
-            gh pr edit ${{ github.event.pull_request.number }} --remove-label "feat,fix,breaking,content" || true
             gh pr edit ${{ github.event.pull_request.number }} --add-label "$SEMTYPE" || true
           else
-            gh pr edit ${{ github.event.pull_request.number }} --remove-label "feat,fix,breaking,content" || true
             echo "No semantic type found in PR title."
           fi
         env:
