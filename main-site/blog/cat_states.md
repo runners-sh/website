@@ -3,6 +3,7 @@ title: Cat States
 author: itepastra
 date: 2025-05-26
 barcode: 20028862
+hidden: true
 ---
 
 ## Classical cat states

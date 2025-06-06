@@ -23,7 +23,10 @@ def build():
 		src_path = path.join(dirname, file)
 		dist_path = path.join(dirname, name + ".html")
 		with MarkdownPage(ssg, "blog.jinja", src_path, dist_path) as pg:
-			posts.append(pg.meta | {"url": "/" + dist_path.removesuffix(".html")})
+			if not pg.meta.get("hidden", False):
+				posts.append(
+					pg.meta | {"url": "/" + dist_path.removesuffix(".html")}
+				)
 
 			barcode = pg.meta.get("barcode")
 			if barcode is not None:
