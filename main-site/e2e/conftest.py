@@ -139,10 +139,7 @@ def screenshot_dir(request):
 	e2e_dir = path.dirname(request.path)
 	screenshot_dir = path.join(e2e_dir, "screenshots")
 
-	desktop_dir = path.join(screenshot_dir, "desktop")
-	mobile_dir = path.join(screenshot_dir, "mobile")
 
-	os.makedirs(desktop_dir, exist_ok=True)
-	os.makedirs(mobile_dir, exist_ok=True)
+	os.makedirs(screenshot_dir, exist_ok=True)
 
 	return screenshot_dir

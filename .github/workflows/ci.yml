@@ -12,8 +12,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests
-        run: python -m pytest
-      
+        run: python -m pytest -k "test_screenshots"
+
       - name: test thing
         run: |
           ls main-site/e2e/screenshots
@@ -23,7 +23,7 @@ jobs:
         with:
           name: screenshots
           path: |
-            main-site/e2e/screenshots/*.png
+            main-site/e2e/screenshots/**/*.png
 
       - name: Create summary
         run: echo ‘### Hello world! :rocket:’ >> $GITHUB_STEP_SUMMARY

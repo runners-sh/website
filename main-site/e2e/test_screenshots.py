@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By  # type: ignore
 
 # helper for generating screenshots
 def gen_screenshots(driver, dir, name, mobile):
-	screenshot_path = path.join(dir, "mobile" if mobile else "desktop", f"{name}.png")
+	screenshot_path = path.join(dir,f"{name}_{"mobile" if mobile else "desktop"}.png")
 
 	driver.get_full_page_screenshot_as_file(screenshot_path)
 
