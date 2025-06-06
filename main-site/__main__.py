@@ -44,3 +44,4 @@ def build():
 	posts.sort(key=lambda x: x["date"], reverse=True)
 
 	ssg.page("blog-overview.jinja", "blog/index.html", posts=posts)
+	

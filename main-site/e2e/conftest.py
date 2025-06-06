@@ -17,7 +17,7 @@ post_src = """
 title: Markdown widget gallery
 author: peppidesu & Cubic
 date: 1984-04-01
-barcode: 45322761
+barcode: ~~~BARCODE_SLOT~~~
 ---
 
 # Heading 1 <h1>
@@ -101,8 +101,8 @@ Weeeeee!
 def serve():
 	proc = subprocess.Popen(
 		[sys.executable, "-m", "main-site", "serve"],
-		stdout=subprocess.DEVNULL,
-		stderr=subprocess.DEVNULL,
+		# stdout=subprocess.DEVNULL,
+		# stderr=subprocess.DEVNULL,
 	)
 	sleep(1)
 	yield
@@ -129,12 +129,16 @@ def driver(serve):
 
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def blog_post():
+	global post_src
 	mod_dir = __import__("main-site").__path__[0]
 	blog_dir = f"{mod_dir}/blog"
+	barcode = subprocess.check_output("python -m runners_common barcode", shell=True, text=True).strip()
+	contents = post_src.strip().replace("~~~BARCODE_SLOT~~~", str(barcode))
+
 	with tempfile.NamedTemporaryFile(dir=blog_dir, suffix=".md", mode="w", encoding="utf-8") as f:
-		f.write(post_src.strip())
+		f.write(contents)
 		f.flush()
 		name = path.basename(f.name).removesuffix(".md")
 
