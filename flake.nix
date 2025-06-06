@@ -18,39 +18,29 @@
 
       dependencies =
         sys: ppkgs: with ppkgs; [
-          anyio
-          click
-          idna
-          iniconfig
           jinja2
-          markdown
-          markupsafe
-          mypy-extensions
-          packaging
-          pathspec
-          platformdirs
-          pluggy
           pymdown-extensions
-          pytest
           python-frontmatter
-          pyyaml
-          ruff
-          sniffio
-          watchfiles
-          setuptools
-          minify-html
+          markdown
           self.packages.${sys}.l2m4m
-          selenium
         ];
     in
     {
       devShells = forAllSystems (system: {
         default = pkgs.${system}.mkShellNoCC {
           packages = with pkgs.${system}; [
-            (python313.withPackages (dependencies system))
-            mask
+            (python313.withPackages (
+              ppkgs:
+              dependencies system ppkgs
+              ++ [
+                ppkgs.pytest
+                ppkgs.selenium
+                ppkgs.watchfiles
+              ]
+            ))
             (writeShellScriptBin "serve" "python -m main-site serve")
-            firefox
+            mask # if there is a desire to use the maskfile
+            firefox # to function as a selenium test driver
           ];
         };
 
