@@ -14,19 +14,12 @@ jobs:
       - name: Run tests
         run: python -m pytest -k "test_screenshots"
 
-      - name: test thing
-        run: |
-          ls main-site/e2e/screenshots
-
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: |
             main-site/e2e/screenshots/*.png
-
-      - name: Create summary
-        run: echo ‘### Hello world! :rocket:’ >> $GITHUB_STEP_SUMMARY
   ruff:
     runs-on: ubuntu-latest
     steps:
