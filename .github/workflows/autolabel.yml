@@ -24,9 +24,12 @@ jobs:
       - name: Get breaking
         id: breaking
         run: |
-          if [[ "$(echo '$PR_TITLE' | sed -E 's/^[a-z]+(\(\w+\))?(!?):.*/\2/g')" == '!' ]]; then
+          BREAKING=$(sed -E 's/^([a-z]+)(\(\w+\))?!?:.*/\1/g' <<< "$PR_TITLE")
+          if [[ "$BREAKING" == '!' ]]; then
             echo "BREAKING=true" >> "$GITHUB_OUTPUT"
           fi
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
 
       - name: Apply label
         run: |
