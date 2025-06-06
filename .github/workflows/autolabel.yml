@@ -13,7 +13,7 @@ jobs:
       - name: Get semantic type
         id: sem_type
         run: |
-          SEMTYPE="$(echo '$PR_TITLE' | sed -E 's/^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert|content)(\(\w+\))?!?:/\1/g')"
+          SEMTYPE=$(sed -E 's/^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert|content)(\(\w+\))?!?:.*/\1/g' <<< "$PR_TITLE")
           echo "SEMTYPE=$SEMTYPE" >> "$GITHUB_OUTPUT"
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
