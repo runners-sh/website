@@ -33,7 +33,7 @@ jobs:
 
       - name: Apply label
         run: |
-          gh pr edit ${{ github.event.pull_request.number }} --remove-label "feat,fix,content" || true
+          gh pr edit ${{ github.event.pull_request.number }} --remove-label "feat,fix,content,breaking" || true
           if [ -n "$BREAKING" ]; then
             gh pr edit ${{ github.event.pull_request.number }} --add-label "breaking" || true
           elif [ -n "$SEMTYPE" ]; then
