@@ -101,8 +101,8 @@ Weeeeee!
 def serve():
 	proc = subprocess.Popen(
 		[sys.executable, "-m", "main-site", "serve"],
-		# stdout=subprocess.DEVNULL,
-		# stderr=subprocess.DEVNULL,
+		stdout=subprocess.DEVNULL,
+		stderr=subprocess.DEVNULL,
 	)
 	sleep(1)
 	yield
