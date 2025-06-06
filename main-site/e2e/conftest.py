@@ -3,6 +3,7 @@ import subprocess
 import sys
 import tempfile
 from os import path
+from time import sleep
 
 import pytest
 from selenium import webdriver  # type: ignore
@@ -103,6 +104,7 @@ def driver():
 		stdout=subprocess.DEVNULL,
 		stderr=subprocess.DEVNULL,
 	)
+	sleep(0.2)
 
 	options = webdriver.FirefoxOptions()
 	profile = webdriver.FirefoxProfile()
@@ -136,5 +138,11 @@ def blog_post():
 def screenshot_dir(request):
 	e2e_dir = path.dirname(request.path)
 	screenshot_dir = path.join(e2e_dir, "screenshots")
-	os.makedirs(screenshot_dir, exist_ok=True)
+
+	desktop_dir = path.join(screenshot_dir, "desktop")
+	mobile_dir = path.join(screenshot_dir, "mobile")
+
+	os.makedirs(desktop_dir, exist_ok=True)
+	os.makedirs(mobile_dir, exist_ok=True)
+
 	return screenshot_dir
