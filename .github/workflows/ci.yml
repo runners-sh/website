@@ -23,7 +23,7 @@ jobs:
         with:
           name: screenshots
           path: |
-            main-site/e2e/screenshots/**/*.png
+            main-site/e2e/screenshots/*.png
 
       - name: Create summary
         run: echo ‘### Hello world! :rocket:’ >> $GITHUB_STEP_SUMMARY
