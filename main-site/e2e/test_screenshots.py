@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By  # type: ignore
 
 # helper for generating screenshots
 def gen_screenshots(driver, dir, name, mobile):
-	screenshot_path = path.join(dir,f"{name}_{"mobile" if mobile else "desktop"}.png")
+	screenshot_path = path.join(dir,f"{"mobile" if mobile else "desktop"}.{name}.png")
 
 	driver.get_full_page_screenshot_as_file(screenshot_path)
 
@@ -27,18 +27,22 @@ def test_screenshot_home(driver, screenshot_dir):
 def test_screenshot_blog(driver, screenshot_dir):
 	driver.get("http://localhost:5123/blog/")
 
+	driver.set_window_size(1024, 768)
 	gen_screenshots(driver, screenshot_dir, "blog", mobile=False)
+	driver.set_window_size(360, 800)
 	gen_screenshots(driver, screenshot_dir, "blog", mobile=True)
 
 def test_screenshot_blog_hover(driver, screenshot_dir):
 	driver.get("http://localhost:5123/blog/")
 
+	driver.set_window_size(1024, 768)
 	blog_post = driver.find_element(By.CSS_SELECTOR, ".post-container")
 	ActionChains(driver).move_to_element(blog_post).perform()
 	sleep(1)  # Wait for any hover effects to take effect
 
 	gen_screenshots(driver, screenshot_dir, "blog_hover", mobile=False)
 
+	driver.set_window_size(360, 800)
 	blog_post = driver.find_element(By.CSS_SELECTOR, ".post-container")
 	ActionChains(driver).move_to_element(blog_post).perform()
 	sleep(1)  # Wait for any hover effects to take effect
@@ -49,5 +53,7 @@ def test_screenshot_blog_post(blog_post, driver, screenshot_dir):
 	gallery_url = path.join(url_blog, blog_post)
 	driver.get(gallery_url)
 
+	driver.set_window_size(1024, 768)
 	gen_screenshots(driver, screenshot_dir, "blog_post", mobile=False)
+	driver.set_window_size(360, 800)
 	gen_screenshots(driver, screenshot_dir, "blog_post", mobile=True)

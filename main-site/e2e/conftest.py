@@ -97,14 +97,21 @@ Weeeeee!
 {: id=spinny }
 """
 
-@pytest.fixture
-def driver():
+@pytest.fixture(scope="module")
+def serve():
 	proc = subprocess.Popen(
 		[sys.executable, "-m", "main-site", "serve"],
 		stdout=subprocess.DEVNULL,
 		stderr=subprocess.DEVNULL,
 	)
-	sleep(0.2)
+	sleep(1)
+	yield
+
+	proc.terminate()
+	proc.wait()
+
+@pytest.fixture(scope="module")
+def driver(serve):
 
 	options = webdriver.FirefoxOptions()
 	profile = webdriver.FirefoxProfile()
@@ -118,11 +125,11 @@ def driver():
 
 	yield driver
 
-	proc.kill()
 	driver.quit()
 
 
-@pytest.fixture
+
+@pytest.fixture(scope="module")
 def blog_post():
 	mod_dir = __import__("main-site").__path__[0]
 	blog_dir = f"{mod_dir}/blog"
