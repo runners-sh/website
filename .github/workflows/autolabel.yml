@@ -16,7 +16,7 @@ jobs:
       - name: Get semantic type
         id: sem_type
         run: |
-          SEMTYPE=$(sed -E 's/^([a-z]+)(\(\w+\))?!?:.*/\1/g' <<< "$PR_TITLE")
+          SEMTYPE=$(sed -E 's/^([a-z]+)(\(\w+\))?(!?):.*/\1/g' <<< "$PR_TITLE")
           echo "SEMTYPE=$SEMTYPE" >> "$GITHUB_OUTPUT"
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
@@ -24,7 +24,7 @@ jobs:
       - name: Get breaking
         id: breaking
         run: |
-          BREAKING=$(sed -E 's/^([a-z]+)(\(\w+\))?!?:.*/\1/g' <<< "$PR_TITLE")
+          BREAKING=$(sed -E 's/^([a-z]+)(\(\w+\))?(!?):.*/\3\/g' <<< "$PR_TITLE")
           if [[ "$BREAKING" == '!' ]]; then
             echo "BREAKING=true" >> "$GITHUB_OUTPUT"
           fi
