@@ -18,6 +18,7 @@ title: Markdown widget gallery
 author: peppidesu & Cubic
 date: 1984-04-01
 barcode: ~~~BARCODE_SLOT~~~
+hidden: true
 ---
 
 # Heading 1 <h1>
@@ -97,6 +98,7 @@ Weeeeee!
 {: id=spinny }
 """
 
+
 @pytest.fixture(scope="module")
 def serve():
 	proc = subprocess.Popen(
@@ -104,15 +106,15 @@ def serve():
 		stdout=subprocess.DEVNULL,
 		stderr=subprocess.DEVNULL,
 	)
-	sleep(1)
+	sleep(0.3)
 	yield
 
 	proc.terminate()
 	proc.wait()
 
-@pytest.fixture(scope="module")
-def driver(serve):
 
+@pytest.fixture(scope="module", params=["desktop", "mobile"])
+def driver(serve, request):
 	options = webdriver.FirefoxOptions()
 	profile = webdriver.FirefoxProfile()
 
@@ -123,10 +125,14 @@ def driver(serve):
 	driver = webdriver.Firefox(options=options)
 	driver.implicitly_wait(3)
 
-	yield driver
+	if request.param == "mobile":
+		driver.set_window_size(360, 800)
+	else:
+		driver.set_window_size(1024, 768)
+
+	yield [driver, request.param]
 
 	driver.quit()
-
 
 
 @pytest.fixture(scope="session")
@@ -134,7 +140,9 @@ def blog_post():
 	global post_src
 	mod_dir = __import__("main-site").__path__[0]
 	blog_dir = f"{mod_dir}/blog"
-	barcode = subprocess.check_output("python -m runners_common barcode", shell=True, text=True).strip()
+	barcode = subprocess.check_output(
+		"python -m runners_common barcode", shell=True, text=True
+	).strip()
 	contents = post_src.strip().replace("~~~BARCODE_SLOT~~~", str(barcode))
 
 	with tempfile.NamedTemporaryFile(dir=blog_dir, suffix=".md", mode="w", encoding="utf-8") as f:
@@ -145,12 +153,9 @@ def blog_post():
 		yield name
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def screenshot_dir(request):
-	e2e_dir = path.dirname(request.path)
-	screenshot_dir = path.join(e2e_dir, "screenshots")
-
-
+	screenshot_dir = "./dist/screenshots"
 	os.makedirs(screenshot_dir, exist_ok=True)
 
 	return screenshot_dir

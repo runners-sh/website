@@ -24,9 +24,7 @@ def build():
 		dist_path = path.join(dirname, name + ".html")
 		with MarkdownPage(ssg, "blog.jinja", src_path, dist_path) as pg:
 			if not pg.meta.get("hidden", False):
-				posts.append(
-					pg.meta | {"url": "/" + dist_path.removesuffix(".html")}
-				)
+				posts.append(pg.meta | {"url": "/" + dist_path.removesuffix(".html")})
 
 			barcode = pg.meta.get("barcode")
 			if barcode is not None:
@@ -44,4 +42,3 @@ def build():
 	posts.sort(key=lambda x: x["date"], reverse=True)
 
 	ssg.page("blog-overview.jinja", "blog/index.html", posts=posts)
-	
