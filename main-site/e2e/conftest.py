@@ -151,7 +151,7 @@ def blog_post():
 		yield name
 
 
-
+@pytest.fixture(scope="session")
 def screenshot_dir(request):
 	screenshot_dir = "./dist/screenshots"
 	os.makedirs(screenshot_dir, exist_ok=True)
