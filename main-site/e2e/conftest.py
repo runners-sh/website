@@ -98,6 +98,7 @@ Weeeeee!
 {: id=spinny }
 """
 
+
 @pytest.fixture(scope="module")
 def serve():
 	proc = subprocess.Popen(
@@ -111,9 +112,9 @@ def serve():
 	proc.terminate()
 	proc.wait()
 
+
 @pytest.fixture(scope="module", params=["desktop", "mobile"])
 def driver(serve, request):
-
 	options = webdriver.FirefoxOptions()
 	profile = webdriver.FirefoxProfile()
 
@@ -134,13 +135,14 @@ def driver(serve, request):
 	driver.quit()
 
 
-
 @pytest.fixture(scope="session")
 def blog_post():
 	global post_src
 	mod_dir = __import__("main-site").__path__[0]
 	blog_dir = f"{mod_dir}/blog"
-	barcode = subprocess.check_output("python -m runners_common barcode", shell=True, text=True).strip()
+	barcode = subprocess.check_output(
+		"python -m runners_common barcode", shell=True, text=True
+	).strip()
 	contents = post_src.strip().replace("~~~BARCODE_SLOT~~~", str(barcode))
 
 	with tempfile.NamedTemporaryFile(dir=blog_dir, suffix=".md", mode="w", encoding="utf-8") as f:

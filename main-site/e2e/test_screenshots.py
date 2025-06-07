@@ -12,17 +12,20 @@ def gen_screenshots(driver, dir, name, device):
 	driver.get_full_page_screenshot_as_file(screenshot_path)
 	assert path.exists(screenshot_path), f"Screenshot not saved at {screenshot_path}"
 
+
 def test_screenshot_home(driver, screenshot_dir):
 	driver, device = driver
 	driver.get("http://localhost:5123/")
 
 	gen_screenshots(driver, screenshot_dir, "home", device)
 
+
 def test_screenshot_blog(driver, screenshot_dir):
 	driver, device = driver
 	driver.get("http://localhost:5123/blog/")
 
 	gen_screenshots(driver, screenshot_dir, "blog_overview", device)
+
 
 def test_screenshot_blog_hover(driver, screenshot_dir):
 	driver, device = driver
@@ -33,6 +36,7 @@ def test_screenshot_blog_hover(driver, screenshot_dir):
 	sleep(1)  # Wait for any hover effects to take effect
 
 	gen_screenshots(driver, screenshot_dir, "blog_overview_hover", device)
+
 
 def test_screenshot_blog_post(blog_post, driver, screenshot_dir):
 	driver, device = driver
