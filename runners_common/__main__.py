@@ -16,6 +16,7 @@ barcode_parser.add_argument(
 	nargs="?",
 	help="A 7-digit number to generate a custom barcode, or nothing to generate a random one",
 )
+
 args = parser.parse_args()
 
 match args.cmd:
