@@ -14,12 +14,13 @@ jobs:
       - name: Run tests
         run: python -m pytest
 
-      - name: Upload screenshots
-        uses: actions/upload-artifact@v4
+      - name: Upload with comment
+        uses: opengisch/comment-pr-with-images@upload_only
         with:
-          name: screenshots
-          path: |
-            main-site/e2e/screenshots/*.png
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          images: "main-site/e2e/screenshots/*.png"
+          upload_to: github_branch
+          edit_previous_comment: true
   ruff:
     runs-on: ubuntu-latest
     steps:

@@ -145,7 +145,7 @@ def blog_post():
 		yield name
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def screenshot_dir(request):
 	e2e_dir = path.dirname(request.path)
 	screenshot_dir = path.join(e2e_dir, "screenshots")
