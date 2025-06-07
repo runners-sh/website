@@ -17,7 +17,7 @@ jobs:
         run: python -m pytest
 
       - name: Create PDF
-        run: img2pdf ./dist/screenshots/**/*.png -o screenshot-report.pdf
+        run: find ./dist/screenshots -name "*.png" | xargs img2pdf -o screenshot-report.pdf
       - name: Upload report
         uses: actions/upload-artifact@v4
         with:
