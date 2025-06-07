@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By  # type: ignore
 
 
 def test_navbar_root_solrunners_url(driver):
+	driver, _ = driver
 	driver.get(url_base)
 
 	navbar = driver.find_element(By.XPATH, "//nav")
@@ -11,6 +12,7 @@ def test_navbar_root_solrunners_url(driver):
 
 
 def test_navbar_home_url(driver):
+	driver, _ = driver
 	driver.get(url_base)
 
 	navbar = driver.find_element(By.XPATH, "//nav")
@@ -20,6 +22,7 @@ def test_navbar_home_url(driver):
 
 
 def test_navbar_blog_url(driver):
+	driver, _ = driver
 	driver.get(url_base)
 
 	navbar = driver.find_element(By.XPATH, "//nav")
