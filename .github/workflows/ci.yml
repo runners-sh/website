@@ -9,17 +9,21 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install img2pdf
 
       - name: Run tests
         run: python -m pytest
 
-      - name: Upload screenshots
+      - name: Create PDF
+        run: img2pdf ./dist/screenshots/**/*.png -o screenshot-report.pdf
+      - name: Upload report
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: |
-            main-site/e2e/screenshots/*.png
+            screenshot-report.pdf
   ruff:
     runs-on: ubuntu-latest
     steps:
