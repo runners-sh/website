@@ -22,7 +22,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           images: "main-site/e2e/screenshots/*.png"
           upload_to: github_branch
-          edit_previous_comment: true
   ruff:
     runs-on: ubuntu-latest
     steps:
