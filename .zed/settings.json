@@ -14,6 +14,11 @@
 				}
 			}
 		},
+		"YAML": {
+			// yaml doesn't allow hard tabs
+			"hard_tabs": false,
+			"tab_size": 2
+		},
 
 		"Markdown": {
 			"hard_tabs": true,

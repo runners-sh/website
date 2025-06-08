@@ -6,10 +6,6 @@ The choice of EAN-8 is because it's horizontal, it fits in the narrow height of 
 [1]: https://ref.gs1.org/standards/genspecs/, 1.4.5 for RCN range, 5.2.1 for the EAN-8 specification
 """
 
-import os.path as path
-
-from solstice.log import warn
-
 # A = NUMBER_SETS[digit]
 # B = NUMBER_SETS[digit][::-1]
 # C = NUMBER_SETS[digit] # but C has the dark bars first
@@ -35,9 +31,9 @@ CENTER_GUARD_BAR = [1, 1, 1, 1, 1]
 type Barcode = int | str | list[int]
 
 
-def barcode_to_digits(barcode: Barcode) -> list[int]:
+def barcode_to_digits(barcode: Barcode, num_digits=8) -> list[int]:
 	if type(barcode) is int:
-		barcode = f"{barcode:08}"
+		barcode = str(barcode).zfill(num_digits)
 	if type(barcode) is str:
 		barcode = [*map(int, barcode)]
 
@@ -82,6 +78,12 @@ _barcode_cache_path = None
 
 def get_barcode_cache(output_path: str):
 	global _barcode_cache, _barcode_cache_path
+
+	# TODO: implement barcode cache as a file
+	"""
+	import os.path as path
+	from solstice.log import warn
+
 	if _barcode_cache is None:
 		_barcode_cache_path = path.join(output_path, path.pardir, "barcode_cache.txt")
 		try:
@@ -100,6 +102,8 @@ def get_barcode_cache(output_path: str):
 		import atexit
 
 		atexit.register(flush_barcode_cache)
+	"""
+	_barcode_cache = set()
 
 	return _barcode_cache
 
@@ -123,7 +127,8 @@ def generate_rcn_barcode(dist_path) -> Barcode:
 		# only 2 and 4 are valid RCN starting digits so just check a random bit to decide
 		first_digit = (2, 4)[integer >> 127]
 
-		barcode = first_digit * 1000000 + integer % 1000000
+		barcode = f"{first_digit}{integer % 1000000:06}"
+		barcode += str(check_digit_for([*map(int, barcode)]))
 		if barcode not in get_barcode_cache(dist_path):
 			return barcode
 

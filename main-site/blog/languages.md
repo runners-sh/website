@@ -3,6 +3,7 @@ title: Programming Languages Gallery
 author: Cubic
 date: 2025-05-26
 barcode: 29015535
+hidden: true
 ---
 
 ```rs

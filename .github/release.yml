@@ -1,0 +1,17 @@
+changelog:
+  categories:
+    - title: Breaking Changes 🛠
+      labels:
+        - breaking
+    - title: New Content 🎉
+      labels:
+        - content
+    - title: New Features
+      labels:
+        - feat
+      exclude:
+        labels:
+          - content
+    - title: Other Changes
+      labels:
+        - "*"

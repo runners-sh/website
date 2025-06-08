@@ -3,10 +3,7 @@ from os import path
 from runners_common import funbar
 from solstice import *
 
-ssg = SiteGenerator(
-	__package__,  # type: ignore
-	output_path="../dist/main-site",
-)
+ssg = SiteGenerator(output_path="../dist/main-site")
 
 
 @cli.entrypoint(ssg)
@@ -26,9 +23,8 @@ def build():
 		src_path = path.join(dirname, file)
 		dist_path = path.join(dirname, name + ".html")
 		with MarkdownPage(ssg, "blog.jinja", src_path, dist_path) as pg:
-			posts.append(
-				pg.meta | {"url": "/" + dist_path.removesuffix(".html")}
-			)
+			if not pg.meta.get("hidden", False):
+				posts.append(pg.meta | {"url": "/" + dist_path.removesuffix(".html")})
 
 			barcode = pg.meta.get("barcode")
 			if barcode is not None:
@@ -39,9 +35,7 @@ def build():
 					)
 				barcode_set[barcode] = src_path
 			if barcode is None:
-				warn(
-					f"Barcode not provided for {src_path}, using dummy barcode"
-				)
+				warn(f"Barcode not provided for {src_path}, using dummy barcode")
 				barcode = 69
 			pg.set_params(funbar=funbar.html_from_ean8(barcode))
 
