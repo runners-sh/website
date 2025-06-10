@@ -13,19 +13,6 @@
 		<h1>blog</h1>
 	</div>
 
-	<ul>
-	{% for post in posts %}
-		<li>
-			<a href="{{post.url}}" class="post-container admonition">
-				<div class="post-sub admonition-title">
-					<span class="post-author">{{post.author}}</span>
-					|
-					<time class="post-date" datetime="{{date}}">{{post.date}}</time>
-				</div>
-				<div class="post-title">{{post.title}}</div>
-			</a>
-		</li>
-	{% endfor %}
-	</ul>
+	{{ comps.postlist(posts=posts) }}
 </main>
 {% endblock %}

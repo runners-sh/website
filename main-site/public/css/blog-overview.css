@@ -12,47 +12,9 @@ main {
 		padding: 1rem 2rem;
 		align-items: left;
 	}
-
-	> ul {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
 }
 
-a.post-container {
-	--color-shadowbox-fg: var(--color-fg-85);
-	transition: color background-color transform;
-	transition-duration: 80ms;
-	&::after {
-		transition: top left;
-		transition-duration: inherit;
-		top: 0;
-		left: 0;
-	}
-	&:hover,
-	&:focus {
-		--color-shadowbox-fg: var(--color-a2);
-	}
-	&:hover:not(:active),
-	&:focus:not(:active) {
-		translate: calc(-0.5 * var(--shadowbox-spacing))
-			calc(-0.5 * var(--shadowbox-spacing));
-		&::after {
-			top: var(--shadowbox-spacing);
-			left: var(--shadowbox-spacing);
-		}
-	}
-	text-decoration: none;
-	display: block;
-	padding: 16px;
-	margin-top: 0;
 
-	.post-title {
-		font-size: 1.25rem;
-		font-weight: bold;
-	}
-}
 
 img {
 	max-width: 100%;

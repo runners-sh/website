@@ -1,6 +1,6 @@
 ---
 title: Markdown widget gallery
-author: peppidesu & Cubic
+authors: ["peppidesu", "Cubic"]
 date: 1984-04-01
 barcode: 45322761
 hidden: true

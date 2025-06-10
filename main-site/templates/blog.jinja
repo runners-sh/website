@@ -54,7 +54,11 @@
 		<div class="subtitle">
 			{{subtitle}}
 			<div class="meta">
-				{{author}} |
+				<span>
+					{% for author in authors %}
+						<a href="/member/{{author}}">{{author}}</a>{% if loop.nextitem is defined %},{% endif %}
+					{% endfor %}
+				</span> |
 				<time datetime="{{date}}">{{date}}</time>
 			</div>
 		</div>

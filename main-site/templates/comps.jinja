@@ -16,3 +16,20 @@
 	{% set tag_name = "a" if url else "div" %}
 	<{{ tag_name }}{% if url %} href="{{url}}"{% endif %} class="pwrln {% if text == selected %}pwr-sel{% endif %}">{{text}}</{{ tag_name }}>
 {% endmacro %}
+
+{% macro postlist(posts) %}
+<ul class="post-list">
+	{% for post in posts %}
+		<li>
+			<a href="{{post.url}}" class="post-container admonition">
+				<div class="post-sub admonition-title">
+					<span class="post-author">{{ ", ".join(post.authors) }}</span>
+					|
+					<time class="post-date" datetime="{{date}}">{{post.date}}</time>
+				</div>
+				<div class="post-title">{{post.title}}</div>
+			</a>
+		</li>
+	{% endfor %}
+</ul>
+{% endmacro %}

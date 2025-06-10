@@ -1,0 +1,30 @@
+{% import "comps.jinja" as comps %}
+{% extends "base.jinja" %}
+{% block head %}
+<link rel="stylesheet" href="/public/css/member.css" />
+<link rel="stylesheet" href="/public/css/codehilite.css" />
+<title>{{title}}</title>
+{% endblock %}
+
+{% block body %}
+{{ comps.navbar(selected="") }}
+<main>
+	<summary>
+		<img class="pfp" src="{{pfp}}"/>
+		<h1>{{username}}</h1>
+		<ol class="links">
+			{% for link in link_data %}
+				<li>
+					{% include link.icon %}
+					<a href="{{link.url}}">{{link.name}}</a>
+				</li>
+			{% endfor %}
+		</ol>
+	</summary>
+	<article>
+		{{ content | safe }}
+		<h1>Posts</h1>
+		{{ comps.postlist(posts) }}
+	</article>
+</main>
+{% endblock %}

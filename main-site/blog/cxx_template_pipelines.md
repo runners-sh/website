@@ -1,15 +1,15 @@
 ---
 title: Simple data pipelining in C++
-author: jayvesmir
+authors: ["jayvesmir"]
 date: 2025-06-08
 barcode: 40028866
 ---
 
 ## Introduction - The bullshit that a blogpost needs to start with
 
-Pipelines are constructs that let us define an algorithm in a high-level, rigid, step-by-step fashion.  
+Pipelines are constructs that let us define an algorithm in a high-level, rigid, step-by-step fashion.
 
-Let's say you wish to parse some sort of file, you're first going to need the actual data from the file, then you'll probably parse some kind of header, then you'll parse the raw data stored in the file, decode it, etc. Some of these steps might be reusable in completely different algorithms. Now, let's say you want to parse another kind of file, you still need to read it, right? That first step is already reusable!  
+Let's say you wish to parse some sort of file, you're first going to need the actual data from the file, then you'll probably parse some kind of header, then you'll parse the raw data stored in the file, decode it, etc. Some of these steps might be reusable in completely different algorithms. Now, let's say you want to parse another kind of file, you still need to read it, right? That first step is already reusable!
 
 If we're clever enough, we can generalize any step to be reusable across many pipelines. Take [Huffman Coding](https://en.wikipedia.org/wiki/Huffman_coding) for example, it's used in many compression algorithms like [JPEG](https://en.wikipedia.org/wiki/JPEG), [PNG](https://en.wikipedia.org/wiki/PNG), and even [H.264](https://cs.wikipedia.org/wiki/H.264) uses it to encode the DCT transform coefficients.
 
@@ -23,7 +23,7 @@ This might be a bummer, but understanding what I'm about to describe requires (e
 
 I'm not competent enough to try and explain how all this shit works, I'm just here to try and share an idea I had one evening. I tried to put as many links to resources to the parts I think would be the most difficult to understand for beginners, but I'm not a teacher, go look this stuff up, try to implement shit on your own and fail a couple times, that's the best way to learn!
 
-[cppreference.com](https://en.cppreference.com/) - Basically a retelling of the C++ standard in web form, it's great, use it!  
+[cppreference.com](https://en.cppreference.com/) - Basically a retelling of the C++ standard in web form, it's great, use it!
 [Cherno's C++ series](https://www.youtube.com/playlist?list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb) - A YouTube playlist that tries to teach you C++
 
 ## Defining a pipeline - Boilerplate to manage our steps
@@ -59,7 +59,7 @@ class pipeline {
             // If the steps weren't instantiated as members inside the pipeline this function would look something like this:
             //   return pipeline<Rest...>()(CurrentStep()(std::forward<Input>(input)));
             // You can see we have to construct the recursed pipeline and the current step in-place,
-            // which isn't very pretty, plus, if we enable optimizations, many compilers will do this without storing them inside the pipeline anyways 
+            // which isn't very pretty, plus, if we enable optimizations, many compilers will do this without storing them inside the pipeline anyways
         }
 }
 ```
@@ -73,7 +73,7 @@ auto result = some_pipeline(...) // Like this!!
 
 And since we've marked the **()** operator as ***constexpr***, if all of the inputs can be inferred by the compiler (and it can see all of our steps' definitions as ***constexpr***), the pipeline's result gets computed at compile-time!! Sadly, this doesn't happen very often in practice, since we can't predict what kind of data we'll be handling. 😞
 
-Our pipeline works thanks to template recursion, you can see we construct another pipeline object with the remaining steps inside our pipeline, which then gets expanded further and further, until only one step is left. But we haven't defined what happens when the last step is reached! We can do that by just defining another case for our pipeline template. 
+Our pipeline works thanks to template recursion, you can see we construct another pipeline object with the remaining steps inside our pipeline, which then gets expanded further and further, until only one step is left. But we haven't defined what happens when the last step is reached! We can do that by just defining another case for our pipeline template.
 
 ```cpp
 // pipeline.hpp
@@ -95,7 +95,7 @@ class pipeline {
             // If the steps weren't instantiated as members inside the pipeline this function would look something like this:
             //   return pipeline<Rest...>()(CurrentStep()(std::forward<Input>(input)));
             // You can see we have to construct the recursed pipeline and the current step in-place,
-            // which isn't very pretty, plus, if we enable optimizations, many compilers will do this without storing them inside the pipeline anyways 
+            // which isn't very pretty, plus, if we enable optimizations, many compilers will do this without storing them inside the pipeline anyways
         }
 }
 
@@ -136,7 +136,7 @@ struct read_file_binary {
         auto stream = std::ifstream(path, std::ios::binary);
         if (!stream) {
             // I'm too lazy to write examples of handling errors, I'm sure you can figure that out on your own 😛
-            return {}; 
+            return {};
         }
 
         return {
@@ -211,7 +211,7 @@ And if we make our step functions ***static*** we can get closer to this, which 
 auto ones = select_ones::operator()(read_file_binary::operator()("some_file.bin"));
 ```
 
-If we pretend compilers could actually read files in constexpr functions for us, then we can take this optimization fantasy further: 
+If we pretend compilers could actually read files in constexpr functions for us, then we can take this optimization fantasy further:
 
 ```cpp
 auto ones = {0x01, 0x01, 0x01, ..., 0x01, 0x01}; // However many ones were in some_file.bin
@@ -258,7 +258,7 @@ class pipeline {
             // If the steps weren't instantiated as members inside the pipeline this function would look something like this:
             //   return pipeline<Rest...>()(CurrentStep()(std::forward<Input>(input)));
             // You can see we have to construct the recursed pipeline and the current step in-place,
-            // which isn't very pretty, plus, if we enable optimizations, many compilers will do this without storing them inside the pipeline anyways 
+            // which isn't very pretty, plus, if we enable optimizations, many compilers will do this without storing them inside the pipeline anyways
         }
 }
 ```
@@ -267,5 +267,5 @@ All we did was slap it on before the **()** operator definition, this is really 
 
 ## Bye Bye
 
-That's pretty much it, hope you learned something new you might not have thought of, Bye!  
+That's pretty much it, hope you learned something new you might not have thought of, Bye!
 My github is [@jayvesmir](https://github.com/jayvesmir) if you wanna read through my terrible code.
