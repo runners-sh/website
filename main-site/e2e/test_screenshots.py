@@ -6,47 +6,58 @@ from selenium.webdriver.common.action_chains import ActionChains  # type: ignore
 from selenium.webdriver.common.by import By  # type: ignore
 
 
-# helper for generating screenshots
-def gen_screenshots(driver, dir, name, device):
+# helpers for generating screenshots --------------------------------------------------------------
+def page_screenshot(driver, dir, name, device):
 	screenshot_path = path.join(dir, f"{device}.{name}.png")
 	driver.get_full_page_screenshot_as_file(screenshot_path)
 	assert path.exists(screenshot_path), f"Screenshot not saved at {screenshot_path}"
 
-def test_screenshot_home(driver, screenshot_dir):
-	driver, device = driver
+def element_screenshot(driver, dir, name, device, element):
+	screenshot_path = path.join(dir, f"{device}.{name}.png")
+	element.screenshot(screenshot_path)
+	assert path.exists(screenshot_path), f"Screenshot not saved at {screenshot_path}"
+
+def window_screenshot(driver, dir, name, device):
+	screenshot_path = path.join(dir, f"{device}.{name}.png")
+	driver.get_screenshot_as_file(screenshot_path)
+	assert path.exists(screenshot_path), f"Screenshot not saved at {screenshot_path}"
+# -------------------------------------------------------------------------------------------------
+
+def test_screenshot_home(driver_multires, screenshot_dir):
+	driver, device = driver_multires
 	driver.get("http://localhost:5123/")
 
-	gen_screenshots(driver, screenshot_dir, "home", device)
+	page_screenshot(driver, screenshot_dir, "home", device)
 
 
-def test_screenshot_blog_overview(driver, screenshot_dir):
-	driver, device = driver
+def test_screenshot_blog_overview(driver_multires, screenshot_dir):
+	driver, device = driver_multires
 	driver.get("http://localhost:5123/blog/")
 
-	gen_screenshots(driver, screenshot_dir, "blog_overview", device)
+	page_screenshot(driver, screenshot_dir, "blog_overview", device)
 
 
-def test_screenshot_blog_overview_hover(driver, screenshot_dir):
-	driver, device = driver
+def test_screenshot_blog_overview_item(driver_multires, screenshot_dir):
+	driver, device = driver_multires
 	driver.get("http://localhost:5123/blog/")
 
-	blog_post = driver.find_element(By.CSS_SELECTOR, ".post-container")
+	blog_post = driver.find_element(By.CSS_SELECTOR, ".post-list > li")
 	ActionChains(driver).move_to_element(blog_post).perform()
 	sleep(1)  # Wait for any hover effects to take effect
 
-	gen_screenshots(driver, screenshot_dir, "blog_overview_hover", device)
+	element_screenshot(driver, screenshot_dir, "blog_overview_item_hover", device, blog_post)
 
 
-def test_screenshot_blog_post(blog_post, driver, screenshot_dir):
-	driver, device = driver
+def test_screenshot_blog_post(blog_post, driver_multires, screenshot_dir):
+	driver, device = driver_multires
 	gallery_url = path.join(url_blog, blog_post)
 	driver.get(gallery_url)
 
-	gen_screenshots(driver, screenshot_dir, "blog_post", device)
+	page_screenshot(driver, screenshot_dir, "blog_post", device)
 
 
-def test_screenshot_blog_post_barcode(blog_post, driver, screenshot_dir):
-	driver, device = driver
+def test_screenshot_blog_post_barcode(blog_post, driver_multires, screenshot_dir):
+	driver, device = driver_multires
 	gallery_url = path.join(url_blog, blog_post)
 	driver.get(gallery_url)
 
@@ -55,13 +66,13 @@ def test_screenshot_blog_post_barcode(blog_post, driver, screenshot_dir):
 	ActionChains(driver).move_to_element(segment).perform()
 	sleep(1)  # Wait for any hover effects to take effect
 
-	gen_screenshots(driver, screenshot_dir, "blog_post_barcode", device)
+	window_screenshot(driver, screenshot_dir, "blog_post_barcode", device)
 
 
-def test_screenshot_member(member_page, driver, screenshot_dir):
-	driver, device = driver
+def test_screenshot_member(member_page, driver_multires, screenshot_dir):
+	driver, device = driver_multires
 	gallery_url = path.join(url_member, member_page)
 	print(gallery_url)
 	driver.get(gallery_url)
 
-	gen_screenshots(driver, screenshot_dir, "member_page", device)
+	page_screenshot(driver, screenshot_dir, "member_page", device)

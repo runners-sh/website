@@ -2,8 +2,7 @@ from conftest import url_base, url_blog, url_home
 from selenium.webdriver.common.by import By  # type: ignore
 
 
-def test_navbar_root_solrunners_url(driver):
-	driver, _ = driver
+def test_navbar_root_solrunners_url(driver):	
 	driver.get(url_base)
 
 	navbar = driver.find_element(By.XPATH, "//nav")
@@ -11,8 +10,7 @@ def test_navbar_root_solrunners_url(driver):
 	home_link.click()
 
 
-def test_navbar_home_url(driver):
-	driver, _ = driver
+def test_navbar_home_url(driver):	
 	driver.get(url_base)
 
 	navbar = driver.find_element(By.XPATH, "//nav")
@@ -21,8 +19,7 @@ def test_navbar_home_url(driver):
 	assert driver.current_url == url_home
 
 
-def test_navbar_blog_url(driver):
-	driver, _ = driver
+def test_navbar_blog_url(driver):	
 	driver.get(url_base)
 
 	navbar = driver.find_element(By.XPATH, "//nav")

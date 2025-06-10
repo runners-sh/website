@@ -5,12 +5,10 @@ from selenium.webdriver.common.by import By  # type: ignore
 
 
 def test_author_links(blog_post, driver):
-	driver, _ = driver
 	gallery_url = path.join(url_blog, blog_post)
 	driver.get(gallery_url)
 
 def test_toc_heading_link_layers(blog_post, driver):
-	driver, _ = driver
 	gallery_url = path.join(url_blog, blog_post)
 	driver.get(gallery_url)
 
@@ -45,7 +43,6 @@ def test_toc_heading_link_layers(blog_post, driver):
 
 
 def test_italics(blog_post, driver):
-	driver, _ = driver
 	gallery_url = path.join(url_blog, blog_post)
 	driver.get(gallery_url)
 
@@ -55,7 +52,6 @@ def test_italics(blog_post, driver):
 
 
 def test_bold(blog_post, driver):
-	driver, _ = driver
 	gallery_url = path.join(url_blog, blog_post)
 	driver.get(gallery_url)
 
@@ -65,7 +61,6 @@ def test_bold(blog_post, driver):
 
 
 def test_links(blog_post, driver):
-	driver, _ = driver
 	gallery_url = path.join(url_blog, blog_post)
 	driver.get(gallery_url)
 
@@ -75,7 +70,6 @@ def test_links(blog_post, driver):
 
 
 def test_inline_code(blog_post, driver):
-	driver, _ = driver
 	gallery_url = path.join(url_blog, blog_post)
 	driver.get(gallery_url)
 
@@ -85,7 +79,6 @@ def test_inline_code(blog_post, driver):
 
 
 def test_strikethrough(blog_post, driver):
-	driver, _ = driver
 	gallery_url = path.join(url_blog, blog_post)
 	driver.get(gallery_url)
 
