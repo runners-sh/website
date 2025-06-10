@@ -34,7 +34,7 @@ def mock_fs(request):
 	yield
 	shutil.rmtree(tmp_dir)
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def serve(mock_fs):
 	proc = subprocess.Popen(
 		[sys.executable, "-m", "__tmp_testing_site", "serve"],
@@ -48,7 +48,7 @@ def serve(mock_fs):
 	proc.wait()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def driver(serve):
 	options = webdriver.FirefoxOptions()
 	profile = webdriver.FirefoxProfile()
