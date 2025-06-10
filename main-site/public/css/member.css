@@ -47,6 +47,13 @@ main {
 					aspect-ratio: 1;
 					vertical-align: middle;
 				}
+
+				transition: translate 80ms;
+				position: relative;
+
+				&:hover {
+					translate: -1px -1px;
+				}
 			}
 		}
 		.pfp {
