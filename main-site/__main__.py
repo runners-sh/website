@@ -3,12 +3,10 @@ from os import path
 from runners_common import funbar
 from solstice import *
 
-ssg = SiteGenerator(
-	output_path="../dist/main-site", extra_watches=["../runners_common", "../solstice"]
-)
+ssg = SiteGenerator(output_path="../dist/main-site")
 
 
-@cli.entrypoint(ssg)
+@cli.entrypoint(ssg, extra_watches=["../runners_common", "../solstice"])
 def build():
 	ssg.copy("public")
 

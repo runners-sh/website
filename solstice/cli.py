@@ -27,7 +27,7 @@ def parse_cli():
 build_func: Any = None
 
 
-def entrypoint(ssg: SiteGenerator):
+def entrypoint(ssg: SiteGenerator, extra_watches: list[str] | None = None):
 	"""
 	`@cli.entrypoint` is used to mark the function that builds your site. It will wrap this function
 	into the CLI, calling it when building/hot-reloading.
@@ -69,7 +69,7 @@ def entrypoint(ssg: SiteGenerator):
 
 				build_func = func
 				try:
-					hotreload(ssg)
+					hotreload(ssg, extra_watches=extra_watches or [])
 				except KeyboardInterrupt:  # Ctrl+C, finalize
 					sys.stderr.write("\x1b[0J")  # clear from cursor down
 					sys.stderr.flush()
@@ -149,7 +149,7 @@ def run_http_server(port, dir):
 		_http_server_exception = sys.exception()
 
 
-def hotreload(ssg: SiteGenerator):
+def hotreload(ssg: SiteGenerator, extra_watches: list[str]):
 	import time
 	import traceback
 	from datetime import datetime
@@ -159,7 +159,7 @@ def hotreload(ssg: SiteGenerator):
 	import pygments.lexers
 	import watchfiles  # type: ignore (removes pyright hallucination)
 
-	it = watchfiles.watch(ssg.project_dir, *map(os.path.realpath, ssg.extra_watches))
+	it = watchfiles.watch(ssg.project_dir, *map(os.path.realpath, extra_watches))
 
 	# wait for server to start
 	while True:

@@ -86,9 +86,6 @@ class SiteGenerator:
 	original_cwd: str
 	""" The original working directory of the process when launched. """
 
-	extra_watches: list[str]
-	""" Files/directories to watch in addition to the main project directory."""
-
 	_md_instance: markdown.Markdown
 
 	def __init__(
@@ -96,7 +93,6 @@ class SiteGenerator:
 		project_dir: str | None = None,
 		output_path: str | None = None,
 		templates_path: str | None = None,
-		extra_watches: list[str] | None = None,
 		profile: Literal["dev", "prod"] = "dev",
 	):
 		if project_dir is None:
@@ -114,7 +110,6 @@ class SiteGenerator:
 
 		self.templates_path = templates_path or "templates"
 
-		self.extra_watches = extra_watches or []
 		self.profile = profile
 
 		self.jinja_env = jinja2.Environment(
