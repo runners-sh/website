@@ -6,6 +6,8 @@ on:
 permissions:
   pull-requests: write
 
+env:
+  TYPES: breaking,feat,fix,content,docs
 jobs:
   autolabel:
     runs-on: ubuntu-latest
@@ -16,7 +18,7 @@ jobs:
       - name: Get semantic type
         id: sem_type
         run: |
-          SEMTYPE=$(sed -E 's/^([a-z]+)(\(\w+\))?(!?):.*/\1/g' <<< "$PR_TITLE")
+          SEMTYPE=$(sed -E 's/^([a-z]+)(\([A-Za-z0-9_\-]+\))?(!?):.*/\1/g' <<< "$PR_TITLE")
           echo "SEMTYPE=$SEMTYPE" >> "$GITHUB_OUTPUT"
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
@@ -24,7 +26,7 @@ jobs:
       - name: Get breaking
         id: breaking
         run: |
-          BREAKING=$(sed -E 's/^([a-z]+)(\(\w+\))?(!?):.*/\3/g' <<< "$PR_TITLE")
+          BREAKING=$(sed -E 's/^([a-z]+)(\([A-Za-z0-9_\-]+\))?(!?):.*/\3/g' <<< "$PR_TITLE")
           if [[ "$BREAKING" == '!' ]]; then
             echo "BREAKING=true" >> "$GITHUB_OUTPUT"
           fi
@@ -33,7 +35,7 @@ jobs:
 
       - name: Apply label
         run: |
-          gh pr edit ${{ github.event.pull_request.number }} --remove-label "feat,fix,content,breaking" || true
+          gh pr edit ${{ github.event.pull_request.number }} --remove-label $TYPES || true
           if [ -n "$BREAKING" ]; then
             gh pr edit ${{ github.event.pull_request.number }} --add-label "breaking" || true
           elif [ -n "$SEMTYPE" ]; then
