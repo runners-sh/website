@@ -54,7 +54,7 @@ social_link_icons = {
 }
 
 
-def build_members(ssg) -> list[dict]:
+def build_members(ssg, posts) -> list[dict]:
 	members = []
 
 	for dirname, file, name, _ in recurse_files("member", [".md"]):
@@ -70,11 +70,17 @@ def build_members(ssg) -> list[dict]:
 				}
 				for k, v in pg.meta["links"].items()
 			]
+			member_posts = list(filter(lambda x: name in x["authors"], posts))
 			links.sort(key=lambda x: x["name"])
 
 			if not pg.meta.get("pfp"):
 				pg.set_params(pfp=f"/public/pfp/{name}.avif")
-			pg.set_params(link_data=links, username=name)
+
+			pg.set_params(
+				link_data=links,
+				username=name,
+				posts=member_posts
+			)
 
 			members.append(pg.meta | {"url": "/" + dist_path.removesuffix(".html")})
 
@@ -88,5 +94,5 @@ def build():
 	ascii_name = read_file("ascii/name.asc")
 	ssg.page("index.jinja", ascii_logo=ascii_logo, ascii_name=ascii_name)
 
-	_posts = build_blog(ssg)
-	_members = build_members(ssg)
+	posts = build_blog(ssg)
+	_members = build_members(ssg, posts)
