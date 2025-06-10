@@ -50,18 +50,16 @@
 			<span class="w1"></span>
 			<span class="a3"></span>
 		</div>
-		<div class="title-box">
-			<h1>{{title}}</h1>
+		<h1>{{title}}</h1>
+		<div>
+			{{subtitle}}
 			<div>
-				{{subtitle}}
-				<div>
-					<span>
-						{% for author in authors %}
-							<a href="/member/{{author}}">{{author}}</a>{% if loop.nextitem is defined %},{% endif %}
-						{% endfor %}
-					</span> |
-					<time datetime="{{date}}">{{date}}</time>
-				</div>
+				<span>
+					{% for author in authors %}
+						<a href="/member/{{author}}">{{author}}</a>{% if loop.nextitem is defined %},{% endif %}
+					{% endfor %}
+				</span> |
+				<time datetime="{{date}}">{{date}}</time>
 			</div>
 		</div>
 	</div>
