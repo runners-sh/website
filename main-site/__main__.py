@@ -5,17 +5,7 @@ from solstice import *
 
 ssg = SiteGenerator(output_path="../dist/main-site")
 
-
-@cli.entrypoint(ssg, extra_watches=["../runners_common", "../solstice"])
-def build():
-	ssg.copy("public")
-
-	ssg.page(
-		"index.jinja",
-		ascii_logo=read_file("ascii/logo.asc"),
-		ascii_name=read_file("ascii/name.asc"),
-	)
-
+def build_blog(ssg) -> list[dict]:
 	posts = []
 
 	# TODO: this will detect files that collide in main-site but not others
@@ -43,5 +33,55 @@ def build():
 			pg.set_params(funbar=funbar.html_from_ean8(barcode))
 
 	posts.sort(key=lambda x: x["date"], reverse=True)
-
 	ssg.page("blog-overview.jinja", "blog/index.html", posts=posts)
+
+	return posts
+
+social_link_formats = {
+	"github": "https://github.com/{}",
+	"mastodon": "https://mastodon.social/@{}",
+	"bsky": "https://bsky.app/profile/{}",
+	"website": "https://{}"
+}
+
+social_link_icons = {
+	"github": "icon/github.svg",
+	"mastodon": "icon/mastodon.svg",
+	"bsky": "icon/bsky.svg",
+	"website": "icon/globe.svg"
+}
+
+def build_members(ssg, posts) -> list[dict]:
+	members = []
+
+	for dirname, file, name, _ in recurse_files("member", [".md"]):
+		src_path = path.join(dirname, file)
+		dist_path = path.join(dirname, name + ".html")
+		with MarkdownPage(ssg, "member.jinja", src_path, dist_path) as pg:
+			links = [{
+				"type": k,
+				"name": v,
+				"url": social_link_formats[k].format(v),
+				"icon": social_link_icons[k]
+			} for k,v in pg.meta["links"].items()]
+			links.sort(key=lambda x: x["name"])
+
+			if not pg.meta.get("pfp"):
+				pg.set_params(pfp=f"/public/pfp/{name}.avif")
+			pg.set_params(link_data=links, username=name)
+
+			members.append(pg.meta | {
+				"url": "/" + dist_path.removesuffix(".html")
+			})
+
+	return members
+
+@cli.entrypoint(ssg, extra_watches=["../runners_common", "../solstice"])
+def build():
+	ssg.copy("public")
+	ascii_logo = read_file("ascii/logo.asc")
+	ascii_name = read_file("ascii/name.asc")
+	ssg.page("index.jinja", ascii_logo=ascii_logo, ascii_name=ascii_name)
+
+	posts = build_blog(ssg)
+	members = build_members(ssg, posts)

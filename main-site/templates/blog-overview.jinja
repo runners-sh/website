@@ -18,7 +18,7 @@
 		<li>
 			<a href="{{post.url}}" class="post-container admonition">
 				<div class="post-sub admonition-title">
-					<span class="post-author">{{post.author}}</span>
+					<span class="post-author">{{ ", ".join(post.authors) }}</span>
 					|
 					<time class="post-date" datetime="{{date}}">{{post.date}}</time>
 				</div>

@@ -1,6 +1,6 @@
 ---
 title: Shellcode Encryption to Bypass Static Detection
-author: vym
+authors: ["vym"]
 date: 2025-06-03
 barcode: 47491014
 ---
@@ -36,7 +36,7 @@ int check(char *a, char *b, int size, int op) {
                 return 0;
         }
     }
-    
+
     return 1337;
 }
 
@@ -47,9 +47,9 @@ int main(){
     setup();
 
     puts("Hey, just because I am hungry doesn't mean I'll execute everything");
-    
+
     int size = read(0, buf, 60);
-	   
+
     if(!check(blacklist, buf, size, strlen(blacklist))) {
         puts("Hehe, told you... won't accept everything");
         exit(1337);
