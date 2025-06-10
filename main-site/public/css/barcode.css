@@ -2,7 +2,7 @@
 	--barcode-base-height: 1.5rem;
 	--barcode-full-height: calc(var(--barcode-slice-width) * 30);
 
-	transform: skew(-30deg);
+	transform: skew(-26.56505118deg);
 	transform-origin: left top;
 
 	position: absolute;
@@ -36,7 +36,8 @@
 		height: var(--barcode-base-height);
 		&.segment {
 			/* the parent container grows on hover; barcode segments should have the same height while the non-barcode segments stay short */
-			height: 100%;
+			/* also make the segments shorter by 1px to fix a sneaky quarter-pixel line at the bottom on hidpi monitors */
+			height: min(100%, var(--barcode-full-height) - 1px);
 		}
 
 		transition: background 100ms ease-out;
@@ -62,6 +63,7 @@
 			--height: calc(var(--barcode-slice-width) * 8);
 			line-height: 1.2;
 			height: var(--height);
+
 			top: calc(var(--barcode-full-height) - var(--height));
 		}
 	}
