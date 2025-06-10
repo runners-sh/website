@@ -5,6 +5,7 @@ from solstice import *
 
 ssg = SiteGenerator(output_path="../dist/main-site")
 
+
 def build_blog(ssg) -> list[dict]:
 	posts = []
 
@@ -37,19 +38,21 @@ def build_blog(ssg) -> list[dict]:
 
 	return posts
 
+
 social_link_formats = {
 	"github": "https://github.com/{}",
 	"mastodon": "https://mastodon.social/@{}",
 	"bsky": "https://bsky.app/profile/{}",
-	"website": "https://{}"
+	"website": "https://{}",
 }
 
 social_link_icons = {
 	"github": "icon/github.svg",
 	"mastodon": "icon/mastodon.svg",
 	"bsky": "icon/bsky.svg",
-	"website": "icon/globe.svg"
+	"website": "icon/globe.svg",
 }
+
 
 def build_members(ssg, posts) -> list[dict]:
 	members = []
@@ -58,23 +61,25 @@ def build_members(ssg, posts) -> list[dict]:
 		src_path = path.join(dirname, file)
 		dist_path = path.join(dirname, name + ".html")
 		with MarkdownPage(ssg, "member.jinja", src_path, dist_path) as pg:
-			links = [{
-				"type": k,
-				"name": v,
-				"url": social_link_formats[k].format(v),
-				"icon": social_link_icons[k]
-			} for k,v in pg.meta["links"].items()]
+			links = [
+				{
+					"type": k,
+					"name": v,
+					"url": social_link_formats[k].format(v),
+					"icon": social_link_icons[k],
+				}
+				for k, v in pg.meta["links"].items()
+			]
 			links.sort(key=lambda x: x["name"])
 
 			if not pg.meta.get("pfp"):
 				pg.set_params(pfp=f"/public/pfp/{name}.avif")
 			pg.set_params(link_data=links, username=name)
 
-			members.append(pg.meta | {
-				"url": "/" + dist_path.removesuffix(".html")
-			})
+			members.append(pg.meta | {"url": "/" + dist_path.removesuffix(".html")})
 
 	return members
+
 
 @cli.entrypoint(ssg, extra_watches=["../runners_common", "../solstice"])
 def build():
@@ -84,4 +89,4 @@ def build():
 	ssg.page("index.jinja", ascii_logo=ascii_logo, ascii_name=ascii_name)
 
 	posts = build_blog(ssg)
-	members = build_members(ssg, posts)
+	_members = build_members(ssg, posts)
