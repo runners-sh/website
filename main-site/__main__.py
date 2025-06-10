@@ -3,15 +3,20 @@ from os import path
 from runners_common import funbar
 from solstice import *
 
-ssg = SiteGenerator(output_path="../dist/main-site")
+ssg = SiteGenerator(
+	output_path="../dist/main-site", extra_watches=["../runners_common", "../solstice"]
+)
 
 
 @cli.entrypoint(ssg)
 def build():
 	ssg.copy("public")
-	ascii_logo = read_file("ascii/logo.asc")
-	ascii_name = read_file("ascii/name.asc")
-	ssg.page("index.jinja", ascii_logo=ascii_logo, ascii_name=ascii_name)
+
+	ssg.page(
+		"index.jinja",
+		ascii_logo=read_file("ascii/logo.asc"),
+		ascii_name=read_file("ascii/name.asc"),
+	)
 
 	posts = []
 
