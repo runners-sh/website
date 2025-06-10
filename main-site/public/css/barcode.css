@@ -1,0 +1,143 @@
+.barcode {
+	--barcode-base-height: 1.5rem;
+	--barcode-full-height: calc(var(--barcode-slice-width) * 30);
+
+	transform: skew(-26.56505118deg);
+	transform-origin: left top;
+
+	position: absolute;
+
+	display: flex;
+
+	overflow: hidden;
+
+	z-index: 1;
+
+	transition-property: height, transform;
+	transition-duration: 80ms;
+	transition-timing-function: cubic-bezier(0, 0, 0.3, 1);
+
+	/* the width of one "unit" in the barcode. segment widths are integer multiples of this */
+	--barcode-slice-width: min(0.5vw - 0.03rem, 0.5rem);
+	/* for mobile */
+	@media (max-width: 800px) {
+		--barcode-slice-width: max(0.85vw - 0.03rem, 0rem);
+	}
+
+	/* extend the barcode to the right because otherwise the skew will mess up the right edge of the barcode  */
+	width: calc(100% + 2rem);
+	height: var(--barcode-base-height);
+
+	&:has(.segment:hover) {
+		height: var(--barcode-full-height);
+	}
+
+	* {
+		height: var(--barcode-base-height);
+		&.segment {
+			/* the parent container grows on hover; barcode segments should have the same height while the non-barcode segments stay short */
+			/* also make the segments shorter by 1px to fix a sneaky quarter-pixel line at the bottom on hidpi monitors */
+			height: min(100%, var(--barcode-full-height) - 1px);
+		}
+
+		transition: background 100ms ease-out;
+		/* flex-shrink: 0; */
+		position: relative;
+
+		/* some segments (namely, the first segment in a "group") contain a digit to imitate conventional product barcodes */
+		.digit {
+			/* each group of barcode segments corresponding to a digit is 7 units long, but add some extra at the end to not cause ugly lines to form due to rendering imprecision */
+			width: calc(var(--barcode-slice-width) * 7.25);
+
+			z-index: 1;
+
+			position: absolute;
+			pointer-events: none;
+
+			text-align: center;
+			background: var(--color-bg);
+			font-weight: bold;
+
+			/* meaningless values, these just have to scale with the barcode size and look good */
+			font-size: calc(var(--barcode-slice-width) * 7.5);
+			--height: calc(var(--barcode-slice-width) * 8);
+			line-height: 1.2;
+			height: var(--height);
+
+			top: calc(var(--barcode-full-height) - var(--height));
+		}
+	}
+
+	> .main-barcode {
+		display: contents;
+
+		/* add a pseudo-element to the 4th digit to cover up the bottom of the middle separator, for style */
+		> .segment:nth-child(16) > .digit::after {
+			content: "";
+			position: absolute;
+			left: 100%;
+			bottom: 0;
+
+			width: 100%;
+			background: inherit;
+			height: 40%;
+		}
+	}
+
+	/* due to rendering imprecision (and the skew transform) you can see a very faint line when the digit is directly on the segment; nudge the digits a bit so this doesn't happen */
+	.fill .digit {
+		left: calc(var(--barcode-slice-width) * -0.5);
+	}
+	.gap .digit {
+		left: calc(var(--barcode-slice-width) * 0.5);
+	}
+
+	/* these make the first element take up most of the space, putting the barcode at the right (and thus not clip beyond the left side of the title box when hovered) */
+	> :first-child {
+		flex-grow: 4;
+	}
+	> :last-child {
+		flex-grow: 2;
+	}
+
+	/* various color styling... */
+	.a1 {
+		--color: var(--color-a1);
+	}
+	.a2 {
+		--color: var(--color-a2);
+	}
+	.a3 {
+		--color: var(--color-a3);
+	}
+	.fg {
+		--color: var(--color-fg);
+	}
+	.gap {
+		--color: var(--color-bg);
+	}
+	* {
+		background-color: var(--color);
+	}
+	.digit {
+		color: var(--color);
+	}
+	/* and width styling... */
+	.w1 {
+		width: var(--barcode-slice-width);
+	}
+	.w2 {
+		width: calc(var(--barcode-slice-width) * 2);
+	}
+	.w3 {
+		width: calc(var(--barcode-slice-width) * 3);
+	}
+	.w4 {
+		width: calc(var(--barcode-slice-width) * 4);
+	}
+	.w6 {
+		width: calc(var(--barcode-slice-width) * 6);
+	}
+
+	/* and we're done! thank you for coming to my ted talk */
+}

@@ -144,7 +144,7 @@ def html_from_ean8(
 	ean8,
 	colors: list[str] = ["fg", "a1", "a2", "a3"],
 	width_prefix: str = "w",
-	element_name: str = "b",
+	element_name: str = "span",
 	padding: int = 6,
 ):
 	digits = barcode_to_digits(ean8)
@@ -154,34 +154,35 @@ def html_from_ean8(
 	rand = Random()
 	rand.seed(bytes(digits))
 
-	elements = []
+	substrings = []
 
-	is_visible = True
+	is_gap = False
 
-	def element(*bar_widths):
-		nonlocal is_visible
-		for bar_width in bar_widths:
-			elements.append(
-				f'<{element_name} class="{width_prefix}{bar_width} {rand.choice(colors) if is_visible else ""}"></{element_name}>'
+	def element(bar_widths, digit: int | None = None):
+		nonlocal is_gap
+		for i, bar_width in enumerate(bar_widths):
+			children = []
+			if i == 0 and digit is not None:
+				children.append(f'<span class="digit {rand.choice(colors)}">{digit}</span>')
+			substrings.append(
+				f'<{element_name} class="segment {width_prefix}{bar_width} {rand.choice(colors)} {"gap" if is_gap else "fill"}">{"".join(children)}</{element_name}>'
 			)
-			is_visible = not is_visible
-
-	def digit(digit):
-		elements.append(f"<span>{digit}</span>")
+			is_gap = not is_gap
 
 	# TODO: light mode barcodes
 	if padding > 0:
-		element(padding)
-	element(*NORMAL_GUARD_BAR)
+		element((padding,))
+	substrings.append('<span class="main-barcode">')
+	element(NORMAL_GUARD_BAR)
 	for c in digits[:4]:
-		digit(c)
-		element(*NUMBER_SETS[c])
-	element(*CENTER_GUARD_BAR)
+		element(NUMBER_SETS[c], c)
+	element(CENTER_GUARD_BAR)
 	for c in digits[4:]:
-		digit(c)
-		element(*NUMBER_SETS[c])
-	element(*NORMAL_GUARD_BAR)
+		element(NUMBER_SETS[c], c)
+	element(NORMAL_GUARD_BAR)
+	substrings.append("</span>")
 	if padding > 0:
-		element(padding)
+		element((padding,))
 
-	return "".join(elements)
+	return "".join(substrings)
+	# return ""
