@@ -39,7 +39,7 @@
 
 main {
 	display: grid;
-	grid-auto-columns: 1fr 13em;
+	grid-auto-columns: 1fr 15em;
 	grid-auto-rows: auto auto 1fr;
 	gap: 4rem;
 	row-gap: 0rem;
@@ -57,6 +57,7 @@ main {
 
 	/* table of contents */
 	> aside {
+		margin-top: -0.15lh;
 		grid-row: 1 / 4;
 		grid-column: 2 / 3;
 
