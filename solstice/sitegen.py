@@ -69,7 +69,7 @@ class SiteGenerator:
 	"""
 
 	project_dir: str
-	""" Path to the current module directory """
+	""" Path to the project directory """
 
 	output_path: str
 	""" Output directory for the site generator """
@@ -82,6 +82,9 @@ class SiteGenerator:
 
 	jinja_env: jinja2.Environment
 	""" Jinja2 environment data """
+
+	original_cwd: str
+	""" The original working directory of the process when launched. """
 
 	_md_instance: markdown.Markdown
 
@@ -100,6 +103,7 @@ class SiteGenerator:
 			project_dir = path.dirname(path.abspath(prev_frame.filename))
 
 		self.project_dir = project_dir
+		self.original_cwd = os.getcwd()
 		os.chdir(self.project_dir)
 
 		self.output_path = output_path or "dist"
@@ -318,8 +322,8 @@ class Page:
 		return self
 
 	def __exit__(self, exc_type, exc_value, traceback):
-		self._log_timer.__exit__(exc_type, exc_value, traceback)
 		self.build()
+		self._log_timer.__exit__(exc_type, exc_value, traceback)
 
 	def build(self):
 		"""
