@@ -1,6 +1,6 @@
 from os import path
 
-from conftest import url_blog
+from conftest import url_blog, url_member
 from selenium.webdriver.common.by import By  # type: ignore
 
 
@@ -85,3 +85,12 @@ def test_strikethrough(blog_post, driver):
 	article = driver.find_element(By.TAG_NAME, "article")
 	element = article.find_element(By.XPATH, ".//del")
 	assert element.text == "strikethrough"
+
+def test_author_link(blog_post, member_page, driver):
+	gallery_url = path.join(url_blog, blog_post)
+	driver.get(gallery_url)
+
+	meta = driver.find_element(By.CLASS_NAME, "meta")
+	link = meta.find_element(By.TAG_NAME, "a")
+	link.click()
+	assert driver.current_url == path.join(url_member, member_page)
