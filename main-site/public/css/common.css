@@ -122,6 +122,9 @@ code {
 	/* the fonts are already monospaced so */
 	font: inherit;
 	outline: 1px solid var(--color-fg-50);
+	padding: 1px;
+	margin: -1px;
+	background-color: var(--color-bg-10);
 }
 .codehilite code {
 	outline: none;
@@ -133,17 +136,12 @@ table:not(.codehilitetable) {
 		text-align: left;
 		padding: 8px;
 		padding-inline: 16px;
-		border-block: 1px solid
-			color-mix(in oklab, var(--color-fg) 50%, var(--color-bg));
+		border-block: 1px solid var(--color-fg-50);
 	}
 
 	thead > tr,
 	tr:nth-child(even) {
-		background-color: color-mix(
-			in oklab,
-			var(--color-fg) 8%,
-			var(--color-bg)
-		);
+		background-color: var(--color-bg-10);
 	}
 	border-collapse: collapse;
 }
