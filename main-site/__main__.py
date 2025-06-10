@@ -54,7 +54,7 @@ social_link_icons = {
 }
 
 
-def build_members(ssg, posts) -> list[dict]:
+def build_members(ssg) -> list[dict]:
 	members = []
 
 	for dirname, file, name, _ in recurse_files("member", [".md"]):
@@ -88,5 +88,5 @@ def build():
 	ascii_name = read_file("ascii/name.asc")
 	ssg.page("index.jinja", ascii_logo=ascii_logo, ascii_name=ascii_name)
 
-	posts = build_blog(ssg)
-	_members = build_members(ssg, posts)
+	_posts = build_blog(ssg)
+	_members = build_members(ssg)

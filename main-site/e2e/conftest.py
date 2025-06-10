@@ -11,11 +11,12 @@ from selenium import webdriver  # type: ignore
 url_base = "http://localhost:5123"
 url_home = f"{url_base}/"
 url_blog = f"{url_base}/blog/"
+url_member = f"{url_base}/member/"
 
 post_src = """
 ---
 title: Markdown widget gallery
-author: peppidesu & Cubic
+authors: ["peppidesu", "Cubic"]
 date: 1984-04-01
 barcode: ~~~BARCODE_SLOT~~~
 hidden: true
@@ -98,9 +99,48 @@ Weeeeee!
 {: id=spinny }
 """
 
+@pytest.fixture(scope="session")
+def blog_post():
+	global post_src
+	mod_dir = __import__("main-site").__path__[0]
+	blog_dir = f"{mod_dir}/blog"
+	barcode = subprocess.check_output(
+		"python -m runners_common barcode", shell=True, text=True
+	).strip()
+	contents = post_src.strip().replace("~~~BARCODE_SLOT~~~", str(barcode))
+
+	with tempfile.NamedTemporaryFile(dir=blog_dir, suffix=".md", mode="w", encoding="utf-8") as f:
+		f.write(contents)
+		f.flush()
+		name = path.basename(f.name).removesuffix(".md")
+
+		yield name
+
+@pytest.fixture(scope="session")
+def member_page():
+	global post_src
+	mod_dir = __import__("main-site").__path__[0]
+	member_dir = f"{mod_dir}/member"
+
+	contents = """
+---
+pfp: "/public/img/solrunners-color.svg"
+links:
+  website: john.doe.com
+  github: johndoe
+  mastodon: johndoe
+---
+This is the body
+	""".strip()
+
+	with tempfile.NamedTemporaryFile(dir=member_dir, suffix=".md", mode="w", encoding="utf-8") as f:
+		f.write(contents)
+		f.flush()
+		name = path.basename(f.name).removesuffix(".md")
+		yield name
 
 @pytest.fixture(scope="module")
-def serve():
+def serve(blog_post, member_page):
 	proc = subprocess.Popen(
 		[sys.executable, "-m", "main-site", "serve"],
 		stdout=subprocess.DEVNULL,
@@ -135,22 +175,6 @@ def driver(serve, request):
 	driver.quit()
 
 
-@pytest.fixture(scope="session")
-def blog_post():
-	global post_src
-	mod_dir = __import__("main-site").__path__[0]
-	blog_dir = f"{mod_dir}/blog"
-	barcode = subprocess.check_output(
-		"python -m runners_common barcode", shell=True, text=True
-	).strip()
-	contents = post_src.strip().replace("~~~BARCODE_SLOT~~~", str(barcode))
-
-	with tempfile.NamedTemporaryFile(dir=blog_dir, suffix=".md", mode="w", encoding="utf-8") as f:
-		f.write(contents)
-		f.flush()
-		name = path.basename(f.name).removesuffix(".md")
-
-		yield name
 
 
 @pytest.fixture(scope="session")

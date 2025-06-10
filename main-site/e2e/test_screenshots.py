@@ -1,7 +1,7 @@
 from os import path
 from time import sleep
 
-from conftest import url_blog
+from conftest import url_blog, url_member
 from selenium.webdriver.common.action_chains import ActionChains  # type: ignore
 from selenium.webdriver.common.by import By  # type: ignore
 
@@ -19,14 +19,14 @@ def test_screenshot_home(driver, screenshot_dir):
 	gen_screenshots(driver, screenshot_dir, "home", device)
 
 
-def test_screenshot_blog(driver, screenshot_dir):
+def test_screenshot_blog_overview(driver, screenshot_dir):
 	driver, device = driver
 	driver.get("http://localhost:5123/blog/")
 
 	gen_screenshots(driver, screenshot_dir, "blog_overview", device)
 
 
-def test_screenshot_blog_hover(driver, screenshot_dir):
+def test_screenshot_blog_overview_hover(driver, screenshot_dir):
 	driver, device = driver
 	driver.get("http://localhost:5123/blog/")
 
@@ -44,6 +44,7 @@ def test_screenshot_blog_post(blog_post, driver, screenshot_dir):
 
 	gen_screenshots(driver, screenshot_dir, "blog_post", device)
 
+
 def test_screenshot_blog_post_barcode(blog_post, driver, screenshot_dir):
 	driver, device = driver
 	gallery_url = path.join(url_blog, blog_post)
@@ -55,3 +56,12 @@ def test_screenshot_blog_post_barcode(blog_post, driver, screenshot_dir):
 	sleep(1)  # Wait for any hover effects to take effect
 
 	gen_screenshots(driver, screenshot_dir, "blog_post_barcode", device)
+
+
+def test_screenshot_member(member_page, driver, screenshot_dir):
+	driver, device = driver
+	gallery_url = path.join(url_member, member_page)
+	print(gallery_url)
+	driver.get(gallery_url)
+
+	gen_screenshots(driver, screenshot_dir, "member_page", device)
