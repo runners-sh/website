@@ -28,6 +28,7 @@ def test_member_post_link(driver):
 	assert url_blog_gallery in urls
 	assert url_blog_headers in urls
 
+
 def test_member_post_list_empty(driver):
 	driver.get(url_member_bob)
 
