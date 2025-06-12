@@ -14,15 +14,6 @@ from pymdownx.highlight import HighlightExtension
 
 from .log import LogTimer, warn
 
-__all__ = [
-	"filename_to_html",
-	"read_file",
-	"recurse_files",
-	"SiteGenerator",
-	"Page",
-	"MarkdownPage",
-]
-
 
 def filename_to_html(name: str) -> str:
 	"""Changes the given filename extension to .html, regardless of what it is."""
@@ -210,8 +201,7 @@ class SiteGenerator:
 		ssg.page("home.jinja", output_path="index.html", title="Hello world!")
 		```
 		"""
-		with Page(self, template_name, output_path) as pg:
-			pg.set_params(**kwargs)
+		Page(self, template_name, output_path).set_params(**kwargs).build()
 
 	def markdown_page(
 		self,
@@ -235,8 +225,7 @@ class SiteGenerator:
 		ssg.markdown_page("blog.jinja", "posts/my_post.md", output_path="blog/my_post.html")
 		```
 		"""
-		with MarkdownPage(self, template_name, content_path, output_path) as pg:
-			pg.set_params(**kwargs)
+		MarkdownPage(self, template_name, content_path, output_path).set_params(**kwargs).build()
 
 
 class Page:
@@ -295,6 +284,7 @@ class Page:
 			"key '{}' is set multiple times.",
 			params,
 		)
+		return self
 
 	def _set_params_internal(
 		self,
@@ -317,23 +307,16 @@ class Page:
 			else:
 				self.params[key] = val
 
-	def __enter__(self):
-		self._log_timer.__enter__()
-		return self
-
-	def __exit__(self, exc_type, exc_value, traceback):
-		self.build()
-		self._log_timer.__exit__(exc_type, exc_value, traceback)
-
 	def build(self):
 		"""
 		Build the page by rendering the template with the provided parameters and saving it to the output path.
 		Called automatically when exiting the context manager.
 		"""
-		dest = self.gen.output_path_for(self.output_path)
-		with open(dest, "w") as file:
-			contents = self.gen.render(self.template_name, **self.params)
-			file.write(contents)
+		with self._log_timer:
+			dest = self.gen.output_path_for(self.output_path)
+			with open(dest, "w") as file:
+				contents = self.gen.render(self.template_name, **self.params)
+				file.write(contents)
 
 
 class MarkdownPage(Page):
