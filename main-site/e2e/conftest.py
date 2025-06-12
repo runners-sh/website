@@ -10,9 +10,15 @@ import pytest
 from selenium import webdriver  # type: ignore
 
 url_base = "http://localhost:5123"
+
 url_home = f"{url_base}/"
 url_blog = f"{url_base}/blog/"
 url_member = f"{url_base}/member/"
+url_member_bob = f"{url_base}/member/bob"
+url_member_johndoe = f"{url_base}/member/johndoe"
+url_blog_gallery = f"{url_base}/blog/gallery"
+url_blog_headers = f"{url_base}/blog/headers"
+
 
 @pytest.fixture(scope="session")
 def mock_fs(request):
@@ -27,12 +33,13 @@ def mock_fs(request):
 		shutil.copytree(
 			path.join(mock_content_path, src),
 			dst,
-			ignore=shutil.ignore_patterns('*.pyc', '__pycache__', 'e2e')
+			ignore=shutil.ignore_patterns("*.pyc", "__pycache__", "e2e"),
 		)
 	subprocess.run([sys.executable, "-m", "__tmp_testing_site", "build"], shell=True, check=True)
 
 	yield
 	shutil.rmtree(tmp_dir)
+
 
 @pytest.fixture(scope="session")
 def serve(mock_fs):
@@ -64,6 +71,7 @@ def driver(serve):
 
 	driver.quit()
 
+
 @pytest.fixture(scope="module", params=["desktop", "mobile"])
 def driver_multires(driver, request):
 	if request.param == "mobile":
@@ -73,17 +81,10 @@ def driver_multires(driver, request):
 
 	return [driver, request.param]
 
+
 @pytest.fixture(scope="session")
 def screenshot_dir(request):
 	screenshot_dir = "./dist/screenshots"
 	os.makedirs(screenshot_dir, exist_ok=True)
 
 	return screenshot_dir
-
-@pytest.fixture(scope="session")
-def blog_post():
-	return "gallery"
-
-@pytest.fixture(scope="session")
-def member_page():
-	return "johndoe"
