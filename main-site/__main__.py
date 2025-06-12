@@ -76,11 +76,7 @@ def build_members(ssg, posts) -> list[dict]:
 			if not pg.meta.get("pfp"):
 				pg.set_params(pfp=f"/public/pfp/{name}.avif")
 
-			pg.set_params(
-				link_data=links,
-				username=name,
-				posts=member_posts
-			)
+			pg.set_params(link_data=links, username=name, posts=member_posts)
 
 			members.append(pg.meta | {"url": "/" + dist_path.removesuffix(".html")})
 

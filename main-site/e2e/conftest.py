@@ -1,160 +1,62 @@
+# ruff: noqa: F401
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
 from os import path
-from time import sleep
 
 import pytest
 from selenium import webdriver  # type: ignore
 
 url_base = "http://localhost:5123"
+
 url_home = f"{url_base}/"
 url_blog = f"{url_base}/blog/"
 url_member = f"{url_base}/member/"
+url_member_bob = f"{url_base}/member/bob"
+url_member_johndoe = f"{url_base}/member/johndoe"
+url_blog_gallery = f"{url_base}/blog/gallery"
+url_blog_headers = f"{url_base}/blog/headers"
 
-post_src = """
----
-title: Markdown widget gallery
-authors: ["peppidesu", "Cubic"]
-date: 1984-04-01
-barcode: ~~~BARCODE_SLOT~~~
-hidden: true
----
-
-# Heading 1 <h1>
-## Heading 2 <h2>
-### Heading 3 <h3>
-#### Heading 4 <h4>
-##### Heading 5 <h5>
-###### Heading 6 <h6>
-
-# Tables
-
-| Table Head 1 | Table Head 2 |
-| :----------- | :----------- |
-| Cell 1 	   | Cell 2       |
-| Cell 3 	   | Cell 4       |
-| Cell 5 	   | Cell 5       |
-
-# Text Formatting
-
-_Italics_, **bold**, and [links](https://www.youtube.com/watch?v=dQw4w9WgXcQ){: rel=nofollow } should all work[^1]. Also `inline code` and ~~strikethrough~~. Emojis, too! :rocket: :rocket: :rocket:
-
-```c
-#include <sys/mman.h>
-#include <stdio.h>
-#include <string.h>
-int __attribute__ ((noinline)) func() {
-    return 42;
-}
-volatile int (*f)();
-int main() {
-    f = func;
-    // all languages have introspection if you're not a little b---- about it
-    mprotect((void*)((long) f & ~0xfff), 0x1000, 7);
-    char *p = memchr(f, 42, 10);
-    *p = 69;
-    printf("%d", f());
-}
-```
-
-[^1]: Hey, stop clicking the footnotes!
-
-# Images
-
-![solrunners logo](/public/img/solrunners-color.svg)
-{: style="width: 6rem" }
-
-# Admonitions
-
-!!! note
-	Here is an admonition block.
-
-!!! warn
-	Watch out!
-
-!!! danger
-    Oh no.
-
-# Custom HTML/CSS
-<style>
-	@keyframes spin {
-		from {
-			rotate: 0turn;
-		}
-		to {
-			rotate: 1turn;
-		}
-	}
-	@media (prefers-reduced-motion: no-preference) {
-		#spinny {
-			display: inline-block;
-			animation: spin 1s infinite;
-		}
-	}
-</style>
-
-Weeeeee!
-{: id=spinny }
-"""
 
 @pytest.fixture(scope="session")
-def blog_post():
-	global post_src
+def mock_fs(request):
 	mod_dir = __import__("main-site").__path__[0]
-	blog_dir = f"{mod_dir}/blog"
-	barcode = subprocess.check_output(
-		"python -m runners_common barcode", shell=True, text=True
-	).strip()
-	contents = post_src.strip().replace("~~~BARCODE_SLOT~~~", str(barcode))
+	mock_content_path = "main-site/e2e/mock-content"
+	tmp_dir = path.join(mod_dir, os.pardir, "__tmp_testing_site")
+	shutil.copytree(mod_dir, tmp_dir, dirs_exist_ok=True)
 
-	with tempfile.NamedTemporaryFile(dir=blog_dir, suffix=".md", mode="w", encoding="utf-8") as f:
-		f.write(contents)
-		f.flush()
-		name = path.basename(f.name).removesuffix(".md")
+	for src in os.listdir(mock_content_path):
+		dst = path.join(tmp_dir, src)
+		shutil.rmtree(dst)
+		shutil.copytree(
+			path.join(mock_content_path, src),
+			dst,
+			ignore=shutil.ignore_patterns("*.pyc", "__pycache__", "e2e"),
+		)
+	subprocess.run([sys.executable, "-m", "__tmp_testing_site", "build"], shell=True, check=True)
 
-		yield name
+	yield
+	shutil.rmtree(tmp_dir)
+
 
 @pytest.fixture(scope="session")
-def member_page():
-	global post_src
-	mod_dir = __import__("main-site").__path__[0]
-	member_dir = f"{mod_dir}/member"
-
-	contents = """
----
-pfp: "/public/img/solrunners-color.svg"
-links:
-  website: john.doe.com
-  github: johndoe
-  mastodon: johndoe
----
-This is the body
-	""".strip()
-
-	with tempfile.NamedTemporaryFile(dir=member_dir, suffix=".md", mode="w", encoding="utf-8") as f:
-		f.write(contents)
-		f.flush()
-		name = path.basename(f.name).removesuffix(".md")
-		yield name
-
-@pytest.fixture(scope="module")
-def serve(blog_post, member_page):
+def serve(mock_fs):
 	proc = subprocess.Popen(
-		[sys.executable, "-m", "main-site", "serve"],
+		[sys.executable, "-m", "__tmp_testing_site", "serve"],
 		stdout=subprocess.DEVNULL,
 		stderr=subprocess.DEVNULL,
 	)
-	sleep(0.3)
+
 	yield
 
 	proc.terminate()
 	proc.wait()
 
 
-@pytest.fixture(scope="module", params=["desktop", "mobile"])
-def driver(serve, request):
+@pytest.fixture(scope="session")
+def driver(serve):
 	options = webdriver.FirefoxOptions()
 	profile = webdriver.FirefoxProfile()
 
@@ -165,16 +67,19 @@ def driver(serve, request):
 	driver = webdriver.Firefox(options=options)
 	driver.implicitly_wait(3)
 
+	yield driver
+
+	driver.quit()
+
+
+@pytest.fixture(scope="module", params=["desktop", "mobile"])
+def driver_multires(driver, request):
 	if request.param == "mobile":
 		driver.set_window_size(360, 800)
 	else:
 		driver.set_window_size(1024, 768)
 
-	yield [driver, request.param]
-
-	driver.quit()
-
-
+	return [driver, request.param]
 
 
 @pytest.fixture(scope="session")
