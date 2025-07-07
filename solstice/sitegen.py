@@ -165,18 +165,28 @@ class SiteGenerator:
 			content, toc = self.md_to_html(content)
 			return content, toc, meta
 
-	def copy(self, dir: str):
+	def copy(self, src: str, dest: str | None = None):
 		"""
-		Copy a directory to the output path, without altering its contents.
+		Copy a file/directory to the output path, without altering its contents.
 		Used for copying static assets like images, CSS, etc.
 
 		# Arguments
-		- `dir`: The directory to copy.
+		- `src`: The path to copy from.
+		- `dest`: The path to copy to, relative to `self.output_path`. Defaults to `src`.
 		"""
-		if path.exists(dir):
-			dist = self.output_path_for(dir)
-			with LogTimer(f"Copying directory '{dir}'..."):
-				shutil.copytree(dir, dist, dirs_exist_ok=True)
+
+		if dest is None:
+			dest = src
+
+		if not path.exists(src):
+			warn(f"Tried to copy nonexistent path {src}")
+
+		dist_path = self.output_path_for(dest)
+		if path.isdir(src):
+			with LogTimer(f"Copying directory '{src}'..."):
+				shutil.copytree(src, dist_path, dirs_exist_ok=True)
+		else:
+			shutil.copy(src, dist_path)
 
 	def clean(self):
 		"""Clean the output directory, removing it and all its contents."""

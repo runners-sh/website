@@ -158,8 +158,13 @@ def hotreload(ssg: SiteGenerator, extra_watches: list[str]):
 	import pygments.formatters
 	import pygments.lexers
 	import watchfiles  # type: ignore (removes pyright hallucination)
+	from watchfiles.filters import DefaultFilter
 
-	it = watchfiles.watch(ssg.project_dir, *map(os.path.realpath, extra_watches))
+	it = watchfiles.watch(
+		ssg.project_dir,
+		*map(os.path.realpath, extra_watches),
+		watch_filter=DefaultFilter(ignore_dirs=(ssg.output_path, *DefaultFilter.ignore_dirs)),
+	)
 
 	# wait for server to start
 	while True:
